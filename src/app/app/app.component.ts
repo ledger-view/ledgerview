@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(private translateService: TranslateService) {}
+
+  public ngOnInit(): void {
+    this.translateService.setFallbackLang('en');
+    this.translateService.use('en');
+  }
+}
