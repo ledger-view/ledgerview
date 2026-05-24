@@ -1,9 +1,11 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { AuthConfig } from 'angular-oauth2-oidc';
+import { environment } from '../environments/environment';
 
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { routes } from './app.routes';
-
-export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideAnimationsAsync()]
+export const authCodeFlowConfig: AuthConfig = {
+  issuer: environment.keycloakIssuer,
+  redirectUri: window.location.origin,
+  clientId: 'ledgerview-web',
+  responseType: 'code',
+  scope: 'openid profile',
+  sessionChecksEnabled: false
 };
