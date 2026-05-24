@@ -1,4 +1,4 @@
-import {PageRequest} from './page.model';
+import { PageRequest } from './page.model';
 
 export interface Transaction {
   id: string;

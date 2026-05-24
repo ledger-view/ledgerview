@@ -7,9 +7,9 @@ const PROXY_CONFIG = [
     logLevel: 'debug',
     headers: {
       'x-forwarded-host': 'localhost',
-      'x-forwarded-proto': 'https',
-    },
-  },
+      'x-forwarded-proto': 'https'
+    }
+  }
 ];
 
 module.exports = PROXY_CONFIG;

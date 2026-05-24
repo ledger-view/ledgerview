@@ -13,7 +13,7 @@ export class FormatDateTimePipe implements PipeTransform {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false,
+      hour12: false
     };
     return date.toLocaleString('en-US', options);
   }

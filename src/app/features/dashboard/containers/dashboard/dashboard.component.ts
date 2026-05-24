@@ -1,12 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import {
-  BehaviorSubject,
-  finalize,
-  MonoTypeOperatorFunction,
-  Observable,
-} from 'rxjs';
-import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '@model/transaction.model';
+import { BehaviorSubject, finalize, MonoTypeOperatorFunction, Observable } from 'rxjs';
+import { TransactionsService } from '../../../../services/transactions.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +13,7 @@ import { Transaction } from '@model/transaction.model';
 export class DashboardComponent implements OnInit {
   protected loading$ = new BehaviorSubject<boolean>(true);
   private transactions = new BehaviorSubject<Transaction[]>([]);
-  protected transactions$: Observable<Transaction[]> =
-    this.transactions.asObservable();
+  protected transactions$: Observable<Transaction[]> = this.transactions.asObservable();
 
   constructor(private transactionsService: TransactionsService) {}
 
