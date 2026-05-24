@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="hero-container">
+    <div class="hero">
+      <div class="image-container">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="transactions$ | async as transactions">
+    <h2 class="panel-title">
+      Your transactions ({{ transactions.length }})
+      <ng-container *ngTemplateOutlet="loader"></ng-container>
+    </h2>
+    <app-transactions-table
+      [transactions]="transactions"
+    ></app-transactions-table>
+  </div>
+
+</div>
+
+<ng-template #loader>
+  <mat-spinner *ngIf="loading$ | async" diameter="20"></mat-spinner>
+</ng-template>
