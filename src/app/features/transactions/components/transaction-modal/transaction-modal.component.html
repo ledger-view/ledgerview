@@ -1,0 +1,70 @@
+<div class="lv-modal-wrap" [formGroup]="form">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">
+      {{ (isEdit ? 'transactions.form.editTitle' : 'transactions.form.addTitle') | translate }}
+    </span>
+    <div class="lv-spacer"></div>
+    <button class="lv-icon-btn" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-segmented">
+      <button [class.active]="form.get('type')?.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
+        {{ 'transactions.form.expense' | translate }}
+      </button>
+      <button [class.active]="form.get('type')?.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
+        {{ 'transactions.form.income' | translate }}
+      </button>
+    </div>
+
+    <div class="lv-field-row">
+      <div class="lv-field">
+        <label class="lv-label">{{ 'transactions.form.description' | translate }}</label>
+        <input class="lv-input" formControlName="title" [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ amountLabel | translate }}</label>
+        <input
+          class="lv-input tx-mono"
+          formControlName="amount"
+          step="0.01"
+          type="number"
+          [placeholder]="'transactions.form.amountPlaceholder' | translate"
+        />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'transactions.form.date' | translate }}</label>
+        <input class="lv-input" formControlName="date" type="date" />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'transactions.form.account' | translate }}</label>
+        <select class="lv-select" formControlName="accountId">
+          @for (acc of data.accounts; track acc.id) {
+            <option [value]="acc.id">{{ acc.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'transactions.form.category' | translate }}</label>
+        <select class="lv-select" formControlName="categoryId">
+          @for (cat of filteredCategories; track cat.id) {
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'transactions.form.note' | translate }}</label>
+        <input class="lv-input" formControlName="note" [placeholder]="'transactions.form.notePlaceholder' | translate" />
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-modal-footer">
+    <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
+      {{ (isEdit ? 'transactions.form.update' : 'transactions.form.save') | translate }}
+    </button>
+  </div>
+</div>

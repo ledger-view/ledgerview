@@ -1,0 +1,70 @@
+<div class="lv-modal-wrap" [formGroup]="form">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">
+      {{ (isEdit ? 'categories.form.edit' : 'categories.form.new') | translate }}
+      @if (isEdit) {
+        — {{ data.category?.name }}
+      }
+    </span>
+    <div class="cat-spacer"></div>
+    <button class="lv-icon-btn" (click)="cancel()"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-field">
+      <label class="lv-label">{{ 'categories.form.name' | translate }}</label>
+      <input class="lv-input" formControlName="name" [placeholder]="'categories.form.namePlaceholder' | translate" />
+    </div>
+
+    <div class="lv-field">
+      <label class="lv-label">{{ 'categories.form.type' | translate }}</label>
+      <div class="lv-segmented">
+        <button [class.active]="form.get('kind')?.value === 'expense'" (click)="setKind('expense')">
+          {{ 'categories.form.expense' | translate }}
+        </button>
+        <button [class.active]="form.get('kind')?.value === 'income'" (click)="setKind('income')">
+          {{ 'categories.form.income' | translate }}
+        </button>
+        <button [class.active]="form.get('kind')?.value === 'transfer'" (click)="setKind('transfer')">
+          {{ 'categories.form.transfer' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="lv-field">
+      <label class="lv-label">{{ 'categories.form.color' | translate }}</label>
+      <div class="cat-palette">
+        @for (c of palette; track c) {
+          <button
+            class="cat-swatch"
+            [class.cat-swatch--active]="form.get('color')?.value === c"
+            [style.background]="c"
+            (click)="setColor(c)"
+          ></button>
+        }
+      </div>
+    </div>
+
+    <div class="cat-preview">
+      <span class="cat-preview-label">{{ 'categories.form.preview' | translate }}</span>
+      <div class="cat-spacer"></div>
+      <span class="lv-dot" [style.background]="form.get('color')?.value"></span>
+      <span class="cat-preview-name">{{ previewName }}</span>
+      <span class="lv-pill lv-pill-neutral">{{ form.get('kind')?.value }}</span>
+    </div>
+  </div>
+
+  <div class="lv-modal-footer">
+    @if (isEdit) {
+      <button class="lv-btn-danger" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        {{ 'common.delete' | translate }}
+      </button>
+    }
+    <div class="cat-spacer"></div>
+    <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
+      {{ (isEdit ? 'categories.form.save' : 'categories.form.create') | translate }}
+    </button>
+  </div>
+</div>

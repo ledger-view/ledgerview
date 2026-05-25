@@ -1,63 +1,196 @@
-$max-width: 1280px;
-
 :host {
   display: flex;
-  flex-direction: column;
   height: 100vh;
   max-height: 100vh;
 }
 
-header {
-  background-color: #101010;
-  color: white;
-
+.lv-shell {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .container {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 0.5rem !important;
-
-    a {
-      font-family: 'Roboto';
-      letter-spacing: 0.031rem;
-      font-weight: 500;
-      font-size: 1.25rem;
-
-      text-decoration: none;
-      color: white;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem;
-      cursor: pointer;
-    }
-  }
-}
-
-.user-details {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-
-  .user {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-}
-
-.container-wrapper {
   width: 100%;
   height: 100%;
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+  overflow: hidden;
 }
 
-.container {
-  width: $max-width;
-  max-width: $max-width;
+// ── Sidebar ──────────────────────────────────────────────────────────────
+.lv-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--lv-sidebar);
+  border-right: 1px solid var(--lv-border);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px;
+  overflow: hidden;
+}
+
+.lv-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 14px;
+  border-bottom: 1px solid var(--lv-border);
+}
+
+.lv-brand-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--lv-accent);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.lv-brand-cols {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.lv-brand-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--lv-text);
+  letter-spacing: -0.1px;
+}
+
+.lv-brand-sub {
+  font-size: 11px;
+  color: var(--lv-text-lo);
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────
+.lv-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: 10px;
+  flex: 1;
+}
+
+.lv-nav-section {
+  padding: 6px 10px 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lv-text-lo);
+}
+
+.lv-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6.5px 10px;
+  border-radius: var(--lv-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lv-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.1s;
+  border: none;
+  background: transparent;
+  font-family: var(--lv-font);
+  line-height: 1.2;
+
+  mat-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0;
+    color: var(--lv-text-lo);
+  }
+
+  &:hover:not(.lv-nav-item--active):not(.lv-nav-item--muted) {
+    background: var(--lv-hover);
+  }
+
+  &.lv-nav-item--active {
+    background: var(--lv-accent-soft);
+    color: var(--lv-accent-text);
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--lv-accent);
+    }
+  }
+
+  &.lv-nav-item--muted {
+    color: var(--lv-text-md);
+    cursor: default;
+    font-weight: 500;
+  }
+}
+
+.lv-nav-dash {
+  width: 16px;
+  text-align: center;
+  color: var(--lv-text-lo);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+// ── Footer / user row ─────────────────────────────────────────────────────
+.lv-side-footer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px;
+  border-top: 1px solid var(--lv-border);
+  margin-top: auto;
+}
+
+.lv-user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #94a3b8, #475569);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.lv-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.lv-user-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--lv-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lv-user-email {
+  font-size: 11px;
+  color: var(--lv-text-lo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lv-spacer {
+  flex: 1;
+}
+
+// ── Content area ──────────────────────────────────────────────────────────
+.lv-content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--lv-bg);
+  display: flex;
+  flex-direction: column;
 }

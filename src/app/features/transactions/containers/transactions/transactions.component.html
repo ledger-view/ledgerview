@@ -1,0 +1,138 @@
+<div class="lv-topbar">
+  <div>
+    <div class="lv-topbar-title">{{ 'transactions.title' | translate }}</div>
+    <div class="lv-topbar-sub">{{ 'transactions.subtitle' | translate }}</div>
+  </div>
+  <div class="lv-spacer"></div>
+</div>
+
+<div class="tx-wrap">
+  <div class="lv-card" style="padding: 0; overflow: hidden">
+    <!-- Filter bar -->
+    <div class="tx-filter-bar">
+      <div class="lv-segmented">
+        <button [class.active]="filters().type === 'all'" (click)="setTypeFilter('all')">
+          {{ 'transactions.filter.all' | translate }}
+        </button>
+        <button [class.active]="filters().type === 'INCOME'" (click)="setTypeFilter('INCOME')">
+          {{ 'transactions.filter.income' | translate }}
+        </button>
+        <button [class.active]="filters().type === 'EXPENSE'" (click)="setTypeFilter('EXPENSE')">
+          {{ 'transactions.filter.expense' | translate }}
+        </button>
+      </div>
+
+      <select class="lv-select tx-filter-select" [value]="filters().accountId" (change)="setAccountFilter($any($event.target).value)">
+        <option value="">{{ 'transactions.filter.allAccounts' | translate }}</option>
+        @for (acc of accounts(); track acc.id) {
+          <option [value]="acc.id">{{ acc.name }}</option>
+        }
+      </select>
+
+      <select class="lv-select tx-filter-select" [value]="filters().categoryId" (change)="setCategoryFilter($any($event.target).value)">
+        <option value="">{{ 'transactions.filter.allCategories' | translate }}</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+
+      <select class="lv-select tx-filter-select" [value]="filters().range" (change)="setRangeFilter($any($event.target).value)">
+        <option value="7d">{{ 'transactions.filter.last7d' | translate }}</option>
+        <option value="30d">{{ 'transactions.filter.last30d' | translate }}</option>
+        <option value="90d">{{ 'transactions.filter.last90d' | translate }}</option>
+        <option value="ytd">{{ 'transactions.filter.ytd' | translate }}</option>
+      </select>
+
+      <div class="lv-spacer"></div>
+      <button class="lv-btn-primary lv-btn-sm" (click)="openAdd()">
+        <mat-icon>add</mat-icon>
+        {{ 'transactions.add' | translate }}
+      </button>
+    </div>
+
+    <!-- Summary strip -->
+    @if (!loading()) {
+      <div class="tx-summary">
+        <div class="tx-summary-item">
+          <div class="tx-summary-label">{{ page().totalElements }} {{ 'transactions.summary.transactions' | translate }}</div>
+        </div>
+      </div>
+    }
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="lv-loading" style="padding: 32px"><mat-spinner diameter="28"></mat-spinner></div>
+    } @else {
+      <!-- Table header -->
+      <div class="lv-table-header tx-cols">
+        <span></span>
+        <button class="lv-sort-btn" [class.active]="sort().key === 'date'" (click)="toggleSort('date')">
+          {{ 'transactions.table.date' | translate }}
+          @if (sort().key === 'date') {
+            <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
+          }
+        </button>
+        <button class="lv-sort-btn" [class.active]="sort().key === 'title'" (click)="toggleSort('title')">
+          {{ 'transactions.table.description' | translate }}
+          @if (sort().key === 'title') {
+            <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
+          }
+        </button>
+        <span>{{ 'transactions.table.category' | translate }}</span>
+        <span>{{ 'transactions.table.account' | translate }}</span>
+        <span>{{ 'transactions.table.type' | translate }}</span>
+        <button class="lv-sort-btn tx-sort-right" [class.active]="sort().key === 'amount'" (click)="toggleSort('amount')">
+          {{ 'transactions.table.amount' | translate }}
+          @if (sort().key === 'amount') {
+            <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
+          }
+        </button>
+      </div>
+
+      <!-- Table rows -->
+      <div>
+        @for (tx of page().content; track tx.id) {
+          <div class="lv-table-row tx-cols">
+            <span class="lv-dot" [style.background]="categoryMap()[tx.categoryId]?.color ?? 'var(--lv-text-lo)'"></span>
+            <span class="tx-date lv-mono">{{ fmtDate(tx.date) }}</span>
+            <div class="tx-info">
+              <span class="tx-title">{{ tx.title }}</span>
+              @if (tx.note) {
+                <span class="tx-note">{{ tx.note }}</span>
+              }
+            </div>
+            <span class="tx-muted">{{ categoryMap()[tx.categoryId]?.name }}</span>
+            <span class="tx-muted">{{ accountMap()[tx.accountId]?.name }}</span>
+            <span class="lv-pill" [class.lv-pill-expense]="tx.type === 'EXPENSE'" [class.lv-pill-income]="tx.type === 'INCOME'">
+              {{ (tx.type === 'INCOME' ? 'transactions.type.income' : 'transactions.type.expense') | translate }}
+            </span>
+            <span class="tx-amount lv-mono" [class.tx-amount--income]="tx.amount >= 0">
+              {{ tx.amount >= 0 ? '+' : '−' }}{{ fmtMoney(tx.amount, accountMap()[tx.accountId]?.currency) }}
+            </span>
+          </div>
+        }
+        @if (page().content.length === 0) {
+          <div class="lv-empty">{{ 'transactions.empty' | translate }}</div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      <div class="tx-pagination">
+        <span class="tx-pagination-info">
+          {{ 'transactions.showing' | translate }}
+          <strong>{{ showingFrom() }}–{{ showingTo() }}</strong>
+          {{ 'transactions.of' | translate }}
+          <strong>{{ page().totalElements }}</strong>
+        </span>
+        <div class="lv-spacer"></div>
+        <button class="lv-btn-secondary lv-btn-sm" [disabled]="currentPage() === 0" (click)="prevPage()">
+          {{ 'common.previous' | translate }}
+        </button>
+        <span class="tx-pagination-page lv-mono">{{ currentPage() + 1 }} / {{ page().totalPages }}</span>
+        <button class="lv-btn-secondary lv-btn-sm" [disabled]="currentPage() >= page().totalPages - 1" (click)="nextPage()">
+          {{ 'common.next' | translate }}
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="lv-modal-wrap" [formGroup]="form">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">
+      {{ (isEdit ? 'accounts.form.edit' : 'accounts.form.new') | translate }}
+      @if (isEdit) {
+        — {{ data.account?.name }}
+      }
+    </span>
+    <div class="acc-spacer"></div>
+    <button class="lv-icon-btn" (click)="cancel()"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-field-row">
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.name' | translate }}</label>
+        <input class="lv-input" formControlName="name" [placeholder]="'accounts.form.namePlaceholder' | translate" />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.institution' | translate }}</label>
+        <input class="lv-input" formControlName="institution" [placeholder]="'accounts.form.institutionPlaceholder' | translate" />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.type' | translate }}</label>
+        <select class="lv-select" formControlName="type">
+          <option value="Checking">{{ 'accounts.filter.checking' | translate }}</option>
+          <option value="Savings">{{ 'accounts.filter.savings' | translate }}</option>
+          <option value="Cash">Cash</option>
+          <option value="Crypto">{{ 'accounts.filter.crypto' | translate }}</option>
+        </select>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.currency' | translate }}</label>
+        <select class="lv-select" formControlName="currency">
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+        </select>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.openingBalance' | translate }}</label>
+        <input class="lv-input acc-mono" formControlName="balance" step="0.01" type="number" />
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'accounts.form.last4' | translate }}</label>
+        <input class="lv-input" formControlName="number" [placeholder]="'accounts.form.last4Placeholder' | translate" />
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-modal-footer">
+    @if (isEdit) {
+      <button class="lv-btn-danger" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        {{ 'common.delete' | translate }}
+      </button>
+    }
+    <div class="acc-spacer"></div>
+    <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
+      {{ (isEdit ? 'accounts.form.save' : 'accounts.form.create') | translate }}
+    </button>
+  </div>
+</div>

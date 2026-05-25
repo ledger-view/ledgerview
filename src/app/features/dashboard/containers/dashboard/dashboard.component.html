@@ -1,19 +1,187 @@
-<!--<div class="container">-->
-<!--  <div class="hero-container">-->
-<!--    <div class="hero">-->
-<!--      <div class="image-container"></div>-->
-<!--    </div>-->
-<!--  </div>-->
+<div class="lv-topbar">
+  <div>
+    <div class="lv-topbar-title">{{ 'dashboard.title' | translate }}</div>
+    <div class="lv-topbar-sub">{{ 'dashboard.subtitle' | translate }}</div>
+  </div>
+  <div class="lv-spacer"></div>
+</div>
 
-<!--  <div *ngIf="transactions$ | async as transactions">-->
-<!--    <h2 class="panel-title">-->
-<!--      Your transactions ({{ transactions.length }})-->
-<!--      <ng-container *ngTemplateOutlet="loader"></ng-container>-->
-<!--    </h2>-->
-<!--    <app-transactions-table [transactions]="transactions"></app-transactions-table>-->
-<!--  </div>-->
-<!--</div>-->
+@if (loading()) {
+  <div class="lv-loading">
+    <mat-spinner diameter="32"></mat-spinner>
+  </div>
+} @else {
+  <div class="db-grid">
+    <!-- Stat cards -->
+    <div class="db-stat lv-card">
+      <div class="db-stat-header">
+        <span class="db-stat-label">{{ 'dashboard.totalBalance' | translate }}</span>
+        <span class="db-stat-delta db-stat-delta--up">↑ 2.4%</span>
+      </div>
+      <div class="db-stat-value lv-mono">{{ fmtMoney(summary()?.totalBalance ?? 0) }}</div>
+      <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
+    </div>
 
-<!--<ng-template #loader>-->
-<!--  <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>-->
-<!--</ng-template>-->
+    <div class="db-stat lv-card">
+      <div class="db-stat-header">
+        <span class="db-stat-label">{{ 'dashboard.monthlyIncome' | translate }}</span>
+        <span class="db-stat-delta db-stat-delta--up">↑ 0.0%</span>
+      </div>
+      <div class="db-stat-value lv-mono db-stat-value--income">{{ fmtMoney(summary()?.monthlyIncome ?? 0) }}</div>
+      <div class="db-stat-sub">{{ 'dashboard.onSchedule' | translate }}</div>
+    </div>
+
+    <div class="db-stat lv-card">
+      <div class="db-stat-header">
+        <span class="db-stat-label">{{ 'dashboard.monthlyExpenses' | translate }}</span>
+        <span class="db-stat-delta db-stat-delta--down">↓ 4.1%</span>
+      </div>
+      <div class="db-stat-value lv-mono db-stat-value--expense">{{ fmtMoney(summary()?.monthlyExpenses ?? 0) }}</div>
+      <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
+    </div>
+
+    <div class="db-stat lv-card">
+      <div class="db-stat-header">
+        <span class="db-stat-label">{{ 'dashboard.netFlow' | translate }}</span>
+        <span class="db-stat-delta db-stat-delta--up">↑ 12.8%</span>
+      </div>
+      <div class="db-stat-value lv-mono db-stat-value--accent">{{ fmtMoney(summary()?.netFlow ?? 0) }}</div>
+      <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
+    </div>
+
+    <!-- Cash flow chart -->
+    <div class="lv-card db-cashflow">
+      <div class="db-card-header">
+        <div>
+          <div class="db-card-title">{{ 'dashboard.cashFlow' | translate }}</div>
+          <div class="db-card-sub">{{ 'dashboard.cashFlowSub' | translate }}</div>
+        </div>
+        <div class="lv-spacer"></div>
+        <div class="db-legend">
+          <span class="db-legend-item">
+            <span class="db-legend-dot" style="background: var(--lv-income)"></span>
+            {{ 'dashboard.income' | translate }}
+          </span>
+          <span class="db-legend-item">
+            <span class="db-legend-dot" style="background: var(--lv-expense)"></span>
+            {{ 'dashboard.expenses' | translate }}
+          </span>
+        </div>
+      </div>
+      <div class="db-bars-wrap">
+        <div class="db-bars">
+          @for (d of cashFlowData; track trackByIndex($index)) {
+            <div class="db-bar-col">
+              <div class="db-bar-pair">
+                @if (d.i > 0) {
+                  <div class="db-bar db-bar--income" [style.height.px]="barHeight(d.i)"></div>
+                }
+                <div class="db-bar db-bar--expense" [style.height.px]="barHeight(d.e)"></div>
+              </div>
+              <span class="db-bar-label lv-mono">{{ d.w }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses by category donut -->
+    <div class="lv-card db-expenses">
+      <div class="db-card-header">
+        <div class="db-card-title">{{ 'dashboard.expensesByCategory' | translate }}</div>
+        <div class="lv-spacer"></div>
+      </div>
+      @if (expensesByCategory().length > 0) {
+        <div class="db-donut-wrap">
+          <svg class="db-donut" height="150" viewBox="0 0 160 160" width="150">
+            <circle cx="80" cy="80" fill="none" r="62" stroke="var(--lv-border)" stroke-width="14" />
+            @for (seg of donutSegments(); track seg.categoryId) {
+              <circle
+                cx="80"
+                cy="80"
+                fill="none"
+                r="62"
+                stroke-linecap="butt"
+                stroke-width="14"
+                transform="rotate(-90 80 80)"
+                [attr.stroke-dasharray]="seg.dash"
+                [attr.stroke-dashoffset]="seg.offset"
+                [attr.stroke]="seg.categoryColor"
+              />
+            }
+            <text class="db-donut-label-sm" text-anchor="middle" x="80" y="75">{{ 'dashboard.thisMonth' | translate }}</text>
+            <text class="db-donut-label-lg" text-anchor="middle" x="80" y="93">{{ fmtMoney(totalExpenses()) }}</text>
+          </svg>
+        </div>
+        <div class="db-legend-list">
+          @for (seg of expensesByCategory().slice(0, 5); track seg.categoryId) {
+            <div class="db-legend-row">
+              <span class="lv-dot" [style.background]="seg.categoryColor"></span>
+              <span class="db-legend-name">{{ seg.categoryName }}</span>
+              <div class="lv-spacer"></div>
+              <span class="db-legend-pct lv-mono">{{ pct(seg.total) }}%</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+      }
+    </div>
+
+    <!-- Recent transactions -->
+    <div class="lv-card db-recent">
+      <div class="db-section-header">
+        <span class="db-section-title">{{ 'dashboard.recentTransactions' | translate }}</span>
+        <div class="lv-spacer"></div>
+        <button class="db-view-all" (click)="navigateToTransactions()">{{ 'dashboard.viewAll' | translate }} →</button>
+      </div>
+      <div class="db-tx-list">
+        @for (tx of recentTransactions(); track tx.id; let first = $first) {
+          <div class="db-tx-row" [class.db-tx-row--first]="first">
+            <span class="lv-dot db-tx-dot"></span>
+            <div class="db-tx-info">
+              <span class="db-tx-title">{{ tx.title }}</span>
+              @if (tx.note) {
+                <span class="db-tx-note">{{ tx.note }}</span>
+              }
+            </div>
+            <span class="db-tx-date lv-mono">{{ fmtDate(tx.date) }}</span>
+            <span class="db-tx-amount lv-mono" [class.db-tx-amount--income]="tx.amount >= 0">
+              {{ tx.amount >= 0 ? '+' : '' }}{{ fmtMoney(tx.amount) }}
+            </span>
+          </div>
+        }
+        @if (recentTransactions().length === 0) {
+          <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+        }
+      </div>
+    </div>
+
+    <!-- Accounts summary -->
+    <div class="lv-card db-accsummary">
+      <div class="db-section-header-inline">
+        <span class="db-card-title">{{ 'dashboard.accountsSummary' | translate }}</span>
+        <div class="lv-spacer"></div>
+        <span class="db-acc-count">{{ accounts().length }} {{ 'dashboard.activeAccounts' | translate }}</span>
+      </div>
+      <div class="db-acc-list">
+        @for (acc of accounts(); track acc.id) {
+          <div class="db-acc-row">
+            <div class="lv-account-icon" [style.background]="accountColor(acc.type)">
+              <mat-icon>{{ accountIcon(acc.type) }}</mat-icon>
+            </div>
+            <div class="db-acc-info">
+              <span class="db-acc-name">{{ acc.name }}</span>
+              <span class="db-acc-sub">{{ acc.institution }} · {{ acc.number }}</span>
+            </div>
+            <div class="lv-spacer"></div>
+            <span class="db-acc-bal lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
+          </div>
+        }
+        @if (accounts().length === 0) {
+          <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+        }
+      </div>
+    </div>
+  </div>
+}

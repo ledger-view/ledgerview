@@ -1,15 +1,28 @@
-import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
-const materialModules = [MatIcon, MatProgressSpinner, MatTooltip, MatDialogModule, MatIconButton];
-const ngModules = [AsyncPipe, DatePipe, NgIf, FormsModule, ReactiveFormsModule, TranslateModule];
+const materialModules = [MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatDialogModule];
+
+const ngModules = [
+  AsyncPipe,
+  DatePipe,
+  NgIf,
+  NgFor,
+  NgClass,
+  NgStyle,
+  FormsModule,
+  ReactiveFormsModule,
+  RouterModule,
+  TranslateModule
+];
 
 @NgModule({
   imports: [...materialModules, ...ngModules],
