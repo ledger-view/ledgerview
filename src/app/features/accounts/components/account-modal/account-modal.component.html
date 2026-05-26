@@ -13,15 +13,15 @@
   <div class="lv-modal-body">
     <div class="lv-field-row">
       <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.name' | translate }}</label>
+        <label class="lv-label">{{ 'common.name' | translate }}</label>
         <input class="lv-input" formControlName="name" [placeholder]="'accounts.form.namePlaceholder' | translate" />
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.institution' | translate }}</label>
+        <label class="lv-label">{{ 'theme.institution' | translate }}</label>
         <input class="lv-input" formControlName="institution" [placeholder]="'accounts.form.institutionPlaceholder' | translate" />
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.type' | translate }}</label>
+        <label class="lv-label">{{ 'common.type' | translate }}</label>
         <select class="lv-select" formControlName="type">
           <option value="Checking">{{ 'accounts.filter.checking' | translate }}</option>
           <option value="Savings">{{ 'accounts.filter.savings' | translate }}</option>
@@ -30,7 +30,7 @@
         </select>
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.currency' | translate }}</label>
+        <label class="lv-label">{{ 'theme.currency' | translate }}</label>
         <select class="lv-select" formControlName="currency">
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
@@ -38,7 +38,7 @@
         </select>
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.openingBalance' | translate }}</label>
+        <label class="lv-label">{{ 'theme.openingBalance' | translate }}</label>
         <input class="lv-input acc-mono" formControlName="balance" step="0.01" type="number" />
       </div>
       <div class="lv-field">
@@ -58,7 +58,7 @@
     <div class="acc-spacer"></div>
     <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
     <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
-      {{ (isEdit ? 'accounts.form.save' : 'accounts.form.create') | translate }}
+      {{ (isEdit ? 'common.save' : 'accounts.form.create') | translate }}
     </button>
   </div>
 </div>

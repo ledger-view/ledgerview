@@ -12,16 +12,16 @@
   <div class="lv-modal-body">
     <div class="lv-segmented">
       <button [class.active]="form.get('type')?.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
-        {{ 'transactions.form.expense' | translate }}
+        {{ 'theme.expense' | translate }}
       </button>
       <button [class.active]="form.get('type')?.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
-        {{ 'transactions.form.income' | translate }}
+        {{ 'theme.income' | translate }}
       </button>
     </div>
 
     <div class="lv-field-row">
       <div class="lv-field">
-        <label class="lv-label">{{ 'transactions.form.description' | translate }}</label>
+        <label class="lv-label">{{ 'theme.description' | translate }}</label>
         <input class="lv-input" formControlName="title" [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
       </div>
       <div class="lv-field">
@@ -35,11 +35,11 @@
         />
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'transactions.form.date' | translate }}</label>
+        <label class="lv-label">{{ 'theme.date' | translate }}</label>
         <input class="lv-input" formControlName="date" type="date" />
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'transactions.form.account' | translate }}</label>
+        <label class="lv-label">{{ 'theme.account' | translate }}</label>
         <select class="lv-select" formControlName="accountId">
           @for (acc of data.accounts; track acc.id) {
             <option [value]="acc.id">{{ acc.name }}</option>
@@ -47,7 +47,7 @@
         </select>
       </div>
       <div class="lv-field">
-        <label class="lv-label">{{ 'transactions.form.category' | translate }}</label>
+        <label class="lv-label">{{ 'theme.category' | translate }}</label>
         <select class="lv-select" formControlName="categoryId">
           @for (cat of filteredCategories; track cat.id) {
             <option [value]="cat.id">{{ cat.name }}</option>

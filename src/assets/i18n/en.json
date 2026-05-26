@@ -1,13 +1,27 @@
 {
   "theme": {
-    "title": "LedgerView"
+    "title": "LedgerView",
+    "income": "Income",
+    "expense": "Expense",
+    "expenses": "Expenses",
+    "transfer": "Transfer",
+    "account": "Account",
+    "accounts": "Accounts",
+    "category": "Category",
+    "categories": "Categories",
+    "transaction": "Transaction",
+    "transactions": "Transactions",
+    "amount": "Amount",
+    "balance": "Balance",
+    "currency": "Currency",
+    "date": "Date",
+    "description": "Description",
+    "institution": "Institution",
+    "openingBalance": "Opening balance"
   },
   "nav": {
     "workspace": "Workspace",
     "dashboard": "Dashboard",
-    "transactions": "Transactions",
-    "accounts": "Accounts",
-    "categories": "Categories",
     "cashFlow": "Cash Flow",
     "netWorth": "Net Worth",
     "budgets": "Budgets",
@@ -21,13 +35,19 @@
     "save": "Save changes",
     "create": "Create",
     "edit": "Edit",
+    "add": "Add",
+    "export": "Export",
+    "all": "All",
+    "name": "Name",
+    "type": "Type",
+    "total": "Total",
+    "showing": "Showing",
+    "of": "of",
     "loading": "Loading...",
     "error": "Something went wrong",
     "noData": "No data",
     "previous": "Previous",
     "next": "Next",
-    "export": "Export",
-    "add": "Add",
     "personal": "Personal"
   },
   "dashboard": {
@@ -44,46 +64,13 @@
     "expensesByCategory": "Expenses by category",
     "recentTransactions": "Recent transactions",
     "viewAll": "View all",
-    "accountsSummary": "Accounts",
-    "income": "Income",
-    "expenses": "Expenses",
-    "thisMonth": "This month",
-    "activeAccounts": "active"
+    "activeAccounts": "active",
+    "thisMonth": "This month"
   },
   "transactions": {
-    "title": "Transactions",
     "subtitle": "All your financial activity",
-    "add": "Add",
-    "form": {
-      "addTitle": "Add transaction",
-      "editTitle": "Edit transaction",
-      "description": "Description",
-      "descriptionPlaceholder": "e.g. Trader Joe's",
-      "amountExpense": "Amount (−)",
-      "amountIncome": "Amount (+)",
-      "amountPlaceholder": "0.00",
-      "date": "Date",
-      "account": "Account",
-      "category": "Category",
-      "note": "Note (optional)",
-      "notePlaceholder": "Add a note",
-      "save": "Save transaction",
-      "update": "Update transaction",
-      "expense": "Expense",
-      "income": "Income"
-    },
-    "table": {
-      "date": "Date",
-      "description": "Description",
-      "category": "Category",
-      "account": "Account",
-      "type": "Type",
-      "amount": "Amount"
-    },
+    "empty": "No transactions match these filters.",
     "filter": {
-      "all": "All",
-      "income": "Income",
-      "expense": "Expense",
       "allAccounts": "All accounts",
       "allCategories": "All categories",
       "last7d": "Last 7 days",
@@ -91,16 +78,20 @@
       "last90d": "Last 90 days",
       "ytd": "Year-to-date"
     },
-    "empty": "No transactions match these filters.",
-    "type": {
-      "income": "Income",
-      "expense": "Expense"
-    },
-    "showing": "Showing",
-    "of": "of"
+    "form": {
+      "addTitle": "Add transaction",
+      "editTitle": "Edit transaction",
+      "descriptionPlaceholder": "e.g. Trader Joe's",
+      "amountExpense": "Amount (−)",
+      "amountIncome": "Amount (+)",
+      "amountPlaceholder": "0.00",
+      "note": "Note (optional)",
+      "notePlaceholder": "Add a note",
+      "save": "Save transaction",
+      "update": "Update transaction"
+    }
   },
   "accounts": {
-    "title": "Accounts",
     "subtitle": "Manage your financial accounts",
     "add": "Add account",
     "totalAcross": "Total across",
@@ -109,63 +100,33 @@
     "refreshed": "Balances refreshed just now",
     "linkNew": "Link a new account",
     "linkNewSub": "Bank, card, wallet, or crypto",
-    "table": {
-      "name": "Name",
-      "institution": "Institution",
-      "type": "Type",
-      "currency": "Currency",
-      "balance": "Balance"
-    },
     "form": {
       "new": "New account",
-      "name": "Name",
+      "edit": "Edit account",
       "namePlaceholder": "Main Checking",
-      "institution": "Institution",
       "institutionPlaceholder": "Chase",
-      "type": "Type",
-      "currency": "Currency",
-      "openingBalance": "Opening balance",
       "last4": "Last 4 / handle",
       "last4Placeholder": "••1234",
-      "create": "Create account",
-      "save": "Save changes"
+      "create": "Create account"
     },
     "filter": {
-      "all": "All",
       "checking": "Checking",
       "savings": "Savings",
       "crypto": "Crypto"
     }
   },
   "categories": {
-    "title": "Categories",
     "subtitle": "Used to label every transaction. Color shows up in charts.",
     "add": "New category",
     "total": "total",
-    "table": {
-      "name": "Name",
-      "type": "Type",
-      "transactions": "Transactions",
-      "total": "Total"
-    },
     "form": {
       "new": "New category",
-      "name": "Name",
+      "edit": "Edit category",
       "namePlaceholder": "Groceries",
-      "type": "Type",
       "color": "Color",
       "preview": "Preview",
       "create": "Create category",
-      "save": "Save changes",
-      "untitled": "Untitled",
-      "expense": "Expense",
-      "income": "Income",
-      "transfer": "Transfer"
-    },
-    "filter": {
-      "all": "All",
-      "income": "Income",
-      "expense": "Expense"
+      "untitled": "Untitled"
     }
   }
 }

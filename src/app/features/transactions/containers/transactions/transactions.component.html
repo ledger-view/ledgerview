@@ -1,6 +1,6 @@
 <div class="lv-topbar">
   <div>
-    <div class="lv-topbar-title">{{ 'transactions.title' | translate }}</div>
+    <div class="lv-topbar-title">{{ 'theme.transactions' | translate }}</div>
     <div class="lv-topbar-sub">{{ 'transactions.subtitle' | translate }}</div>
   </div>
   <div class="lv-spacer"></div>
@@ -12,13 +12,13 @@
     <div class="tx-filter-bar">
       <div class="lv-segmented">
         <button [class.active]="filters().type === 'all'" (click)="setTypeFilter('all')">
-          {{ 'transactions.filter.all' | translate }}
+          {{ 'common.all' | translate }}
         </button>
         <button [class.active]="filters().type === 'INCOME'" (click)="setTypeFilter('INCOME')">
-          {{ 'transactions.filter.income' | translate }}
+          {{ 'theme.income' | translate }}
         </button>
         <button [class.active]="filters().type === 'EXPENSE'" (click)="setTypeFilter('EXPENSE')">
-          {{ 'transactions.filter.expense' | translate }}
+          {{ 'theme.expense' | translate }}
         </button>
       </div>
 
@@ -46,7 +46,7 @@
       <div class="lv-spacer"></div>
       <button class="lv-btn-primary lv-btn-sm" (click)="openAdd()">
         <mat-icon>add</mat-icon>
-        {{ 'transactions.add' | translate }}
+        {{ 'common.add' | translate }}
       </button>
     </div>
 
@@ -54,7 +54,7 @@
     @if (!loading()) {
       <div class="tx-summary">
         <div class="tx-summary-item">
-          <div class="tx-summary-label">{{ page().totalElements }} {{ 'transactions.summary.transactions' | translate }}</div>
+          <div class="tx-summary-label">{{ page().totalElements }} {{ 'theme.transactions' | translate }}</div>
         </div>
       </div>
     }
@@ -67,22 +67,22 @@
       <div class="lv-table-header tx-cols">
         <span></span>
         <button class="lv-sort-btn" [class.active]="sort().key === 'date'" (click)="toggleSort('date')">
-          {{ 'transactions.table.date' | translate }}
+          {{ 'theme.date' | translate }}
           @if (sort().key === 'date') {
             <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
           }
         </button>
         <button class="lv-sort-btn" [class.active]="sort().key === 'title'" (click)="toggleSort('title')">
-          {{ 'transactions.table.description' | translate }}
+          {{ 'theme.description' | translate }}
           @if (sort().key === 'title') {
             <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
           }
         </button>
-        <span>{{ 'transactions.table.category' | translate }}</span>
-        <span>{{ 'transactions.table.account' | translate }}</span>
-        <span>{{ 'transactions.table.type' | translate }}</span>
+        <span>{{ 'theme.category' | translate }}</span>
+        <span>{{ 'theme.account' | translate }}</span>
+        <span>{{ 'common.type' | translate }}</span>
         <button class="lv-sort-btn tx-sort-right" [class.active]="sort().key === 'amount'" (click)="toggleSort('amount')">
-          {{ 'transactions.table.amount' | translate }}
+          {{ 'theme.amount' | translate }}
           @if (sort().key === 'amount') {
             <span class="tx-sort-arrow">{{ sort().dir === 'desc' ? '↓' : '↑' }}</span>
           }
@@ -104,7 +104,7 @@
             <span class="tx-muted">{{ categoryMap()[tx.categoryId]?.name }}</span>
             <span class="tx-muted">{{ accountMap()[tx.accountId]?.name }}</span>
             <span class="lv-pill" [class.lv-pill-expense]="tx.type === 'EXPENSE'" [class.lv-pill-income]="tx.type === 'INCOME'">
-              {{ (tx.type === 'INCOME' ? 'transactions.type.income' : 'transactions.type.expense') | translate }}
+              {{ (tx.type === 'INCOME' ? 'theme.income' : 'theme.expense') | translate }}
             </span>
             <span class="tx-amount lv-mono" [class.tx-amount--income]="tx.amount >= 0">
               {{ tx.amount >= 0 ? '+' : '−' }}{{ fmtMoney(tx.amount, accountMap()[tx.accountId]?.currency) }}
@@ -119,9 +119,9 @@
       <!-- Pagination -->
       <div class="tx-pagination">
         <span class="tx-pagination-info">
-          {{ 'transactions.showing' | translate }}
+          {{ 'common.showing' | translate }}
           <strong>{{ showingFrom() }}–{{ showingTo() }}</strong>
-          {{ 'transactions.of' | translate }}
+          {{ 'common.of' | translate }}
           <strong>{{ page().totalElements }}</strong>
         </span>
         <div class="lv-spacer"></div>

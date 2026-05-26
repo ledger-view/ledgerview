@@ -12,21 +12,21 @@
 
   <div class="lv-modal-body">
     <div class="lv-field">
-      <label class="lv-label">{{ 'categories.form.name' | translate }}</label>
+      <label class="lv-label">{{ 'common.name' | translate }}</label>
       <input class="lv-input" formControlName="name" [placeholder]="'categories.form.namePlaceholder' | translate" />
     </div>
 
     <div class="lv-field">
-      <label class="lv-label">{{ 'categories.form.type' | translate }}</label>
+      <label class="lv-label">{{ 'common.type' | translate }}</label>
       <div class="lv-segmented">
         <button [class.active]="type.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
-          {{ 'categories.form.expense' | translate }}
+          {{ 'theme.expense' | translate }}
         </button>
         <button [class.active]="type.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
-          {{ 'categories.form.income' | translate }}
+          {{ 'theme.income' | translate }}
         </button>
         <button [class.active]="type.value === CategoryType.TRANSFER" (click)="setType(CategoryType.TRANSFER)">
-          {{ 'categories.form.transfer' | translate }}
+          {{ 'theme.transfer' | translate }}
         </button>
       </div>
     </div>
@@ -59,7 +59,7 @@
     <div class="cat-spacer"></div>
     <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
     <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
-      {{ (isEdit ? 'categories.form.save' : 'categories.form.create') | translate }}
+      {{ (isEdit ? 'common.save' : 'categories.form.create') | translate }}
     </button>
   </div>
 </div>
