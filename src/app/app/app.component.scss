@@ -23,12 +23,16 @@
   overflow: hidden;
 }
 
+.lv-brand-section {
+  min-height: 51px;
+  border-bottom: 1px solid var(--lv-border);
+}
+
 .lv-brand {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 8px 14px;
-  border-bottom: 1px solid var(--lv-border);
+  padding: 3px 8px;
 }
 
 .lv-brand-icon {
