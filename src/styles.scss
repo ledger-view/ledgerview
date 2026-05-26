@@ -1,3 +1,5 @@
+@use './assets/styles/utilities/helpers';
+
 // ── Pulse Light design tokens ─────────────────────────────────────────────
 :root {
   --lv-bg: #fafafb;
@@ -417,9 +419,6 @@ body {
     margin-top: 1px;
   }
 
-  .lv-spacer {
-    flex: 1;
-  }
 }
 
 // ── Mono numbers ─────────────────────────────────────────────────────────

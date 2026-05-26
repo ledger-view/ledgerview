@@ -6,7 +6,7 @@
         — {{ data.account?.name }}
       }
     </span>
-    <div class="acc-spacer"></div>
+    <div class="lv-spacer"></div>
     <button class="lv-icon-btn" (click)="cancel()"><mat-icon>close</mat-icon></button>
   </div>
 
@@ -55,7 +55,7 @@
         {{ 'common.delete' | translate }}
       </button>
     }
-    <div class="acc-spacer"></div>
+    <div class="lv-spacer"></div>
     <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
     <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
       {{ (isEdit ? 'common.save' : 'accounts.form.create') | translate }}
