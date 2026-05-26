@@ -14,5 +14,13 @@ export interface Category {
 export interface CategoryRequest {
   name: string;
   color: string;
-  kind: CategoryType;
+  type: CategoryType;
 }
+
+const categoryTypeToCssPillClass: Record<CategoryType, string> = {
+  [CategoryType.INCOME]: 'lv-pill-income',
+  [CategoryType.EXPENSE]: 'lv-pill-expense',
+  [CategoryType.TRANSFER]: 'lv-pill-neutral'
+};
+
+export const getCategoryCssPillClass = (type: CategoryType) => categoryTypeToCssPillClass[type];

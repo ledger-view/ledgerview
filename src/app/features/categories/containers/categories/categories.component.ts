@@ -6,7 +6,7 @@ import {
 } from '@features/categories/components/category-modal/category-modal.component';
 import { CategoryService } from '@features/categories/services/category.service';
 import { TransactionApiService } from '@features/transactions/services/transaction-api.service';
-import { Category, CategoryRequest } from '@model/category.model';
+import { Category, CategoryRequest, getCategoryCssPillClass } from '@model/category.model';
 import { Transaction } from '@model/transaction.model';
 
 interface CategoryUsage {
@@ -99,4 +99,6 @@ export class CategoriesComponent implements OnInit {
   protected trackById(_: number, item: Category): string {
     return item.id;
   }
+
+  protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
 }

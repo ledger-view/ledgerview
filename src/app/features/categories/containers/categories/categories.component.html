@@ -28,7 +28,7 @@
             </div>
             <div class="cat-card-info">
               <span class="cat-card-name">{{ cat.name }}</span>
-              <span class="cat-card-kind">{{ cat.type }}</span>
+              <span class="cat-card-type">{{ cat.type }}</span>
             </div>
             <div class="lv-spacer"></div>
             <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>
@@ -55,22 +55,22 @@
       <div class="lv-table-header cat-table-cols">
         <span></span>
         <span>{{ 'categories.table.name' | translate }}</span>
-        <span>{{ 'categories.table.kind' | translate }}</span>
+        <span>{{ 'categories.table.type' | translate }}</span>
         <span>{{ 'categories.table.transactions' | translate }}</span>
         <span class="cat-right">{{ 'categories.table.total' | translate }}</span>
         <span></span>
       </div>
 
-      @for (cat of categories(); track cat.id; let last = $last) {
+      @for (category of categories(); track category.id; let last = $last) {
         <div class="lv-table-row cat-table-cols" [class.cat-row-last]="last">
-          <div class="cat-dot-lg" [style.background]="cat.color"></div>
-          <span class="cat-row-name">{{ cat.name }}</span>
-          <span class="lv-pill lv-pill-neutral">{{ cat.type }}</span>
-          <span class="cat-muted lv-mono">{{ getUsage(cat.id).count }}</span>
-          <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(cat.id).total) }}</span>
+          <div class="cat-dot-lg" [style.background]="category.color"></div>
+          <span class="cat-row-name">{{ category.name }}</span>
+          <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ category.type }}</span>
+          <span class="cat-muted lv-mono">{{ getUsage(category.id).count }}</span>
+          <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(category.id).total) }}</span>
           <div class="cat-actions">
-            <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>
-            <button class="lv-icon-btn" (click)="categoryService.delete$(cat.id).subscribe()"><mat-icon>delete</mat-icon></button>
+            <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>
+            <button class="lv-icon-btn" (click)="categoryService.delete$(category.id).subscribe()"><mat-icon>delete</mat-icon></button>
           </div>
         </div>
       }

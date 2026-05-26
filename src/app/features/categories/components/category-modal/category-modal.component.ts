@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, CategoryRequest } from '@model/category.model';
+import { Category, CategoryRequest, CategoryType, getCategoryCssPillClass } from '@model/category.model';
 
 export interface CategoryModalData {
   category?: Category;
@@ -34,6 +34,8 @@ export class CategoryModalComponent implements OnInit {
   protected readonly isEdit: boolean;
   protected readonly palette = PALETTE;
 
+  protected readonly CategoryType = CategoryType;
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CategoryModalComponent>,
@@ -46,7 +48,7 @@ export class CategoryModalComponent implements OnInit {
     const c = this.data.category;
     this.form = this.fb.group({
       name: [c?.name ?? '', Validators.required],
-      kind: [c?.type ?? 'expense'],
+      type: [c?.type ?? 'expense'],
       color: [c?.color ?? PALETTE[0]]
     });
   }
@@ -59,8 +61,8 @@ export class CategoryModalComponent implements OnInit {
     return this.form.get('name')?.value?.trim() || 'Untitled';
   }
 
-  protected setKind(kind: string): void {
-    this.form.patchValue({ kind });
+  protected setType(type: string): void {
+    this.form.patchValue({ type });
   }
   protected setColor(color: string): void {
     this.form.patchValue({ color });
@@ -69,14 +71,25 @@ export class CategoryModalComponent implements OnInit {
   protected save(): void {
     if (!this.form.valid) return;
     const v = this.form.value;
-    const req: CategoryRequest = { name: v.name.trim(), color: v.color, kind: v.kind };
+    const req: CategoryRequest = { name: v.name.trim(), color: v.color, type: v.type };
     this.dialogRef.close({ action: 'save', data: req });
   }
 
   protected delete(): void {
     this.dialogRef.close({ action: 'delete' });
   }
+
   protected cancel(): void {
     this.dialogRef.close();
   }
+
+  protected get type(): FormControl {
+    return this.form.get('type') as FormControl;
+  }
+
+  protected get color(): FormControl {
+    return this.form.get('color') as FormControl;
+  }
+
+  protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
 }

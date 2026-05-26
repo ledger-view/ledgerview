@@ -280,7 +280,10 @@ body {
 
 // ── Pill / badge ──────────────────────────────────────────────────────────
 .lv-pill {
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
+  min-width: 72px;
+
   align-items: center;
   gap: 5px;
   padding: 2px 7px;

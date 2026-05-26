@@ -19,13 +19,13 @@
     <div class="lv-field">
       <label class="lv-label">{{ 'categories.form.type' | translate }}</label>
       <div class="lv-segmented">
-        <button [class.active]="form.get('kind')?.value === 'expense'" (click)="setKind('expense')">
+        <button [class.active]="type.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
           {{ 'categories.form.expense' | translate }}
         </button>
-        <button [class.active]="form.get('kind')?.value === 'income'" (click)="setKind('income')">
+        <button [class.active]="type.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
           {{ 'categories.form.income' | translate }}
         </button>
-        <button [class.active]="form.get('kind')?.value === 'transfer'" (click)="setKind('transfer')">
+        <button [class.active]="type.value === CategoryType.TRANSFER" (click)="setType(CategoryType.TRANSFER)">
           {{ 'categories.form.transfer' | translate }}
         </button>
       </div>
@@ -35,12 +35,7 @@
       <label class="lv-label">{{ 'categories.form.color' | translate }}</label>
       <div class="cat-palette">
         @for (c of palette; track c) {
-          <button
-            class="cat-swatch"
-            [class.cat-swatch--active]="form.get('color')?.value === c"
-            [style.background]="c"
-            (click)="setColor(c)"
-          ></button>
+          <button class="cat-swatch" [class.cat-swatch--active]="color.value === c" [style.background]="c" (click)="setColor(c)"></button>
         }
       </div>
     </div>
@@ -48,9 +43,9 @@
     <div class="cat-preview">
       <span class="cat-preview-label">{{ 'categories.form.preview' | translate }}</span>
       <div class="cat-spacer"></div>
-      <span class="lv-dot" [style.background]="form.get('color')?.value"></span>
+      <span class="lv-dot" [style.background]="color.value"></span>
       <span class="cat-preview-name">{{ previewName }}</span>
-      <span class="lv-pill lv-pill-neutral">{{ form.get('kind')?.value }}</span>
+      <span class="lv-pill" [class]="getCategoryCssPillClass(type.value)">{{ type.value }}</span>
     </div>
   </div>
 
