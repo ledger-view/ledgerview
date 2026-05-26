@@ -124,6 +124,12 @@
     cursor: default;
     font-weight: 500;
   }
+
+  &.lv-nav-item--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: all;
+  }
 }
 
 .lv-nav-dash {

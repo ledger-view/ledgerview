@@ -7,9 +7,11 @@ import { AccountApiService } from './account-api.service';
 export class AccountService {
   private _accounts = signal<Account[]>([]);
   private _loading = signal(false);
+  private _loaded = signal(false);
 
   readonly accounts = this._accounts.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly loaded = this._loaded.asReadonly();
 
   constructor(private api: AccountApiService) {}
 
@@ -19,8 +21,12 @@ export class AccountService {
       next: (a) => {
         this._accounts.set(a);
         this._loading.set(false);
+        this._loaded.set(true);
       },
-      error: () => this._loading.set(false)
+      error: () => {
+        this._loading.set(false);
+        this._loaded.set(true);
+      }
     });
   }
 

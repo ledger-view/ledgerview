@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TransactionsPrerequisitesGuard } from '@core/transactions-prerequisites.guard';
 import { AppPath } from './app-routing.model';
 
 const routes: Routes = [
@@ -9,6 +10,7 @@ const routes: Routes = [
   },
   {
     path: AppPath.transactions,
+    canActivate: [TransactionsPrerequisitesGuard],
     loadChildren: () => import('@features/transactions/transactions.module').then((m) => m.TransactionsModule)
   },
   {

@@ -22,10 +22,17 @@
           <mat-icon>dashboard</mat-icon>
           <span>{{ 'nav.dashboard' | translate }}</span>
         </a>
-        <a class="lv-nav-item" routerLink="/transactions" routerLinkActive="lv-nav-item--active">
-          <mat-icon>receipt_long</mat-icon>
-          <span>{{ 'nav.transactions' | translate }}</span>
-        </a>
+        @if (transactionsEnabled()) {
+          <a class="lv-nav-item" routerLink="/transactions" routerLinkActive="lv-nav-item--active">
+            <mat-icon>receipt_long</mat-icon>
+            <span>{{ 'nav.transactions' | translate }}</span>
+          </a>
+        } @else {
+          <span class="lv-nav-item lv-nav-item--disabled" matTooltipPosition="right" [matTooltip]="transactionsTooltipKey() | translate">
+            <mat-icon>receipt_long</mat-icon>
+            <span>{{ 'nav.transactions' | translate }}</span>
+          </span>
+        }
         <a class="lv-nav-item" routerLink="/accounts" routerLinkActive="lv-nav-item--active">
           <mat-icon>account_balance</mat-icon>
           <span>{{ 'nav.accounts' | translate }}</span>

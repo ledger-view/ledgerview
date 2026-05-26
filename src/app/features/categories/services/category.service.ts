@@ -7,9 +7,11 @@ import { CategoryApiService } from './category-api.service';
 export class CategoryService {
   private _categories = signal<Category[]>([]);
   private _loading = signal(false);
+  private _loaded = signal(false);
 
   readonly categories = this._categories.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly loaded = this._loaded.asReadonly();
 
   constructor(private api: CategoryApiService) {}
 
@@ -19,8 +21,12 @@ export class CategoryService {
       next: (c) => {
         this._categories.set(c);
         this._loading.set(false);
+        this._loaded.set(true);
       },
-      error: () => this._loading.set(false)
+      error: () => {
+        this._loading.set(false);
+        this._loaded.set(true);
+      }
     });
   }
 

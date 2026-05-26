@@ -10,7 +10,10 @@
     "categories": "Categories",
     "cashFlow": "Cash Flow",
     "netWorth": "Net Worth",
-    "budgets": "Budgets"
+    "budgets": "Budgets",
+    "transactionsNeedBoth": "Add an account and a category first",
+    "transactionsNeedAccount": "Add an account first",
+    "transactionsNeedCategory": "Add a category first"
   },
   "common": {
     "cancel": "Cancel",
