@@ -10,6 +10,7 @@ export interface Transaction {
   title: string;
   amount: number;
   type: TransactionType;
+  currency: string;
   date: string;
   categoryId: string;
   accountId: string;

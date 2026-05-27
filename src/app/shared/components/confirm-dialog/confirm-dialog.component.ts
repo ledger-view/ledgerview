@@ -6,6 +6,7 @@ export interface ConfirmDialogData {
   message: string;
   confirmLabel?: string;
   danger?: boolean;
+  hideCancel?: boolean;
 }
 
 @Component({

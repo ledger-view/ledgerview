@@ -8,13 +8,7 @@
 
 <div class="acc-wrap">
   <!-- Header strip -->
-  <div class="acc-header">
-    <div>
-      <div class="acc-total-label">{{ 'accounts.totalAcross' | translate }} {{ accounts().length }} {{ 'accounts.activeAccounts' | translate }}</div>
-      <div class="acc-total lv-mono">{{ fmtMoney(total) }}</div>
-    </div>
-    <span class="lv-pill lv-pill-income">↑ 2.4% MoM</span>
-    <div class="lv-spacer"></div>
+  <div class="acc-header flex justify-end">
     <button class="lv-btn-primary" (click)="openAdd()">
       <mat-icon>add</mat-icon>
       {{ 'accounts.add' | translate }}

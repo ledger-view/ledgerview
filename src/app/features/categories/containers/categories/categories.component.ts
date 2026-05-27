@@ -80,6 +80,21 @@ export class CategoriesComponent implements OnInit {
         filter((confirmed): confirmed is true => confirmed === true),
         switchMap(() => this.categoryService.delete$(category.id))
       )
-      .subscribe();
+      .subscribe({
+        error: (err: Error) => {
+          if (err.message === 'CATEGORY_IN_USE') {
+            this.dialog.open<ConfirmDialogComponent, ConfirmDialogData>(ConfirmDialogComponent, {
+              data: {
+                title: this.translate.instant('categories.deleteError.title'),
+                message: this.translate.instant('categories.deleteError.message', { name: category.name }),
+                danger: false,
+                hideCancel: true,
+                confirmLabel: 'common.ok'
+              },
+              width: '380px'
+            });
+          }
+        }
+      });
   }
 }

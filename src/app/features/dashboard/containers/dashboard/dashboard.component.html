@@ -19,7 +19,12 @@
         <span class="db-stat-label">{{ 'dashboard.totalBalance' | translate }}</span>
         <span class="db-stat-delta db-stat-delta--up">↑ 2.4%</span>
       </div>
-      <div class="db-stat-value lv-mono">{{ fmtMoney(summary()?.totalBalance ?? 0) }}</div>
+      <div class="db-stat-amounts">
+        @for (ca of summary()?.totalBalance ?? []; track ca.currency; let first = $first) {
+          <div class="db-stat-value lv-mono" [class.db-stat-value--sm]="!first">{{ fmtMoney(ca.amount, ca.currency) }}</div>
+        }
+        @if (!(summary()?.totalBalance?.length)) { <div class="db-stat-value lv-mono">—</div> }
+      </div>
       <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
     </div>
 
@@ -28,7 +33,12 @@
         <span class="db-stat-label">{{ 'dashboard.monthlyIncome' | translate }}</span>
         <span class="db-stat-delta db-stat-delta--up">↑ 0.0%</span>
       </div>
-      <div class="db-stat-value lv-mono db-stat-value--income">{{ fmtMoney(summary()?.monthlyIncome ?? 0) }}</div>
+      <div class="db-stat-amounts">
+        @for (ca of summary()?.monthlyIncome ?? []; track ca.currency; let first = $first) {
+          <div class="db-stat-value lv-mono db-stat-value--income" [class.db-stat-value--sm]="!first">{{ fmtMoney(ca.amount, ca.currency) }}</div>
+        }
+        @if (!(summary()?.monthlyIncome?.length)) { <div class="db-stat-value lv-mono db-stat-value--income">—</div> }
+      </div>
       <div class="db-stat-sub">{{ 'dashboard.onSchedule' | translate }}</div>
     </div>
 
@@ -37,7 +47,12 @@
         <span class="db-stat-label">{{ 'dashboard.monthlyExpenses' | translate }}</span>
         <span class="db-stat-delta db-stat-delta--down">↓ 4.1%</span>
       </div>
-      <div class="db-stat-value lv-mono db-stat-value--expense">{{ fmtMoney(summary()?.monthlyExpenses ?? 0) }}</div>
+      <div class="db-stat-amounts">
+        @for (ca of summary()?.monthlyExpenses ?? []; track ca.currency; let first = $first) {
+          <div class="db-stat-value lv-mono db-stat-value--expense" [class.db-stat-value--sm]="!first">{{ fmtMoney(ca.amount, ca.currency) }}</div>
+        }
+        @if (!(summary()?.monthlyExpenses?.length)) { <div class="db-stat-value lv-mono db-stat-value--expense">—</div> }
+      </div>
       <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
     </div>
 
@@ -46,7 +61,12 @@
         <span class="db-stat-label">{{ 'dashboard.netFlow' | translate }}</span>
         <span class="db-stat-delta db-stat-delta--up">↑ 12.8%</span>
       </div>
-      <div class="db-stat-value lv-mono db-stat-value--accent">{{ fmtMoney(summary()?.netFlow ?? 0) }}</div>
+      <div class="db-stat-amounts">
+        @for (ca of summary()?.netFlow ?? []; track ca.currency; let first = $first) {
+          <div class="db-stat-value lv-mono db-stat-value--accent" [class.db-stat-value--sm]="!first">{{ fmtMoney(ca.amount, ca.currency) }}</div>
+        }
+        @if (!(summary()?.netFlow?.length)) { <div class="db-stat-value lv-mono db-stat-value--accent">—</div> }
+      </div>
       <div class="db-stat-sub">{{ 'dashboard.vsLastMonth' | translate }}</div>
     </div>
 
@@ -111,15 +131,16 @@
               />
             }
             <text class="db-donut-label-sm" text-anchor="middle" x="80" y="75">{{ 'dashboard.thisMonth' | translate }}</text>
-            <text class="db-donut-label-lg" text-anchor="middle" x="80" y="93">{{ fmtMoney(totalExpenses()) }}</text>
+            <text class="db-donut-label-lg" text-anchor="middle" x="80" y="93">{{ fmtMoney(primaryExpenseTotal()?.amount ?? 0, primaryExpenseTotal()?.currency ?? 'USD') }}</text>
           </svg>
         </div>
         <div class="db-legend-list">
-          @for (seg of expensesByCategory().slice(0, 5); track seg.categoryId) {
+          @for (seg of expensesByCategory().slice(0, 5); track seg.categoryId + seg.currency) {
             <div class="db-legend-row">
               <span class="lv-dot" [style.background]="seg.categoryColor"></span>
               <span class="db-legend-name">{{ seg.categoryName }}</span>
               <div class="lv-spacer"></div>
+              <span class="db-legend-ccy lv-mono">{{ seg.currency }}</span>
               <span class="db-legend-pct lv-mono">{{ pct(seg.total) }}%</span>
             </div>
           }

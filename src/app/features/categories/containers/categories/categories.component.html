@@ -19,26 +19,26 @@
     <div class="lv-loading"><mat-spinner diameter="28"></mat-spinner></div>
   } @else {
     <!-- Category cards grid -->
-    <div class="cat-cards-grid">
-      @for (cat of categories(); track cat.id) {
-        <div class="lv-card cat-card">
-          <div class="cat-card-top">
-            <div class="cat-icon" [style.background]="cat.color">
-              <span class="cat-icon-letter">{{ cat.name[0] }}</span>
-            </div>
-            <div class="cat-card-info">
-              <span class="cat-card-name">{{ cat.name }}</span>
-              <span class="cat-card-type">{{ cat.type }}</span>
-            </div>
-            <div class="lv-spacer"></div>
-            <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>
-          </div>
-          <div class="cat-card-stats">
-            <span class="cat-card-count">{{ cat.transactionCount }} tx</span>
-          </div>
-        </div>
-      }
-    </div>
+    <!--    <div class="cat-cards-grid">-->
+    <!--      @for (cat of categories(); track cat.id) {-->
+    <!--        <div class="lv-card cat-card">-->
+    <!--          <div class="cat-card-top">-->
+    <!--            <div class="cat-icon" [style.background]="cat.color">-->
+    <!--              <span class="cat-icon-letter">{{ cat.name[0] }}</span>-->
+    <!--            </div>-->
+    <!--            <div class="cat-card-info">-->
+    <!--              <span class="cat-card-name">{{ cat.name }}</span>-->
+    <!--              <span class="cat-card-type">{{ cat.type }}</span>-->
+    <!--            </div>-->
+    <!--            <div class="lv-spacer"></div>-->
+    <!--            <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>-->
+    <!--          </div>-->
+    <!--          <div class="cat-card-stats">-->
+    <!--            <span class="cat-card-count">{{ cat.transactionCount }} tx</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      }-->
+    <!--    </div>-->
 
     <!-- Detail list -->
     <div class="lv-card" style="padding: 0; overflow: hidden">

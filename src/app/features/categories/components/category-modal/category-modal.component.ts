@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, CategoryRequest, CategoryType, getCategoryCssPillClass, getCategoryTranslationKey } from '@model/category.model';
+import {
+  Category,
+  CategoryRequest,
+  CategoryType,
+  getCategoryCssPillClass,
+  getCategoryTranslationKey
+} from '@model/category.model';
 
 export interface CategoryModalData {
   category?: Category;

@@ -37,6 +37,7 @@
       "positiveAmount": "Must be greater than 0"
     },
     "cancel": "Cancel",
+    "ok": "OK",
     "delete": "Delete",
     "save": "Save changes",
     "create": "Create",
@@ -133,6 +134,10 @@
     "confirmDelete": {
       "title": "Delete category",
       "message": "Delete \"{{name}}\"? This cannot be undone."
+    },
+    "deleteError": {
+      "title": "Cannot delete category",
+      "message": "\"{{name}}\" is used by existing transactions and cannot be deleted."
     },
     "subtitle": "Used to label every transaction. Color shows up in charts.",
     "add": "New category",

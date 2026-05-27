@@ -155,7 +155,10 @@ export class TransactionsComponent implements OnInit {
         filter((r): r is TransactionModalResult => !!r && r.action === 'save' && !!r.data),
         switchMap((r) => this.txService.create$(r.data!))
       )
-      .subscribe(() => this.loadTransactions());
+      .subscribe(() => {
+        this.loadTransactions();
+        this.accountService.load();
+      });
   }
 
   protected openEdit(tx: Transaction): void {
@@ -168,7 +171,10 @@ export class TransactionsComponent implements OnInit {
       .pipe(filter((r): r is TransactionModalResult => !!r))
       .subscribe((r) => {
         if (r.action === 'save' && r.data) {
-          this.txService.update$(tx.id, r.data).subscribe(() => this.loadTransactions());
+          this.txService.update$(tx.id, r.data).subscribe(() => {
+            this.loadTransactions();
+            this.accountService.load();
+          });
         }
         if (r.action === 'delete') {
           this.openConfirmDelete(tx);
@@ -195,7 +201,10 @@ export class TransactionsComponent implements OnInit {
         filter((confirmed): confirmed is true => confirmed === true),
         switchMap(() => this.txService.delete$(tx.id))
       )
-      .subscribe(() => this.loadTransactions());
+      .subscribe(() => {
+        this.loadTransactions();
+        this.accountService.load();
+      });
   }
 
   protected fmtMoney(amount: number, currency = 'USD'): string {

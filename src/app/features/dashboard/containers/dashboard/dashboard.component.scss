@@ -60,6 +60,12 @@
   }
 }
 
+.db-stat-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .db-stat-value {
   font-size: 24px;
   font-weight: 600;
@@ -75,6 +81,12 @@
   }
   &--accent {
     color: var(--lv-accent);
+  }
+  &--sm {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    color: var(--lv-text-md);
   }
 }
 
@@ -218,6 +230,12 @@
 
 .db-legend-name {
   color: var(--lv-text);
+}
+
+.db-legend-ccy {
+  font-size: 10px;
+  color: var(--lv-text-lo);
+  margin-right: 4px;
 }
 
 .db-legend-pct {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardService } from '@features/dashboard/services/dashboard.service';
+import { CurrencyAmount } from '@model/dashboard.model';
 import { formatDate, formatTime } from '@shared/date/utils';
 import { AppPath } from '../../../../app-routing.model';
 
@@ -23,7 +24,18 @@ export class DashboardComponent implements OnInit {
   protected readonly accounts = this.dashboardService.accounts;
   protected readonly loading = this.dashboardService.loading;
 
-  protected readonly totalExpenses = computed(() => this.expensesByCategory().reduce((sum, s) => sum + s.total, 0));
+  protected readonly totalExpenses = computed(() =>
+    this.expensesByCategory().reduce((sum, s) => sum + s.total, 0)
+  );
+
+  protected readonly primaryExpenseTotal = computed(() => {
+    const expenses = this.expensesByCategory();
+    if (!expenses.length) return null;
+    const byCurrency: Record<string, number> = {};
+    expenses.forEach((e) => (byCurrency[e.currency] = (byCurrency[e.currency] ?? 0) + e.total));
+    const [currency, amount] = Object.entries(byCurrency).sort((a, b) => b[1] - a[1])[0];
+    return { currency, amount };
+  });
 
   protected readonly donutSegments = computed(() => {
     const segs = this.expensesByCategory();
@@ -70,8 +82,14 @@ export class DashboardComponent implements OnInit {
   protected fmtMoney(amount: number, currency = 'USD'): string {
     const sym: Record<string, string> = { USD: '$', EUR: '€', GBP: '£' };
     return (
-      (sym[currency] ?? '$') + Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      (sym[currency] ?? currency + ' ') +
+      Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     );
+  }
+
+  protected fmtAmounts(amounts: CurrencyAmount[]): string {
+    if (!amounts.length) return '—';
+    return amounts.map((a) => this.fmtMoney(a.amount, a.currency)).join(' · ');
   }
 
   protected pct(value: number): string {

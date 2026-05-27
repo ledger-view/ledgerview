@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Category, CategoryRequest } from '@model/category.model';
-import { tap } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { CategoryApiService } from './category-api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -41,6 +42,12 @@ export class CategoryService {
   }
 
   delete$(id: string) {
-    return this.api.deleteCategory$(id).pipe(tap(() => this._categories.update((list) => list.filter((c) => c.id !== id))));
+    return this.api.deleteCategory$(id).pipe(
+      tap(() => this._categories.update((list) => list.filter((c) => c.id !== id))),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 409) return throwError(() => new Error('CATEGORY_IN_USE'));
+        return throwError(() => err);
+      })
+    );
   }
 }
