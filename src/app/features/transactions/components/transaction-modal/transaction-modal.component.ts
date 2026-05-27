@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Account } from '@model/account.model';
@@ -10,6 +10,11 @@ export interface TransactionModalData {
   transaction?: Transaction;
   accounts: Account[];
   categories: Category[];
+}
+
+export interface TransactionModalResult {
+  action: 'save' | 'delete';
+  data?: TransactionRequest;
 }
 
 @Component({
@@ -27,7 +32,7 @@ export class TransactionModalComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<TransactionModalComponent>,
+    private dialogRef: MatDialogRef<TransactionModalComponent, TransactionModalResult>,
     @Inject(MAT_DIALOG_DATA) protected data: TransactionModalData
   ) {
     this.isEdit = !!data.transaction;
@@ -68,8 +73,18 @@ export class TransactionModalComponent implements OnInit {
     this.form.patchValue({ type });
   }
 
+  @HostListener('keydown.enter', ['$event'])
+  onEnter(e: Event): void {
+    const tag = (e.target as HTMLElement).tagName;
+    if (tag === 'BUTTON' || tag === 'SELECT') return;
+    this.save();
+  }
+
   protected save(): void {
-    if (!this.form.valid) return;
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const v = this.form.value;
     const amt = +v.amount * (v.type === CategoryType.EXPENSE ? -1 : 1);
     const req: TransactionRequest = {
@@ -81,7 +96,11 @@ export class TransactionModalComponent implements OnInit {
       categoryId: v.categoryId,
       note: v.note?.trim() || undefined
     };
-    this.dialogRef.close(req);
+    this.dialogRef.close({ action: 'save', data: req });
+  }
+
+  protected delete(): void {
+    this.dialogRef.close({ action: 'delete' });
   }
 
   protected cancel(): void {

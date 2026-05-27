@@ -6,14 +6,13 @@
         — {{ data.category?.name }}
       }
     </span>
-    <div class="lv-spacer"></div>
-    <button class="lv-icon-btn" (click)="cancel()"><mat-icon>close</mat-icon></button>
   </div>
 
   <div class="lv-modal-body">
     <div class="lv-field">
       <label class="lv-label">{{ 'common.name' | translate }}</label>
       <input class="lv-input" formControlName="name" [placeholder]="'categories.form.namePlaceholder' | translate" />
+      <span class="lv-error">@if (form.get('name')?.invalid && form.get('name')?.touched) { {{ 'common.errors.required' | translate }} }</span>
     </div>
 
     <div class="lv-field">
@@ -45,21 +44,24 @@
       <div class="lv-spacer"></div>
       <span class="lv-dot" [style.background]="color.value"></span>
       <span class="cat-preview-name">{{ previewName }}</span>
-      <span class="lv-pill" [class]="getCategoryCssPillClass(type.value)">{{ type.value }}</span>
+      <span class="lv-pill ml-auto" [class]="getCategoryCssPillClass(type.value)">{{ type.value }}</span>
     </div>
   </div>
 
-  <div class="lv-modal-footer">
-    @if (isEdit) {
-      <button class="lv-btn-danger" (click)="delete()">
-        <mat-icon>delete</mat-icon>
-        {{ 'common.delete' | translate }}
+  <div class="lv-modal-footer flex justify-between">
+    <div>
+      @if (isEdit) {
+        <button class="lv-btn-danger" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          {{ 'common.delete' | translate }}
+        </button>
+      }
+    </div>
+    <div class="flex gap-2">
+      <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button class="lv-btn-primary" (click)="save()">
+        {{ (isEdit ? 'common.save' : 'categories.form.create') | translate }}
       </button>
-    }
-    <div class="lv-spacer"></div>
-    <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
-    <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
-      {{ (isEdit ? 'common.save' : 'categories.form.create') | translate }}
-    </button>
+    </div>
   </div>
 </div>

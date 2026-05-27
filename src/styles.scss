@@ -23,6 +23,8 @@
   --lv-shadow: 0 1px 0 rgba(15, 17, 21, 0.04), 0 0 0 1px rgba(15, 17, 21, 0.06);
   --lv-font: 'Geist', ui-sans-serif, system-ui, sans-serif;
   --lv-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --lv-error-font-size: 11px;
 }
 
 // ── Reset ─────────────────────────────────────────────────────────────────
@@ -108,7 +110,6 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  justify-content: flex-end;
 }
 
 // ── Cards ─────────────────────────────────────────────────────────────────
@@ -122,13 +123,21 @@ body {
 .lv-field {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
+  position: relative;
+
+  .lv-error {
+    position: absolute;
+    left: 1px;
+    bottom: calc(-1 * var(--lv-error-font-size) - 2px);
+    line-height: 1;
+  }
 }
 
 .lv-field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 15px 10px;
 }
 
 .lv-field--full {
@@ -177,8 +186,16 @@ body {
 }
 
 .lv-error {
-  font-size: 11px;
+  display: block;
+  min-height: var(--lv-error-font-size);
+  font-size: var(--lv-error-font-size);
+  line-height: 1;
   color: var(--lv-expense);
+}
+
+.lv-input.ng-invalid.ng-touched,
+.lv-select.ng-invalid.ng-touched {
+  border-color: var(--lv-expense);
 }
 
 // ── Buttons ───────────────────────────────────────────────────────────────

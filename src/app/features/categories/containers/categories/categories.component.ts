@@ -5,9 +5,12 @@ import {
   CategoryModalData
 } from '@features/categories/components/category-modal/category-modal.component';
 import { CategoryService } from '@features/categories/services/category.service';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { TransactionApiService } from '@features/transactions/services/transaction-api.service';
 import { Category, CategoryRequest, getCategoryCssPillClass } from '@model/category.model';
 import { Transaction } from '@model/transaction.model';
+import { TranslateService } from '@ngx-translate/core';
+import { filter, switchMap } from 'rxjs';
 
 interface CategoryUsage {
   count: number;
@@ -25,6 +28,7 @@ export class CategoriesComponent implements OnInit {
   protected readonly categoryService = inject(CategoryService);
   private readonly txApi = inject(TransactionApiService);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   protected readonly categories = this.categoryService.categories;
   protected readonly loading = this.categoryService.loading;
@@ -71,8 +75,13 @@ export class CategoriesComponent implements OnInit {
   protected openAdd(): void {
     this.openModal(undefined);
   }
+
   protected openEdit(category: Category): void {
     this.openModal(category);
+  }
+
+  protected openDelete(category: Category): void {
+    this.openConfirmDelete(category);
   }
 
   private openModal(category?: Category): void {
@@ -91,9 +100,27 @@ export class CategoriesComponent implements OnInit {
           op$.subscribe(() => this.loadUsage());
         }
         if (result.action === 'delete' && category) {
-          this.categoryService.delete$(category.id).subscribe();
+          this.openConfirmDelete(category);
         }
       });
+  }
+
+  private openConfirmDelete(category: Category): void {
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: this.translate.instant('categories.confirmDelete.title'),
+          message: this.translate.instant('categories.confirmDelete.message', { name: category.name }),
+          danger: true
+        },
+        width: '380px'
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed): confirmed is true => confirmed === true),
+        switchMap(() => this.categoryService.delete$(category.id))
+      )
+      .subscribe();
   }
 
   protected trackById(_: number, item: Category): string {

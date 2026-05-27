@@ -18,7 +18,8 @@
     "time": "Time",
     "description": "Description",
     "institution": "Institution",
-    "openingBalance": "Opening balance"
+    "openingBalance": "Opening balance",
+    "optional": "Optional"
   },
   "nav": {
     "workspace": "Workspace",
@@ -31,6 +32,10 @@
     "transactionsNeedCategory": "Add a category first"
   },
   "common": {
+    "errors": {
+      "required": "Required",
+      "positiveAmount": "Must be greater than 0"
+    },
     "cancel": "Cancel",
     "delete": "Delete",
     "save": "Save changes",
@@ -79,6 +84,10 @@
       "last90d": "Last 90 days",
       "ytd": "Year-to-date"
     },
+    "confirmDelete": {
+      "title": "Delete transaction",
+      "message": "Delete \"{{title}}\"? This cannot be undone."
+    },
     "form": {
       "addTitle": "Add transaction",
       "editTitle": "Edit transaction",
@@ -86,13 +95,17 @@
       "amountExpense": "Amount (−)",
       "amountIncome": "Amount (+)",
       "amountPlaceholder": "0.00",
-      "note": "Note (optional)",
+      "note": "Note",
       "notePlaceholder": "Add a note",
       "save": "Save transaction",
       "update": "Update transaction"
     }
   },
   "accounts": {
+    "confirmDelete": {
+      "title": "Delete account",
+      "message": "Delete \"{{name}}\"? All associated transactions will be affected. This cannot be undone."
+    },
     "subtitle": "Manage your financial accounts",
     "add": "Add account",
     "totalAcross": "Total across",
@@ -107,7 +120,7 @@
       "namePlaceholder": "Main Checking",
       "institutionPlaceholder": "Chase",
       "last4": "Last 4 / handle",
-      "last4Placeholder": "••1234",
+      "last4Placeholder": "1234",
       "create": "Create account"
     },
     "filter": {
@@ -117,6 +130,10 @@
     }
   },
   "categories": {
+    "confirmDelete": {
+      "title": "Delete category",
+      "message": "Delete \"{{name}}\"? This cannot be undone."
+    },
     "subtitle": "Used to label every transaction. Color shows up in charts.",
     "add": "New category",
     "total": "total",

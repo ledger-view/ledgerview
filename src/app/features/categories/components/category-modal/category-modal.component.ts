@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Category, CategoryRequest, CategoryType, getCategoryCssPillClass } from '@model/category.model';
@@ -48,7 +48,7 @@ export class CategoryModalComponent implements OnInit {
     const c = this.data.category;
     this.form = this.fb.group({
       name: [c?.name ?? '', Validators.required],
-      type: [c?.type ?? 'expense'],
+      type: [c?.type ?? CategoryType.EXPENSE],
       color: [c?.color ?? PALETTE[0]]
     });
   }
@@ -68,8 +68,18 @@ export class CategoryModalComponent implements OnInit {
     this.form.patchValue({ color });
   }
 
+  @HostListener('keydown.enter', ['$event'])
+  onEnter(e: Event): void {
+    const tag = (e.target as HTMLElement).tagName;
+    if (tag === 'BUTTON' || tag === 'SELECT') return;
+    this.save();
+  }
+
   protected save(): void {
-    if (!this.form.valid) return;
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const v = this.form.value;
     const req: CategoryRequest = { name: v.name.trim(), color: v.color, type: v.type };
     this.dialogRef.close({ action: 'save', data: req });

@@ -1,6 +1,7 @@
 import { AsyncPipe, DatePipe, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { A11yModule } from '@angular/cdk/a11y';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,8 +9,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
-const materialModules = [MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatDialogModule];
+const materialModules = [A11yModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatDialogModule];
 
 const ngModules = [
   AsyncPipe,
@@ -25,7 +27,8 @@ const ngModules = [
 ];
 
 @NgModule({
+  declarations: [ConfirmDialogComponent],
   imports: [...materialModules, ...ngModules],
-  exports: [...materialModules, ...ngModules]
+  exports: [ConfirmDialogComponent, ...materialModules, ...ngModules]
 })
 export class SharedModule {}

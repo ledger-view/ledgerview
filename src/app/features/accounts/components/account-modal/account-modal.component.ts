@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Account, AccountRequest } from '@model/account.model';
@@ -17,6 +17,8 @@ export interface AccountModalData {
 export class AccountModalComponent implements OnInit {
   protected form!: FormGroup;
   protected readonly isEdit: boolean;
+
+  protected readonly currencies = ['USD', 'EUR', 'GBP'];
 
   constructor(
     private fb: FormBuilder,
@@ -42,8 +44,18 @@ export class AccountModalComponent implements OnInit {
     return this.form.valid;
   }
 
+  @HostListener('keydown.enter', ['$event'])
+  onEnter(e: Event): void {
+    const tag = (e.target as HTMLElement).tagName;
+    if (tag === 'BUTTON' || tag === 'SELECT') return;
+    this.save();
+  }
+
   protected save(): void {
-    if (!this.form.valid) return;
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const v = this.form.value;
     const req: AccountRequest = {
       name: v.name.trim(),

@@ -3,10 +3,6 @@
     <span class="lv-modal-title">
       {{ (isEdit ? 'transactions.form.editTitle' : 'transactions.form.addTitle') | translate }}
     </span>
-    <div class="lv-spacer"></div>
-    <button class="lv-icon-btn" (click)="cancel()">
-      <mat-icon>close</mat-icon>
-    </button>
   </div>
 
   <div class="lv-modal-body">
@@ -22,7 +18,12 @@
     <div class="lv-field-row">
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.description' | translate }}</label>
-        <input class="lv-input" formControlName="title" [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
+        <input class="lv-input" cdkFocusInitial formControlName="title" [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
+        <span class="lv-error">
+          @if (form.get('title')?.invalid && form.get('title')?.touched) {
+            {{ 'common.errors.required' | translate }}
+          }
+        </span>
       </div>
       <div class="lv-field">
         <label class="lv-label">{{ amountLabel | translate }}</label>
@@ -33,14 +34,29 @@
           type="number"
           [placeholder]="'transactions.form.amountPlaceholder' | translate"
         />
+        <span class="lv-error">
+          @if (form.get('amount')?.touched) {
+            @if (form.get('amount')?.hasError('required')) {
+              {{ 'common.errors.required' | translate }}
+            } @else if (form.get('amount')?.hasError('min')) {
+              {{ 'common.errors.positiveAmount' | translate }}
+            }
+          }
+        </span>
       </div>
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.date' | translate }}</label>
         <input class="lv-input" formControlName="date" type="date" />
+        <span class="lv-error">
+          @if (form.get('date')?.invalid && form.get('date')?.touched) {
+            {{ 'common.errors.required' | translate }}
+          }
+        </span>
       </div>
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.time' | translate }}</label>
         <input class="lv-input" formControlName="time" type="time" />
+        <span class="lv-error"></span>
       </div>
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.account' | translate }}</label>
@@ -49,6 +65,7 @@
             <option [value]="acc.id">{{ acc.name }}</option>
           }
         </select>
+        <span class="lv-error"></span>
       </div>
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.category' | translate }}</label>
@@ -57,18 +74,29 @@
             <option [value]="cat.id">{{ cat.name }}</option>
           }
         </select>
+        <span class="lv-error"></span>
       </div>
       <div class="lv-field lv-field--full">
-        <label class="lv-label">{{ 'transactions.form.note' | translate }}</label>
+        <label class="lv-label">{{ 'transactions.form.note' | translate }}&nbsp;({{ 'theme.optional' | translate | lowercase }})</label>
         <input class="lv-input" formControlName="note" [placeholder]="'transactions.form.notePlaceholder' | translate" />
+        <span class="lv-error"></span>
       </div>
     </div>
   </div>
 
-  <div class="lv-modal-footer">
-    <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
-    <button class="lv-btn-primary" [disabled]="!isValid" (click)="save()">
-      {{ (isEdit ? 'transactions.form.update' : 'transactions.form.save') | translate }}
-    </button>
+  <div class="lv-modal-footer justify-between">
+    @if (isEdit) {
+      <button class="lv-btn-danger" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        {{ 'common.delete' | translate }}
+      </button>
+    }
+    <div class="lv-spacer"></div>
+    <div class="flex gap-2">
+      <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button class="lv-btn-primary" (click)="save()">
+        {{ (isEdit ? 'transactions.form.update' : 'transactions.form.save') | translate }}
+      </button>
+    </div>
   </div>
 </div>

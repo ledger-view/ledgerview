@@ -4,13 +4,16 @@ import { AccountService } from '@features/accounts/services/account.service';
 import { CategoryService } from '@features/categories/services/category.service';
 import {
   TransactionModalComponent,
-  TransactionModalData
+  TransactionModalData,
+  TransactionModalResult
 } from '@features/transactions/components/transaction-modal/transaction-modal.component';
 import { TransactionService } from '@features/transactions/services/transaction.service';
 import { Account } from '@model/account.model';
 import { Category } from '@model/category.model';
 import { Transaction, TransactionRequest } from '@model/transaction.model';
 import { filter, switchMap } from 'rxjs';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 import { dayEndIso, dayStartIso, formatDate, formatTime } from '@shared/date/utils';
 
 export interface TxFilters {
@@ -32,6 +35,7 @@ export class TransactionsComponent implements OnInit {
   private readonly accountService = inject(AccountService);
   private readonly categoryService = inject(CategoryService);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   protected readonly page = this.txService.page;
   protected readonly loading = this.txService.loading;
@@ -142,35 +146,56 @@ export class TransactionsComponent implements OnInit {
 
   protected openAdd(): void {
     this.dialog
-      .open<TransactionModalComponent, TransactionModalData, TransactionRequest>(TransactionModalComponent, {
+      .open<TransactionModalComponent, TransactionModalData, TransactionModalResult>(TransactionModalComponent, {
         data: { accounts: this.accounts(), categories: this.categories() },
         width: '500px'
       })
       .afterClosed()
       .pipe(
-        filter((r): r is TransactionRequest => !!r),
-        switchMap((req) => this.txService.create$(req))
+        filter((r): r is TransactionModalResult => !!r && r.action === 'save' && !!r.data),
+        switchMap((r) => this.txService.create$(r.data!))
       )
       .subscribe(() => this.loadTransactions());
   }
 
   protected openEdit(tx: Transaction): void {
     this.dialog
-      .open<TransactionModalComponent, TransactionModalData, TransactionRequest>(TransactionModalComponent, {
+      .open<TransactionModalComponent, TransactionModalData, TransactionModalResult>(TransactionModalComponent, {
         data: { transaction: tx, accounts: this.accounts(), categories: this.categories() },
         width: '500px'
       })
       .afterClosed()
-      .pipe(
-        filter((r): r is TransactionRequest => !!r),
-        switchMap((req) => this.txService.update$(tx.id, req))
-      )
-      .subscribe(() => this.loadTransactions());
+      .pipe(filter((r): r is TransactionModalResult => !!r))
+      .subscribe((r) => {
+        if (r.action === 'save' && r.data) {
+          this.txService.update$(tx.id, r.data).subscribe(() => this.loadTransactions());
+        }
+        if (r.action === 'delete') {
+          this.openConfirmDelete(tx);
+        }
+      });
   }
 
   protected openDelete(tx: Transaction): void {
-    if (!window.confirm(`Delete "${tx.title}"?`)) return;
-    this.txService.delete$(tx.id).subscribe(() => this.loadTransactions());
+    this.openConfirmDelete(tx);
+  }
+
+  private openConfirmDelete(tx: Transaction): void {
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: this.translate.instant('transactions.confirmDelete.title'),
+          message: this.translate.instant('transactions.confirmDelete.message', { title: tx.title }),
+          danger: true
+        },
+        width: '380px'
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed): confirmed is true => confirmed === true),
+        switchMap(() => this.txService.delete$(tx.id))
+      )
+      .subscribe(() => this.loadTransactions());
   }
 
   protected fmtMoney(amount: number, currency = 'USD'): string {

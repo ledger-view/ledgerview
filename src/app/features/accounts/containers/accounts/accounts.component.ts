@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import { AccountModalComponent, AccountModalData } from '@features/accounts/components/account-modal/account-modal.component';
 import { AccountService } from '@features/accounts/services/account.service';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { Account, AccountRequest } from '@model/account.model';
-import { filter } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-accounts',
@@ -15,6 +17,7 @@ import { filter } from 'rxjs';
 export class AccountsComponent implements OnInit {
   private readonly accountService = inject(AccountService);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   protected readonly accounts = this.accountService.accounts;
   protected readonly loading = this.accountService.loading;
@@ -71,7 +74,21 @@ export class AccountsComponent implements OnInit {
           op$.subscribe();
         }
         if (result.action === 'delete' && account) {
-          this.accountService.delete$(account.id).subscribe();
+          this.dialog
+            .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+              data: {
+                title: this.translate.instant('accounts.confirmDelete.title'),
+                message: this.translate.instant('accounts.confirmDelete.message', { name: account.name }),
+                danger: true
+              },
+              width: '380px'
+            })
+            .afterClosed()
+            .pipe(
+              filter((confirmed): confirmed is true => confirmed === true),
+              switchMap(() => this.accountService.delete$(account.id))
+            )
+            .subscribe();
         }
       });
   }

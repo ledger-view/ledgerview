@@ -1,0 +1,19 @@
+<div class="lv-modal-wrap">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">{{ data.title }}</span>
+  </div>
+
+  <div class="lv-modal-body cd-body">
+    <p class="cd-message" [innerHTML]="data.message"></p>
+  </div>
+
+  <div class="lv-modal-footer justify-between">
+    <div></div>
+    <div class="flex gap-2">
+      <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button cdkFocusInitial [class.lv-btn-danger]="data.danger !== false" [class.lv-btn-primary]="data.danger === false" (click)="confirm()">
+        {{ data.confirmLabel ?? 'common.delete' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

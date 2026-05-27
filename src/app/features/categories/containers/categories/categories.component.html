@@ -70,7 +70,7 @@
           <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(category.id).total) }}</span>
           <div class="cat-actions">
             <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>
-            <button class="lv-icon-btn" (click)="categoryService.delete$(category.id).subscribe()"><mat-icon>delete</mat-icon></button>
+            <button class="lv-icon-btn" (click)="openDelete(category)"><mat-icon>delete</mat-icon></button>
           </div>
         </div>
       }
