@@ -137,7 +137,7 @@
       </div>
       <div class="db-tx-list">
         @for (tx of recentTransactions(); track tx.id; let first = $first) {
-          <div class="db-tx-row" [class.db-tx-row--first]="first">
+          <div class="db-tx-row gap-4" [class.db-tx-row--first]="first">
             <span class="lv-dot db-tx-dot"></span>
             <div class="db-tx-info">
               <span class="db-tx-title">{{ tx.title }}</span>
@@ -145,10 +145,13 @@
                 <span class="db-tx-note">{{ tx.note }}</span>
               }
             </div>
-            <span class="db-tx-date lv-mono">{{ fmtDate(tx.date) }}</span>
             <span class="db-tx-amount lv-mono" [class.db-tx-amount--income]="tx.amount >= 0">
               {{ tx.amount >= 0 ? '+' : '' }}{{ fmtMoney(tx.amount) }}
             </span>
+            <div class="db-tx-date lv-mono flex gap-2">
+              <span>{{ formatDate(tx.date) }}</span>
+              <span class="tx-time">{{ formatTime(tx.date) }}</span>
+            </div>
           </div>
         }
         @if (recentTransactions().length === 0) {

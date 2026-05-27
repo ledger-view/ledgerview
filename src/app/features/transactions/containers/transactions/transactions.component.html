@@ -94,7 +94,10 @@
         @for (tx of page().content; track tx.id) {
           <div class="lv-table-row tx-cols">
             <span class="lv-dot" [style.background]="categoryMap()[tx.categoryId]?.color ?? 'var(--lv-text-lo)'"></span>
-            <span class="tx-date lv-mono">{{ fmtDate(tx.date) }}</span>
+            <div class="tx-date lv-mono">
+              <span>{{ formatDate(tx.date) }}</span>
+              <span class="tx-time">{{ formatTime(tx.date) }}</span>
+            </div>
             <div class="tx-info">
               <span class="tx-title">{{ tx.title }}</span>
               @if (tx.note) {

@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Account } from '@model/account.model';
 import { Category, CategoryType } from '@model/category.model';
 import { Transaction, TransactionRequest } from '@model/transaction.model';
+import { localDateTimeInputToIso, toLocalDateInput, toLocalTimeInput } from '@shared/date/utils';
 
 export interface TransactionModalData {
   transaction?: Transaction;
@@ -34,12 +35,12 @@ export class TransactionModalComponent implements OnInit {
 
   ngOnInit(): void {
     const tx = this.data.transaction;
-    const today = new Date().toISOString().slice(0, 10);
     this.form = this.fb.group({
       type: [tx?.type ?? CategoryType.EXPENSE],
       title: [tx?.title ?? '', Validators.required],
       amount: [tx ? Math.abs(tx.amount) : '', [Validators.required, Validators.min(0.01)]],
-      date: [tx?.date ?? today, Validators.required],
+      date: [tx ? toLocalDateInput(new Date(tx.date)) : toLocalDateInput(new Date()), Validators.required],
+      time: [tx ? toLocalTimeInput(new Date(tx.date)) : '00:00', Validators.required],
       accountId: [tx?.accountId ?? this.data.accounts[0]?.id ?? '', Validators.required],
       categoryId: [tx?.categoryId ?? this.data.categories[0]?.id ?? '', Validators.required],
       note: [tx?.note ?? '']
@@ -75,7 +76,7 @@ export class TransactionModalComponent implements OnInit {
       title: v.title.trim(),
       amount: amt,
       type: v.type,
-      date: v.date,
+      date: localDateTimeInputToIso(v.date, v.time),
       accountId: v.accountId,
       categoryId: v.categoryId,
       note: v.note?.trim() || undefined

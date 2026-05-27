@@ -15,6 +15,7 @@
     "balance": "Balance",
     "currency": "Currency",
     "date": "Date",
+    "time": "Time",
     "description": "Description",
     "institution": "Institution",
     "openingBalance": "Opening balance"

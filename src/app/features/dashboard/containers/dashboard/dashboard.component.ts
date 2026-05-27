@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@a
 import { Router } from '@angular/router';
 import { DashboardService } from '@features/dashboard/services/dashboard.service';
 import { AppPath } from '../../../../app-routing.model';
+import { formatDate, formatTime } from '@shared/date/utils';
 
 const CIRCUMFERENCE = 2 * Math.PI * 62;
 
@@ -55,7 +56,10 @@ export class DashboardComponent implements OnInit {
 
   protected readonly cashFlowMax = Math.max(...this.cashFlowData.map((d) => Math.max(d.i, d.e))) * 1.1;
 
-  ngOnInit(): void {
+  protected readonly formatDate = formatDate;
+  protected readonly formatTime = formatTime;
+
+  public ngOnInit(): void {
     this.dashboardService.load();
   }
 
@@ -68,10 +72,6 @@ export class DashboardComponent implements OnInit {
     return (
       (sym[currency] ?? '$') + Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     );
-  }
-
-  protected fmtDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
   protected pct(value: number): string {

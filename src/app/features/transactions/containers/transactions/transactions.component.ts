@@ -11,6 +11,7 @@ import { Account } from '@model/account.model';
 import { Category } from '@model/category.model';
 import { TransactionRequest } from '@model/transaction.model';
 import { filter, switchMap } from 'rxjs';
+import { dayEndIso, dayStartIso, formatDate, formatTime } from '@shared/date/utils';
 
 export interface TxFilters {
   type: 'all' | 'INCOME' | 'EXPENSE';
@@ -74,26 +75,25 @@ export class TransactionsComponent implements OnInit {
   }
 
   private dateRangeParams(range: TxFilters['range']): Record<string, string> {
-    const today = new Date();
-    const fmt = (d: Date) => d.toISOString().slice(0, 10);
-    const dateTo = fmt(today);
+    const now = new Date();
+    const dateTo = dayEndIso(now);
 
     if (range === '7d') {
-      const from = new Date(today);
+      const from = new Date(now);
       from.setDate(from.getDate() - 7);
-      return { dateFrom: fmt(from), dateTo };
+      return { dateFrom: dayStartIso(from), dateTo };
     }
     if (range === '30d') {
-      const from = new Date(today);
+      const from = new Date(now);
       from.setDate(from.getDate() - 30);
-      return { dateFrom: fmt(from), dateTo };
+      return { dateFrom: dayStartIso(from), dateTo };
     }
     if (range === '90d') {
-      const from = new Date(today);
+      const from = new Date(now);
       from.setDate(from.getDate() - 90);
-      return { dateFrom: fmt(from), dateTo };
+      return { dateFrom: dayStartIso(from), dateTo };
     }
-    return { dateFrom: `${today.getFullYear()}-01-01`, dateTo };
+    return { dateFrom: dayStartIso(new Date(now.getFullYear(), 0, 1)), dateTo };
   }
 
   protected setTypeFilter(type: TxFilters['type']): void {
@@ -161,9 +161,8 @@ export class TransactionsComponent implements OnInit {
     );
   }
 
-  protected fmtDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
+  protected readonly formatDate = formatDate;
+  protected readonly formatTime = formatTime;
 
   protected showingFrom(): number {
     const p = this.page();

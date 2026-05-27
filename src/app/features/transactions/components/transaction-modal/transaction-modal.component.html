@@ -39,6 +39,10 @@
         <input class="lv-input" formControlName="date" type="date" />
       </div>
       <div class="lv-field">
+        <label class="lv-label">{{ 'theme.time' | translate }}</label>
+        <input class="lv-input" formControlName="time" type="time" />
+      </div>
+      <div class="lv-field">
         <label class="lv-label">{{ 'theme.account' | translate }}</label>
         <select class="lv-select" formControlName="accountId">
           @for (acc of data.accounts; track acc.id) {
@@ -54,7 +58,7 @@
           }
         </select>
       </div>
-      <div class="lv-field">
+      <div class="lv-field lv-field--full">
         <label class="lv-label">{{ 'transactions.form.note' | translate }}</label>
         <input class="lv-input" formControlName="note" [placeholder]="'transactions.form.notePlaceholder' | translate" />
       </div>
