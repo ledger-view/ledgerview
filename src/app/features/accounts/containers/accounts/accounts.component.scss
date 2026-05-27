@@ -9,10 +9,13 @@
 
 .acc-wrap {
   padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  > * + * {
+    margin-top: 14px;
+  }
 }
 
 .acc-header {
@@ -161,16 +164,7 @@
 }
 
 .acc-table-cols {
-  grid-template-columns: 36px 1.6fr 1fr 1fr 0.8fr 1fr 80px;
-  padding: 8px 16px;
-}
-
-.lv-table-row.acc-table-cols {
-  padding: 10px 16px;
-}
-
-.acc-row-last {
-  border-bottom: none !important;
+  grid-template-columns: 36px 1.6fr 1fr 1fr 1fr 64px 64px;
 }
 
 .acc-icon-sm {
@@ -212,10 +206,4 @@
 
 .acc-right {
   text-align: right;
-}
-
-.acc-actions {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-end;
 }

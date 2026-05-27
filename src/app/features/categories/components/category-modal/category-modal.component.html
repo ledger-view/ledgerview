@@ -12,7 +12,11 @@
     <div class="lv-field">
       <label class="lv-label">{{ 'common.name' | translate }}</label>
       <input class="lv-input" formControlName="name" [placeholder]="'categories.form.namePlaceholder' | translate" />
-      <span class="lv-error">@if (form.get('name')?.invalid && form.get('name')?.touched) { {{ 'common.errors.required' | translate }} }</span>
+      <span class="lv-error">
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          {{ 'common.errors.required' | translate }}
+        }
+      </span>
     </div>
 
     <div class="lv-field">

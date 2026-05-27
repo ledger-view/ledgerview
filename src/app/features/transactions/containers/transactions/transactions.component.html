@@ -113,11 +113,11 @@
             <span class="tx-amount lv-mono" [class.tx-amount--income]="tx.amount >= 0">
               {{ tx.amount >= 0 ? '+' : '−' }}{{ fmtMoney(tx.amount, accountMap()[tx.accountId]?.currency) }}
             </span>
-            <div class="tx-row-actions">
+            <div class="lv-row-actions">
               <button class="lv-icon-btn tx-action-btn" (click)="openEdit(tx); $event.stopPropagation()">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button class="lv-icon-btn tx-action-btn tx-action-btn--danger" (click)="openDelete(tx); $event.stopPropagation()">
+              <button class="lv-icon-btn tx-action-btn lv-icon-btn-danger" (click)="openDelete(tx); $event.stopPropagation()">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

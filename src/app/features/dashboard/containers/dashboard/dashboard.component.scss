@@ -8,12 +8,18 @@
   flex: 1;
 }
 
+.db-scroll-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
 .db-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   padding: 18px;
-  overflow-y: auto;
+  align-content: start;
 }
 
 // ── Stat cards ────────────────────────────────────────────────────────────
@@ -263,9 +269,11 @@
   display: grid;
   grid-template-columns: 20px 1fr auto auto;
   align-items: center;
-  padding: 9px 16px;
+  height: 36px;
+  padding: 0 16px;
   border-top: 1px solid var(--lv-border);
   font-size: 12.5px;
+  overflow: hidden;
   transition: background 0.1s;
 
   &--first {
@@ -282,20 +290,12 @@
   background: var(--lv-text-lo);
 }
 
-.db-tx-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
 .db-tx-title {
   font-weight: 500;
   color: var(--lv-text);
-}
-
-.db-tx-note {
-  font-size: 11px;
-  color: var(--lv-text-lo);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .db-tx-date {

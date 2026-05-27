@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import { AccountModalComponent, AccountModalData } from '@features/accounts/components/account-modal/account-modal.component';
 import { AccountService } from '@features/accounts/services/account.service';
-import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { Account, AccountRequest } from '@model/account.model';
 import { TranslateService } from '@ngx-translate/core';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { filter, switchMap } from 'rxjs';
 
 @Component({
@@ -60,6 +60,28 @@ export class AccountsComponent implements OnInit {
     this.openModal(account);
   }
 
+  protected openDelete(account: Account): void {
+    this.openConfirmDelete(account);
+  }
+
+  private openConfirmDelete(account: Account): void {
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: this.translate.instant('accounts.confirmDelete.title'),
+          message: this.translate.instant('accounts.confirmDelete.message', { name: account.name }),
+          danger: true
+        },
+        width: '380px'
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed): confirmed is true => confirmed === true),
+        switchMap(() => this.accountService.delete$(account.id))
+      )
+      .subscribe();
+  }
+
   private openModal(account?: Account): void {
     this.dialog
       .open<AccountModalComponent, AccountModalData, { action: string; data?: AccountRequest }>(AccountModalComponent, {
@@ -74,21 +96,7 @@ export class AccountsComponent implements OnInit {
           op$.subscribe();
         }
         if (result.action === 'delete' && account) {
-          this.dialog
-            .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
-              data: {
-                title: this.translate.instant('accounts.confirmDelete.title'),
-                message: this.translate.instant('accounts.confirmDelete.message', { name: account.name }),
-                danger: true
-              },
-              width: '380px'
-            })
-            .afterClosed()
-            .pipe(
-              filter((confirmed): confirmed is true => confirmed === true),
-              switchMap(() => this.accountService.delete$(account.id))
-            )
-            .subscribe();
+          this.openConfirmDelete(account);
         }
       });
   }

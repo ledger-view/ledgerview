@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardService } from '@features/dashboard/services/dashboard.service';
-import { AppPath } from '../../../../app-routing.model';
 import { formatDate, formatTime } from '@shared/date/utils';
+import { AppPath } from '../../../../app-routing.model';
 
 const CIRCUMFERENCE = 2 * Math.PI * 62;
 

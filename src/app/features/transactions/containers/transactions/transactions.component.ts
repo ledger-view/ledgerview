@@ -10,11 +10,11 @@ import {
 import { TransactionService } from '@features/transactions/services/transaction.service';
 import { Account } from '@model/account.model';
 import { Category } from '@model/category.model';
-import { Transaction, TransactionRequest } from '@model/transaction.model';
-import { filter, switchMap } from 'rxjs';
-import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { Transaction } from '@model/transaction.model';
 import { TranslateService } from '@ngx-translate/core';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { dayEndIso, dayStartIso, formatDate, formatTime } from '@shared/date/utils';
+import { filter, switchMap } from 'rxjs';
 
 export interface TxFilters {
   type: 'all' | 'INCOME' | 'EXPENSE';

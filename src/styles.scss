@@ -1,4 +1,5 @@
 @use './assets/styles/utilities/helpers';
+@use './assets/styles/layout/tables';
 
 // ── Pulse Light design tokens ─────────────────────────────────────────────
 :root {
@@ -17,6 +18,8 @@
   --lv-income-soft: #e8f7ee;
   --lv-expense: #e11d48;
   --lv-expense-soft: #fdecef;
+  --lv-danger: #dc2626;
+  --lv-danger-soft: #fee2e2;
   --lv-hover: #f4f4f6;
   --lv-radius: 10px;
   --lv-radius-sm: 6px;
@@ -151,7 +154,7 @@ body {
 }
 
 .lv-req {
-  color: var(--lv-expense);
+  color: var(--lv-danger);
 }
 
 .lv-input,
@@ -190,12 +193,12 @@ body {
   min-height: var(--lv-error-font-size);
   font-size: var(--lv-error-font-size);
   line-height: 1;
-  color: var(--lv-expense);
+  color: var(--lv-danger);
 }
 
 .lv-input.ng-invalid.ng-touched,
 .lv-select.ng-invalid.ng-touched {
-  border-color: var(--lv-expense);
+  border-color: var(--lv-danger);
 }
 
 // ── Buttons ───────────────────────────────────────────────────────────────
@@ -260,11 +263,15 @@ body {
 
 .lv-btn-danger {
   background: transparent;
-  color: var(--lv-expense);
+  color: var(--lv-danger);
   border: 1px solid var(--lv-border);
   &:hover:not(:disabled) {
-    background: var(--lv-expense-soft);
+    background: var(--lv-danger-soft);
   }
+}
+
+.lv-icon-btn-danger:hover {
+  color: var(--lv-danger) !important;
 }
 
 .lv-btn-sm {
@@ -361,60 +368,6 @@ body {
   }
 }
 
-// ── Table ─────────────────────────────────────────────────────────────────
-.lv-table-header {
-  display: grid;
-  padding: 7px 14px;
-  background: var(--lv-bg);
-  border-top: 1px solid var(--lv-border);
-  border-bottom: 1px solid var(--lv-border);
-  align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--lv-text-md);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.lv-table-row {
-  display: grid;
-  padding: 8px 14px;
-  align-items: center;
-  gap: 12px;
-  font-size: 12.5px;
-  border-bottom: 1px solid var(--lv-border);
-  transition: background 0.1s;
-  cursor: pointer;
-
-  &:hover {
-    background: var(--lv-hover);
-  }
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-// ── Sort button ───────────────────────────────────────────────────────────
-.lv-sort-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: var(--lv-font);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--lv-text-md);
-
-  &.active {
-    color: var(--lv-text);
-  }
-}
 
 // ── Topbar ────────────────────────────────────────────────────────────────
 .lv-topbar {
@@ -439,7 +392,6 @@ body {
     color: var(--lv-text-md);
     margin-top: 1px;
   }
-
 }
 
 // ── Mono numbers ─────────────────────────────────────────────────────────
@@ -457,13 +409,6 @@ body {
   flex-shrink: 0;
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────
-.lv-empty {
-  padding: 40px 14px;
-  text-align: center;
-  color: var(--lv-text-md);
-  font-size: 12.5px;
-}
 
 // ── Loading spinner ───────────────────────────────────────────────────────
 .lv-loading {

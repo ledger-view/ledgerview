@@ -9,10 +9,13 @@
 
 .cat-wrap {
   padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  > * + * {
+    margin-top: 14px;
+  }
 }
 
 .cat-toolbar {
@@ -126,16 +129,7 @@
 }
 
 .cat-table-cols {
-  grid-template-columns: 36px 1fr 100px 95px 140px 80px;
-  padding: 8px 16px;
-}
-
-.lv-table-row.cat-table-cols {
-  padding: 10px 16px;
-}
-
-.cat-row-last {
-  border-bottom: none !important;
+  grid-template-columns: 36px 1fr 75px 95px 140px 64px;
 }
 
 .cat-dot-lg {
@@ -157,10 +151,4 @@
   text-align: right;
   font-weight: 600;
   color: var(--lv-text);
-}
-
-.cat-actions {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-end;
 }

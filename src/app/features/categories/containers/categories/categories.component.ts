@@ -5,11 +5,11 @@ import {
   CategoryModalData
 } from '@features/categories/components/category-modal/category-modal.component';
 import { CategoryService } from '@features/categories/services/category.service';
-import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { TransactionApiService } from '@features/transactions/services/transaction-api.service';
 import { Category, CategoryRequest, getCategoryCssPillClass } from '@model/category.model';
 import { Transaction } from '@model/transaction.model';
 import { TranslateService } from '@ngx-translate/core';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { filter, switchMap } from 'rxjs';
 
 interface CategoryUsage {

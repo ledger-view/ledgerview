@@ -6,6 +6,7 @@
   <div class="lv-spacer"></div>
 </div>
 
+<div class="db-scroll-wrap">
 @if (loading()) {
   <div class="lv-loading">
     <mat-spinner diameter="32"></mat-spinner>
@@ -139,12 +140,7 @@
         @for (tx of recentTransactions(); track tx.id; let first = $first) {
           <div class="db-tx-row gap-4" [class.db-tx-row--first]="first">
             <span class="lv-dot db-tx-dot"></span>
-            <div class="db-tx-info">
-              <span class="db-tx-title">{{ tx.title }}</span>
-              @if (tx.note) {
-                <span class="db-tx-note">{{ tx.note }}</span>
-              }
-            </div>
+            <span class="db-tx-title">{{ tx.title }}</span>
             <span class="db-tx-amount lv-mono" [class.db-tx-amount--income]="tx.amount >= 0">
               {{ tx.amount >= 0 ? '+' : '' }}{{ fmtMoney(tx.amount) }}
             </span>
@@ -188,3 +184,4 @@
     </div>
   </div>
 }
+</div>

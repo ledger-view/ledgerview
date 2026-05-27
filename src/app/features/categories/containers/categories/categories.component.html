@@ -62,15 +62,15 @@
       </div>
 
       @for (category of categories(); track category.id; let last = $last) {
-        <div class="lv-table-row cat-table-cols" [class.cat-row-last]="last">
+        <div class="lv-table-row cat-table-cols">
           <div class="cat-dot-lg" [style.background]="category.color"></div>
           <span class="cat-row-name">{{ category.name }}</span>
           <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ category.type }}</span>
           <span class="cat-muted lv-mono text-right">{{ getUsage(category.id).count }}</span>
           <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(category.id).total) }}</span>
-          <div class="cat-actions">
+          <div class="lv-row-actions">
             <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>
-            <button class="lv-icon-btn" (click)="openDelete(category)"><mat-icon>delete</mat-icon></button>
+            <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(category)"><mat-icon>delete</mat-icon></button>
           </div>
         </div>
       }

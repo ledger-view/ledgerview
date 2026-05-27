@@ -71,13 +71,13 @@
         <span>{{ 'common.name' | translate }}</span>
         <span>{{ 'theme.institution' | translate }}</span>
         <span>{{ 'common.type' | translate }}</span>
-        <span>{{ 'theme.currency' | translate }}</span>
         <span class="acc-right">{{ 'theme.balance' | translate }}</span>
+        <span>{{ 'theme.currency' | translate }}</span>
         <span></span>
       </div>
 
       @for (acc of accounts(); track acc.id; let last = $last) {
-        <div class="lv-table-row acc-table-cols" [class.acc-row-last]="last">
+        <div class="lv-table-row acc-table-cols">
           <div class="lv-account-icon acc-icon-sm" [style.background]="accountColor(acc.type)">
             <mat-icon>{{ accountIcon(acc.type) }}</mat-icon>
           </div>
@@ -87,10 +87,11 @@
           </div>
           <span class="acc-muted">{{ acc.institution }}</span>
           <span class="acc-muted">{{ acc.type }}</span>
-          <span class="acc-muted lv-mono">{{ acc.currency }}</span>
           <span class="acc-bal lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
-          <div class="acc-actions">
+          <span class="acc-muted lv-mono">{{ acc.currency }}</span>
+          <div class="lv-row-actions">
             <button class="lv-icon-btn" (click)="openEdit(acc)"><mat-icon>edit</mat-icon></button>
+            <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(acc)"><mat-icon>delete</mat-icon></button>
           </div>
         </div>
       }
