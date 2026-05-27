@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { EchartComponent } from './components/echart/echart.component';
 
 const materialModules = [A11yModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatDialogModule];
 
@@ -27,8 +28,8 @@ const ngModules = [
 ];
 
 @NgModule({
-  declarations: [ConfirmDialogComponent],
+  declarations: [ConfirmDialogComponent, EchartComponent],
   imports: [...materialModules, ...ngModules],
-  exports: [ConfirmDialogComponent, ...materialModules, ...ngModules]
+  exports: [ConfirmDialogComponent, EchartComponent, ...materialModules, ...ngModules]
 })
 export class SharedModule {}

@@ -29,6 +29,7 @@
             <div class="db-group-balance">
               <span class="db-group-bal-value lv-mono">{{ fmtMoney(group.totalBalance, group.currency) }}</span>
               <span class="db-group-acc-count">{{ group.accounts.length }} {{ 'dashboard.accounts' | translate }}</span>
+              <span class="db-group-weeks">{{ group.weeks.length }} {{ 'dashboard.weeks' | translate }}</span>
             </div>
 
             <div class="db-group-kpis">
@@ -52,16 +53,7 @@
               </div>
             </div>
 
-            <svg class="db-sparkline" viewBox="0 0 60 24">
-              <path
-                fill="none"
-                stroke="var(--lv-accent)"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                [attr.d]="sparklinePath(group.weeks)"
-              />
-            </svg>
+            <app-echart class="db-sparkline" [option]="sparklineOption(group.weeks)"></app-echart>
 
             <mat-icon class="db-chevron">{{ expandedCurrency() === group.currency ? 'expand_less' : 'expand_more' }}</mat-icon>
           </div>
@@ -82,131 +74,8 @@
                 }
               </div>
 
-              <!-- Chart area -->
-              <div class="db-chart-wrap">
-                @if (getChart(group.currency) === 'mirror') {
-                  <svg class="db-chart-svg" preserveAspectRatio="none" viewBox="0 0 240 130">
-                    <line stroke="var(--lv-border)" stroke-width="1" x1="0" x2="240" y1="55" y2="55" />
-                    @for (bar of mirrorBars(group.weeks); track bar.x) {
-                      @if (bar.incomeH > 0) {
-                        <rect
-                          fill="var(--lv-income)"
-                          rx="2"
-                          [attr.height]="bar.incomeH"
-                          [attr.width]="BAR_W"
-                          [attr.x]="bar.x - BAR_W - 1"
-                          [attr.y]="bar.incomeY"
-                        />
-                      }
-                      <rect
-                        fill="var(--lv-expense)"
-                        opacity="0.85"
-                        rx="2"
-                        [attr.height]="bar.expenseH"
-                        [attr.width]="BAR_W"
-                        [attr.x]="bar.x + 1"
-                        [attr.y]="bar.expenseY"
-                      />
-                      <text class="db-chart-label" text-anchor="middle" y="122" [attr.x]="bar.x">{{ bar.label }}</text>
-                    }
-                  </svg>
-                  <div class="db-chart-legend">
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-income)"></span>
-                      {{ 'theme.income' | translate }}
-                    </span>
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-expense)"></span>
-                      {{ 'theme.expenses' | translate }}
-                    </span>
-                  </div>
-                }
-
-                @if (getChart(group.currency) === 'area') {
-                  @let area = balanceArea(group.weeks);
-                  <svg class="db-chart-svg" preserveAspectRatio="none" [attr.viewBox]="'0 0 240 ' + area.viewH">
-                    <line
-                      stroke="var(--lv-border)"
-                      stroke-dasharray="3 3"
-                      stroke-width="1"
-                      x1="0"
-                      x2="240"
-                      [attr.y1]="area.zeroY"
-                      [attr.y2]="area.zeroY"
-                    />
-                    <path fill="var(--lv-accent)" opacity="0.12" [attr.d]="area.areaPath" />
-                    <path
-                      fill="none"
-                      stroke="var(--lv-accent)"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      [attr.d]="area.linePath"
-                    />
-                  </svg>
-                  <div class="db-chart-legend">
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-accent)"></span>
-                      {{ 'dashboard.chart.runningBalance' | translate }}
-                    </span>
-                  </div>
-                }
-
-                @if (getChart(group.currency) === 'waterfall') {
-                  <svg class="db-chart-svg" preserveAspectRatio="none" viewBox="0 0 240 130">
-                    <line stroke="var(--lv-border)" stroke-width="1" x1="0" x2="240" y1="55" y2="55" />
-                    @for (bar of waterfallBars(group.weeks); track bar.x) {
-                      <rect
-                        rx="2"
-                        [attr.fill]="bar.positive ? 'var(--lv-income)' : 'var(--lv-expense)'"
-                        [attr.height]="bar.h"
-                        [attr.width]="BAR_W"
-                        [attr.x]="bar.x"
-                        [attr.y]="bar.y"
-                      />
-                      <text class="db-chart-label" text-anchor="middle" y="122" [attr.x]="bar.x + BAR_W / 2">{{ bar.label }}</text>
-                    }
-                  </svg>
-                  <div class="db-chart-legend">
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-income)"></span>
-                      {{ 'dashboard.chart.surplus' | translate }}
-                    </span>
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-expense)"></span>
-                      {{ 'dashboard.chart.deficit' | translate }}
-                    </span>
-                  </div>
-                }
-
-                @if (getChart(group.currency) === 'heatmap') {
-                  <svg class="db-chart-svg" preserveAspectRatio="none" viewBox="0 0 240 60">
-                    @for (cell of heatmapCells(group.weeks); track cell.x + cell.y) {
-                      <rect
-                        rx="3"
-                        [attr.fill]="cell.row === 'income' ? 'var(--lv-income)' : 'var(--lv-expense)'"
-                        [attr.height]="cell.h"
-                        [attr.opacity]="0.1 + cell.opacity * 0.85"
-                        [attr.width]="cell.w"
-                        [attr.x]="cell.x"
-                        [attr.y]="cell.y"
-                      />
-                    }
-                    <text class="db-chart-label" fill="var(--lv-income)" opacity="0.7" x="2" y="13">{{ 'theme.income' | translate }}</text>
-                    <text class="db-chart-label" fill="var(--lv-expense)" opacity="0.7" x="2" y="40">{{ 'theme.expenses' | translate }}</text>
-                  </svg>
-                  <div class="db-chart-legend">
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-income)"></span>
-                      {{ 'theme.income' | translate }}
-                    </span>
-                    <span class="db-legend-item">
-                      <span class="db-legend-dot" style="background: var(--lv-expense)"></span>
-                      {{ 'theme.expenses' | translate }}
-                    </span>
-                  </div>
-                }
-              </div>
+              <!-- Chart -->
+              <app-echart class="db-chart" [option]="groupChartOption(group, getChart(group.currency))"></app-echart>
 
               <!-- Account tiles -->
               <div class="db-account-list">
@@ -219,16 +88,7 @@
                       <span class="db-account-name">{{ acc.name }}</span>
                       <span class="db-account-sub">{{ acc.institution }} · {{ acc.number }}</span>
                     </div>
-                    <svg class="db-acc-sparkline" viewBox="0 0 60 24">
-                      <path
-                        fill="none"
-                        stroke="var(--lv-text-lo)"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.2"
-                        [attr.d]="accountSparkline(acc.id, group)"
-                      />
-                    </svg>
+                    <app-echart class="db-acc-sparkline" [option]="sparklineOption(group.accountWeeks[acc.id])"></app-echart>
                     <span class="db-account-bal lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
                   </div>
                 }

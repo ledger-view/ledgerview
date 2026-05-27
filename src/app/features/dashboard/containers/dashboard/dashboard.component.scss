@@ -136,6 +136,12 @@
   color: var(--lv-text-lo);
 }
 
+.db-group-weeks {
+  font-size: 10px;
+  color: var(--lv-text-lo);
+  font-variant-numeric: tabular-nums;
+}
+
 .db-group-kpis {
   display: flex;
   gap: 20px;
@@ -169,7 +175,7 @@
 
 .db-sparkline {
   width: 64px;
-  height: 24px;
+  height: 28px;
 }
 
 .db-chevron {
@@ -219,42 +225,9 @@
   }
 }
 
-.db-chart-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.db-chart-svg {
+.db-chart {
+  height: 200px;
   width: 100%;
-  height: 130px;
-  display: block;
-}
-
-.db-chart-label {
-  font-size: 8px;
-  fill: var(--lv-text-lo);
-  font-family: var(--lv-mono);
-}
-
-.db-chart-legend {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-size: 11px;
-  color: var(--lv-text-md);
-}
-
-.db-legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.db-legend-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
 }
 
 .db-account-list {
@@ -302,7 +275,7 @@
 
 .db-acc-sparkline {
   width: 64px;
-  height: 24px;
+  height: 28px;
 }
 
 .db-account-bal {

@@ -4,47 +4,37 @@ import { DashboardService } from '@features/dashboard/services/dashboard.service
 import { Account } from '@model/account.model';
 import { AccountGroup, WeekBucket } from '@model/dashboard.model';
 import { formatDate, formatTime } from '@shared/date/utils';
+import type { EChartsOption } from 'echarts/types/dist/shared';
 import { AppPath } from '../../../../app-routing.model';
 
 export type ChartType = 'mirror' | 'area' | 'waterfall' | 'heatmap';
 
-interface MirrorBar {
-  x: number;
-  label: string;
-  incomeY: number;
-  incomeH: number;
-  expenseY: number;
-  expenseH: number;
-}
+const C = {
+  income: '#16a34a',
+  incomeSoft: '#e8f7ee',
+  expense: '#e11d48',
+  expenseSoft: '#fdecef',
+  accent: '#4f46e5',
+  muted: '#9ca3af',
+  border: '#e5e7eb'
+} as const;
 
-interface WaterfallBar {
-  x: number;
-  label: string;
-  y: number;
-  h: number;
-  positive: boolean;
-}
-
-interface BalanceAreaData {
-  linePath: string;
-  areaPath: string;
-  zeroY: number;
-  viewH: number;
-}
-
-interface HeatmapCell {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  opacity: number;
-  row: 'income' | 'expense';
-  label: string;
-}
-
-const CHART_W = 240;
-const COL_W = CHART_W / 12;
-const BAR_W = 8;
+const GRID = { top: 8, bottom: 28, left: 4, right: 4, containLabel: false };
+const X_AXIS_STYLE = {
+  axisLabel: { fontSize: 9, color: C.muted, fontFamily: 'monospace' },
+  axisLine: { show: false },
+  axisTick: { show: false },
+  splitLine: { show: false }
+};
+const TOOLTIP_STYLE = {
+  backgroundColor: '#ffffff',
+  borderColor: '#e5e7eb',
+  borderWidth: 1,
+  borderRadius: 8,
+  padding: [8, 12],
+  textStyle: { fontSize: 12, color: '#0f1115', fontFamily: 'inherit' },
+  extraCssText: 'box-shadow: 0 4px 16px rgba(15,17,21,0.10)'
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -63,9 +53,7 @@ export class DashboardComponent implements OnInit {
   protected readonly loading = this.dashboardService.loading;
 
   protected readonly activeChart = signal<Record<string, ChartType>>({});
-
-  protected readonly chartTypes: ChartType[] = ['mirror', 'area', 'waterfall', 'heatmap'];
-  protected readonly BAR_W = BAR_W;
+  protected readonly chartTypes: ChartType[] = ['area', 'mirror', 'waterfall', 'heatmap'];
 
   protected readonly formatDate = formatDate;
   protected readonly formatTime = formatTime;
@@ -79,7 +67,7 @@ export class DashboardComponent implements OnInit {
   }
 
   protected getChart(currency: string): ChartType {
-    return this.activeChart()[currency] ?? 'mirror';
+    return this.activeChart()[currency] ?? 'area';
   }
 
   protected setChart(currency: string, type: ChartType): void {
@@ -93,7 +81,7 @@ export class DashboardComponent implements OnInit {
   protected fmtMoney(amount: number, currency = 'USD'): string {
     const sym: Record<string, string> = { USD: '$', EUR: '€', GBP: '£' };
     return (
-      (sym[currency] ?? currency + ' ') +
+      (sym[currency] ?? currency + ' ') +
       Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     );
   }
@@ -103,7 +91,7 @@ export class DashboardComponent implements OnInit {
     const prefix = amount >= 0 ? '+' : '−';
     return (
       prefix +
-      (sym[currency] ?? currency + ' ') +
+      (sym[currency] ?? currency + ' ') +
       Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     );
   }
@@ -123,94 +111,189 @@ export class DashboardComponent implements OnInit {
     return map[type] ?? 'credit_card';
   }
 
-  protected mirrorBars(weeks: WeekBucket[]): MirrorBar[] {
-    const max = Math.max(...weeks.flatMap((w) => [w.income, w.expense]), 1) * 1.1;
-    const centerY = 55;
-    const maxH = 50;
-    return weeks.map((w, i) => {
-      const x = COL_W * i + COL_W / 2;
-      const ih = (w.income / max) * maxH;
-      const eh = (w.expense / max) * maxH;
-      return { x, label: w.label, incomeY: centerY - ih, incomeH: ih, expenseY: centerY, expenseH: eh };
-    });
+  // ── ECharts options ────────────────────────────────────────────────────────
+
+  protected groupChartOption(group: AccountGroup, type: ChartType): EChartsOption {
+    switch (type) {
+      case 'mirror':
+        return this.mirrorBarsOption(group.weeks);
+      case 'area':
+        return this.balanceAreaOption(group.weeks);
+      case 'waterfall':
+        return this.waterfallOption(group.weeks);
+      case 'heatmap':
+        return this.heatmapOption(group.weeks);
+    }
   }
 
-  protected balanceArea(weeks: WeekBucket[]): BalanceAreaData {
+  protected sparklineOption(weeks: WeekBucket[]): EChartsOption {
+    const nets = weeks.map((w) => w.income - w.expense);
+    return {
+      animation: false,
+      grid: { top: 2, bottom: 2, left: 2, right: 2 },
+      xAxis: { type: 'category', show: false, data: weeks.map((w) => w.label) },
+      yAxis: { type: 'value', show: false },
+      series: [
+        {
+          type: 'line',
+          data: nets,
+          smooth: true,
+          symbol: 'none',
+          lineStyle: { color: C.muted, width: 1.5 }
+        }
+      ]
+    };
+  }
+
+  private mirrorBarsOption(weeks: WeekBucket[]): EChartsOption {
+    return {
+      animation: false,
+      grid: GRID,
+      tooltip: {
+        trigger: 'axis',
+        ...TOOLTIP_STYLE,
+        formatter: (params: any) => {
+          const week = params[0]?.axisValue ?? '';
+          const income = params.find((p: any) => p.seriesName === 'Income')?.value ?? 0;
+          const expense = Math.abs(params.find((p: any) => p.seriesName === 'Expenses')?.value ?? 0);
+          return (
+            `<div style="font-weight:600;margin-bottom:4px">${week}</div>` +
+            `<div style="color:${C.income}">↑ Income &nbsp;<b>${income.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b></div>` +
+            `<div style="color:${C.expense}">↓ Expenses <b>${expense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b></div>`
+          );
+        }
+      },
+      xAxis: { type: 'category', data: weeks.map((w) => w.label), ...X_AXIS_STYLE },
+      yAxis: { type: 'value', show: false },
+      series: [
+        {
+          name: 'Income',
+          type: 'bar',
+          data: weeks.map((w) => w.income),
+          itemStyle: { color: C.income, borderRadius: [3, 3, 0, 0] },
+          barMaxWidth: 12
+        },
+        {
+          name: 'Expenses',
+          type: 'bar',
+          data: weeks.map((w) => -w.expense),
+          itemStyle: { color: C.expense, opacity: 0.85, borderRadius: [0, 0, 3, 3] },
+          barMaxWidth: 12
+        }
+      ]
+    };
+  }
+
+  private balanceAreaOption(weeks: WeekBucket[]): EChartsOption {
     const nets: number[] = [];
     let running = 0;
     for (const w of weeks) {
       running += w.income - w.expense;
       nets.push(running);
     }
-    const min = Math.min(...nets, 0);
-    const max = Math.max(...nets, 1);
-    const range = max - min || 1;
-    const viewH = 90;
-    const pad = 8;
-    const avail = viewH - 2 * pad;
-    const pts = nets.map((v, i) => ({
-      x: COL_W * i + COL_W / 2,
-      y: viewH - pad - ((v - min) / range) * avail
-    }));
-    const zeroY = viewH - pad - ((0 - min) / range) * avail;
-    const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
-    const last = pts[pts.length - 1];
-    const first = pts[0];
-    const areaPath = `${linePath} L${last.x.toFixed(1)},${zeroY.toFixed(1)} L${first.x.toFixed(1)},${zeroY.toFixed(1)} Z`;
-    return { linePath, areaPath, zeroY, viewH };
+    const trend = nets[nets.length - 1] >= nets[0] ? C.income : C.expense;
+    return {
+      animation: false,
+      grid: GRID,
+      tooltip: {
+        trigger: 'axis',
+        ...TOOLTIP_STYLE,
+        formatter: (params: any) => {
+          const week = params[0]?.axisValue ?? '';
+          const val = params[0]?.value ?? 0;
+          const color = val >= 0 ? C.income : C.expense;
+          return (
+            `<div style="font-weight:600;margin-bottom:4px">${week}</div>` +
+            `<div style="color:${color}">Balance <b>${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b></div>`
+          );
+        }
+      },
+      xAxis: { type: 'category', data: weeks.map((w) => w.label), ...X_AXIS_STYLE },
+      yAxis: { type: 'value', show: false, splitLine: { show: false } },
+      series: [
+        {
+          type: 'line',
+          data: nets,
+          smooth: 0.4,
+          symbol: 'none',
+          lineStyle: { color: trend, width: 2 },
+          areaStyle: { color: trend, opacity: 0.12 }
+        }
+      ]
+    };
   }
 
-  protected waterfallBars(weeks: WeekBucket[]): WaterfallBar[] {
+  private waterfallOption(weeks: WeekBucket[]): EChartsOption {
     const nets = weeks.map((w) => w.income - w.expense);
-    const max = Math.max(...nets.map(Math.abs), 1) * 1.1;
-    const centerY = 55;
-    const maxH = 50;
-    return weeks.map((w, i) => {
-      const net = w.income - w.expense;
-      const h = (Math.abs(net) / max) * maxH;
-      return {
-        x: COL_W * i + COL_W / 2 - BAR_W / 2,
-        label: w.label,
-        y: net >= 0 ? centerY - h : centerY,
-        h,
-        positive: net >= 0
-      };
-    });
+    return {
+      animation: false,
+      grid: GRID,
+      tooltip: {
+        trigger: 'axis',
+        ...TOOLTIP_STYLE,
+        formatter: (params: any) => {
+          const week = params[0]?.axisValue ?? '';
+          const val = params[0]?.value ?? 0;
+          const color = val >= 0 ? C.income : C.expense;
+          const label = val >= 0 ? 'Surplus' : 'Deficit';
+          return (
+            `<div style="font-weight:600;margin-bottom:4px">${week}</div>` +
+            `<div style="color:${color}">${label} <b>${Math.abs(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b></div>`
+          );
+        }
+      },
+      xAxis: { type: 'category', data: weeks.map((w) => w.label), ...X_AXIS_STYLE },
+      yAxis: { type: 'value', show: false },
+      series: [
+        {
+          type: 'bar',
+          data: nets.map((v) => ({
+            value: v,
+            itemStyle: { color: v >= 0 ? C.income : C.expense, borderRadius: v >= 0 ? [3, 3, 0, 0] : [0, 0, 3, 3] }
+          })),
+          barMaxWidth: 14
+        }
+      ]
+    };
   }
 
-  protected heatmapCells(weeks: WeekBucket[]): HeatmapCell[] {
+  private heatmapOption(weeks: WeekBucket[]): EChartsOption {
     const maxI = Math.max(...weeks.map((w) => w.income), 1);
     const maxE = Math.max(...weeks.map((w) => w.expense), 1);
-    const cellW = 18;
-    const cellH = 22;
-    const cells: HeatmapCell[] = [];
-    weeks.forEach((w, i) => {
-      const x = COL_W * i + (COL_W - cellW) / 2;
-      cells.push({ x, y: 3, w: cellW, h: cellH, opacity: w.income / maxI, row: 'income', label: w.label });
-      cells.push({ x, y: 30, w: cellW, h: cellH, opacity: w.expense / maxE, row: 'expense', label: w.label });
-    });
-    return cells;
-  }
-
-  protected sparklinePath(weeks: WeekBucket[]): string {
-    const nets = weeks.map((w) => w.income - w.expense);
-    const min = Math.min(...nets);
-    const max = Math.max(...nets, 1);
-    const range = max - min || 1;
-    const W = 60,
-      H = 24,
-      pad = 3;
-    const pts = nets.map((v, i) => {
-      const x = pad + (i / (nets.length - 1)) * (W - 2 * pad);
-      const y = H - pad - ((v - min) / range) * (H - 2 * pad);
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    });
-    return `M${pts.join(' L')}`;
-  }
-
-  protected accountSparkline(accountId: string, group: AccountGroup): string {
-    const weeks = group.accountWeeks[accountId] ?? [];
-    return this.sparklinePath(weeks.length > 0 ? weeks : group.weeks);
+    return {
+      animation: false,
+      grid: { top: 8, bottom: 28, left: 60, right: 4 },
+      tooltip: {
+        ...TOOLTIP_STYLE,
+        formatter: (params: any) => {
+          const p = Array.isArray(params) ? params[0] : params;
+          const week = weeks[p.data[0]]?.label ?? '';
+          const row = p.data[1] === 1 ? 'Income' : 'Expenses';
+          const color = p.data[1] === 1 ? C.income : C.expense;
+          return (
+            `<div style="font-weight:600;margin-bottom:4px">${week}</div>` +
+            `<div style="color:${color}">${row} <b>${p.data[2].toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b></div>`
+          );
+        }
+      },
+      xAxis: { type: 'category', data: weeks.map((w) => w.label), ...X_AXIS_STYLE, splitArea: { show: false } },
+      yAxis: {
+        type: 'category',
+        data: ['Expenses', 'Income'],
+        axisLabel: { fontSize: 9, color: C.muted },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        splitLine: { show: false }
+      },
+      visualMap: [
+        { seriesIndex: 0, min: 0, max: maxI, show: false, inRange: { color: [C.incomeSoft, C.income] } },
+        { seriesIndex: 1, min: 0, max: maxE, show: false, inRange: { color: [C.expenseSoft, C.expense] } }
+      ] as any,
+      series: [
+        { type: 'heatmap', data: weeks.map((w, i) => [i, 1, w.income]) } as any,
+        { type: 'heatmap', data: weeks.map((w, i) => [i, 0, w.expense]) } as any
+      ]
+    };
   }
 
   protected trackById(_: number, item: Account): string {

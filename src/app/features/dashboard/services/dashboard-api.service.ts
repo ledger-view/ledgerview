@@ -22,10 +22,10 @@ export class DashboardApiService {
     return this.http.get<Account[]>(`${this.base}/api/accounts`);
   }
 
-  getCashflowTransactions$(): Observable<Transaction[]> {
+  getCashflowTransactions$(days: number): Observable<Transaction[]> {
     const now = new Date();
     const from = new Date(now);
-    from.setDate(from.getDate() - 84);
+    from.setDate(from.getDate() - days);
     return this.http
       .get<Page<Transaction>>(`${this.base}/api/transactions`, {
         params: { sort: 'date', dir: 'asc', size: '1000', page: '0', dateFrom: dayStartIso(from), dateTo: dayEndIso(now) }
