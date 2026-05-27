@@ -4,60 +4,39 @@
   height: 100%;
 }
 
-.lv-spacer {
-  flex: 1;
-}
-
 .db-scroll-wrap {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.db-grid {
+.db-stat-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  padding: 18px;
-  align-content: start;
 }
 
-// ── Stat cards ────────────────────────────────────────────────────────────
 .db-stat {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 16px;
-  min-height: 108px;
+  padding: 14px 16px;
+  min-height: 90px;
 }
 
 .db-stat-header {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .db-stat-label {
   font-size: 11.5px;
   color: var(--lv-text-md);
   font-weight: 500;
-}
-
-.db-stat-delta {
-  margin-left: auto;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 7px;
-  border-radius: 999px;
-
-  &--up {
-    color: var(--lv-income);
-    background: var(--lv-income-soft);
-  }
-  &--down {
-    color: var(--lv-expense);
-    background: var(--lv-expense-soft);
-  }
 }
 
 .db-stat-amounts {
@@ -67,9 +46,9 @@
 }
 
 .db-stat-value {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.5px;
   color: var(--lv-text);
   line-height: 1.1;
 
@@ -82,46 +61,183 @@
   &--accent {
     color: var(--lv-accent);
   }
+
   &--sm {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.1px;
     color: var(--lv-text-md);
   }
 }
 
-.db-stat-sub {
-  font-size: 11px;
-  color: var(--lv-text-lo);
-  margin-top: auto;
-}
-
-// ── Cash flow chart ───────────────────────────────────────────────────────
-.db-cashflow {
-  grid-column: span 3;
-  padding: 16px;
-}
-
-.db-card-header {
+.db-accordion {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 14px;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.db-card-title {
-  font-size: 13px;
+.db-accordion-empty {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.db-group {
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.db-group-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto 64px 20px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+
+  &:hover {
+    background: var(--lv-hover);
+  }
+}
+
+.db-ccy-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  background: var(--lv-accent-soft, oklch(95% 0.03 250));
+  color: var(--lv-accent-text, var(--lv-accent));
+  border: 1px solid var(--lv-accent-border, oklch(88% 0.06 250));
+}
+
+.db-group-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.db-group-bal-value {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
   color: var(--lv-text);
 }
 
-.db-card-sub {
-  font-size: 11.5px;
+.db-group-acc-count {
+  font-size: 10.5px;
   color: var(--lv-text-lo);
-  margin-top: 1px;
 }
 
-.db-legend {
+.db-group-kpis {
+  display: flex;
+  gap: 20px;
+}
+
+.db-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 72px;
+}
+
+.db-kpi-label {
+  font-size: 10px;
+  color: var(--lv-text-lo);
+  white-space: nowrap;
+}
+
+.db-kpi-value {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--lv-text);
+
+  &--income {
+    color: var(--lv-income);
+  }
+  &--expense {
+    color: var(--lv-expense);
+  }
+}
+
+.db-sparkline {
+  width: 64px;
+  height: 24px;
+}
+
+.db-chevron {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--lv-text-lo);
+}
+
+.db-group-panel {
+  border-top: 1px solid var(--lv-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.db-chart-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.db-chart-tab {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--lv-border);
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--lv-text-md);
+  font-family: var(--lv-font);
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+
+  &:hover {
+    background: var(--lv-hover);
+  }
+
+  &--active {
+    background: var(--lv-accent-soft, oklch(95% 0.03 250));
+    color: var(--lv-accent-text, var(--lv-accent));
+    border-color: var(--lv-accent-border, oklch(88% 0.06 250));
+  }
+}
+
+.db-chart-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.db-chart-svg {
+  width: 100%;
+  height: 130px;
+  display: block;
+}
+
+.db-chart-label {
+  font-size: 8px;
+  fill: var(--lv-text-lo);
+  font-family: var(--lv-mono);
+}
+
+.db-chart-legend {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -141,174 +257,37 @@
   border-radius: 2px;
 }
 
-.db-bars-wrap {
-  overflow: hidden;
+.db-account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.db-bars {
+.db-account-tile {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 8px;
-  height: 165px;
-  align-items: flex-end;
-}
-
-.db-bar-col {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 32px 1fr 64px auto;
   align-items: center;
-  gap: 4px;
-  height: 100%;
-  justify-content: flex-end;
-}
-
-.db-bar-pair {
-  display: flex;
-  gap: 2px;
-  align-items: flex-end;
-  height: 140px;
-  justify-content: center;
-}
-
-.db-bar {
-  width: 7px;
-  border-radius: 2px 2px 0 0;
-
-  &--income {
-    background: var(--lv-income);
-  }
-  &--expense {
-    background: var(--lv-expense);
-    opacity: 0.85;
-  }
-}
-
-.db-bar-label {
-  font-size: 10px;
-  color: var(--lv-text-lo);
-}
-
-// ── Expense breakdown ─────────────────────────────────────────────────────
-.db-expenses {
-  grid-column: span 1;
-  padding: 16px;
-  min-height: 254px;
-}
-
-.db-donut-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
-.db-donut-label-sm {
-  font-size: 10.5px;
-  fill: var(--lv-text-md);
-  font-family: var(--lv-font);
-}
-
-.db-donut-label-lg {
-  font-size: 17px;
-  font-weight: 600;
-  fill: var(--lv-text);
-  font-family: var(--lv-mono);
-  letter-spacing: -0.3px;
-}
-
-.db-legend-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.db-legend-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11.5px;
-}
-
-.db-legend-name {
-  color: var(--lv-text);
-}
-
-.db-legend-ccy {
-  font-size: 10px;
-  color: var(--lv-text-lo);
-  margin-right: 4px;
-}
-
-.db-legend-pct {
-  font-size: 11px;
-  color: var(--lv-text-md);
-}
-
-// ── Recent transactions ───────────────────────────────────────────────────
-.db-recent {
-  grid-column: span 3;
-  padding: 0;
-  overflow: hidden;
-}
-
-.db-section-header {
-  display: flex;
-  align-items: baseline;
-  padding: 14px 16px 12px;
-}
-
-.db-section-header-inline {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 12px;
-}
-
-.db-section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--lv-text);
-}
-
-.db-view-all {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 11.5px;
-  color: var(--lv-accent-text);
-  font-family: var(--lv-font);
-  font-weight: 500;
-}
-
-.db-tx-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.db-tx-row {
-  display: grid;
-  grid-template-columns: 20px 1fr auto auto;
-  align-items: center;
-  height: 36px;
-  padding: 0 16px;
-  border-top: 1px solid var(--lv-border);
-  font-size: 12.5px;
-  overflow: hidden;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--lv-surface-alt, oklch(97.5% 0.003 250));
   transition: background 0.1s;
 
-  &--first {
-    border-top: none;
-  }
   &:hover {
     background: var(--lv-hover);
   }
 }
 
-.db-tx-dot {
-  width: 7px !important;
-  height: 7px !important;
-  background: var(--lv-text-lo);
+.db-account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  line-height: 1.2;
 }
 
-.db-tx-title {
+.db-account-name {
+  font-size: 12.5px;
   font-weight: 500;
   color: var(--lv-text);
   overflow: hidden;
@@ -316,65 +295,19 @@
   white-space: nowrap;
 }
 
-.db-tx-date {
-  font-size: 11.5px;
-  color: var(--lv-text-md);
-}
-
-.db-tx-amount {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--lv-text);
-  text-align: right;
-
-  &--income {
-    color: var(--lv-income);
-  }
-}
-
-// ── Accounts summary ──────────────────────────────────────────────────────
-.db-accsummary {
-  grid-column: span 1;
-  padding: 16px;
-}
-
-.db-acc-count {
-  font-size: 11px;
+.db-account-sub {
+  font-size: 10.5px;
   color: var(--lv-text-lo);
 }
 
-.db-acc-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.db-acc-sparkline {
+  width: 64px;
+  height: 24px;
 }
 
-.db-acc-row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.db-acc-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.2;
-}
-
-.db-acc-name {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--lv-text);
-}
-
-.db-acc-sub {
-  font-size: 11px;
-  color: var(--lv-text-lo);
-}
-
-.db-acc-bal {
-  font-size: 12.5px;
+.db-account-bal {
+  font-size: 13px;
   font-weight: 600;
   color: var(--lv-text);
+  white-space: nowrap;
 }

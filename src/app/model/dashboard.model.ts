@@ -1,3 +1,5 @@
+import { Account } from './account.model';
+
 export interface CurrencyAmount {
   currency: string;
   amount: number;
@@ -10,10 +12,19 @@ export interface DashboardSummary {
   netFlow: CurrencyAmount[];
 }
 
-export interface ExpenseByCategory {
-  categoryId: string;
-  categoryName: string;
-  categoryColor: string;
+export interface WeekBucket {
+  label: string;
+  income: number;
+  expense: number;
+}
+
+export interface AccountGroup {
   currency: string;
-  total: number;
+  totalBalance: number;
+  totalIncome: number;
+  totalExpenses: number;
+  netFlow: number;
+  accounts: Account[];
+  weeks: WeekBucket[];
+  accountWeeks: Record<string, WeekBucket[]>;
 }

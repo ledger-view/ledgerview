@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Account } from '@model/account.model';
-import { DashboardSummary, ExpenseByCategory } from '@model/dashboard.model';
+import { DashboardSummary } from '@model/dashboard.model';
 import { Page } from '@model/page.model';
 import { Transaction } from '@model/transaction.model';
+import { dayEndIso, dayStartIso } from '@shared/date/utils';
 import { environment } from 'environments/environment';
 import { map, Observable } from 'rxjs';
 
@@ -17,22 +18,18 @@ export class DashboardApiService {
     return this.http.get<DashboardSummary>(`${this.base}/api/dashboard/summary`);
   }
 
-  getExpensesByCategory$(year?: number, month?: number): Observable<ExpenseByCategory[]> {
-    const params: Record<string, string> = {};
-    if (year != null) params['year'] = String(year);
-    if (month != null) params['month'] = String(month);
-    return this.http.get<ExpenseByCategory[]>(`${this.base}/api/dashboard/expenses-by-category`, { params });
-  }
-
-  getRecentTransactions$(): Observable<Transaction[]> {
-    return this.http
-      .get<Page<Transaction>>(`${this.base}/api/transactions`, {
-        params: { sort: 'date', dir: 'desc', size: '8', page: '0' }
-      })
-      .pipe(map((p) => p.content));
-  }
-
   getAccounts$(): Observable<Account[]> {
     return this.http.get<Account[]>(`${this.base}/api/accounts`);
+  }
+
+  getCashflowTransactions$(): Observable<Transaction[]> {
+    const now = new Date();
+    const from = new Date(now);
+    from.setDate(from.getDate() - 84);
+    return this.http
+      .get<Page<Transaction>>(`${this.base}/api/transactions`, {
+        params: { sort: 'date', dir: 'asc', size: '1000', page: '0', dateFrom: dayStartIso(from), dateTo: dayEndIso(now) }
+      })
+      .pipe(map((p) => p.content));
   }
 }

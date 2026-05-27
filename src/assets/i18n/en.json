@@ -65,14 +65,16 @@
     "monthlyExpenses": "Expenses · This month",
     "netFlow": "Net flow",
     "vsLastMonth": "vs. last month",
-    "onSchedule": "On schedule",
-    "cashFlow": "Cash flow",
-    "cashFlowSub": "Income vs. expenses · last 12 weeks",
-    "expensesByCategory": "Expenses by category",
-    "recentTransactions": "Recent transactions",
-    "viewAll": "View all",
-    "activeAccounts": "active",
-    "thisMonth": "This month"
+    "accounts": "accounts",
+    "chart": {
+      "mirror": "Mirror Bars",
+      "area": "Balance Area",
+      "waterfall": "Waterfall",
+      "heatmap": "Heatmap",
+      "runningBalance": "Running balance",
+      "surplus": "Surplus",
+      "deficit": "Deficit"
+    }
   },
   "transactions": {
     "subtitle": "All your financial activity",
