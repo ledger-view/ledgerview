@@ -47,13 +47,26 @@
 
 // ── Table columns ─────────────────────────────────────────────────────────
 .tx-cols {
-  grid-template-columns: 22px 110px 1fr 130px 130px 100px 120px;
+  grid-template-columns: 22px 110px 1fr 130px 130px 100px 120px 60px;
 }
 
 .lv-table-row.tx-cols {
   height: 46px;
   padding: 0 14px;
   overflow: hidden;
+
+  .tx-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+
+  &:hover .tx-row-actions {
+    opacity: 1;
+  }
 }
 
 .tx-date {
@@ -98,6 +111,15 @@
 
   &--income {
     color: var(--lv-income);
+  }
+}
+
+.tx-action-btn {
+  width: 24px;
+  height: 24px;
+
+  &--danger:hover {
+    color: var(--lv-danger, #ef4444);
   }
 }
 

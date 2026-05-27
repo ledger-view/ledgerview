@@ -56,8 +56,8 @@
         <span></span>
         <span>{{ 'common.name' | translate }}</span>
         <span>{{ 'common.type' | translate }}</span>
-        <span>{{ 'theme.transactions' | translate }}</span>
-        <span class="cat-right">{{ 'common.total' | translate }}</span>
+        <span class="text-right">{{ 'theme.transactions' | translate }}</span>
+        <span class="text-right">{{ 'common.total' | translate }}</span>
         <span></span>
       </div>
 
@@ -66,7 +66,7 @@
           <div class="cat-dot-lg" [style.background]="category.color"></div>
           <span class="cat-row-name">{{ category.name }}</span>
           <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ category.type }}</span>
-          <span class="cat-muted lv-mono">{{ getUsage(category.id).count }}</span>
+          <span class="cat-muted lv-mono text-right">{{ getUsage(category.id).count }}</span>
           <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(category.id).total) }}</span>
           <div class="cat-actions">
             <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>

@@ -9,7 +9,7 @@ import {
 import { TransactionService } from '@features/transactions/services/transaction.service';
 import { Account } from '@model/account.model';
 import { Category } from '@model/category.model';
-import { TransactionRequest } from '@model/transaction.model';
+import { Transaction, TransactionRequest } from '@model/transaction.model';
 import { filter, switchMap } from 'rxjs';
 import { dayEndIso, dayStartIso, formatDate, formatTime } from '@shared/date/utils';
 
@@ -152,6 +152,25 @@ export class TransactionsComponent implements OnInit {
         switchMap((req) => this.txService.create$(req))
       )
       .subscribe(() => this.loadTransactions());
+  }
+
+  protected openEdit(tx: Transaction): void {
+    this.dialog
+      .open<TransactionModalComponent, TransactionModalData, TransactionRequest>(TransactionModalComponent, {
+        data: { transaction: tx, accounts: this.accounts(), categories: this.categories() },
+        width: '500px'
+      })
+      .afterClosed()
+      .pipe(
+        filter((r): r is TransactionRequest => !!r),
+        switchMap((req) => this.txService.update$(tx.id, req))
+      )
+      .subscribe(() => this.loadTransactions());
+  }
+
+  protected openDelete(tx: Transaction): void {
+    if (!window.confirm(`Delete "${tx.title}"?`)) return;
+    this.txService.delete$(tx.id).subscribe(() => this.loadTransactions());
   }
 
   protected fmtMoney(amount: number, currency = 'USD'): string {
