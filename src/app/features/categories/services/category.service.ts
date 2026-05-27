@@ -18,8 +18,8 @@ export class CategoryService {
   load(): void {
     this._loading.set(true);
     this.api.getCategories$().subscribe({
-      next: (c) => {
-        this._categories.set(c);
+      next: (categories) => {
+        this._categories.set(categories);
         this._loading.set(false);
         this._loaded.set(true);
       },

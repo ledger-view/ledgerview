@@ -97,18 +97,6 @@
   color: var(--lv-text-lo);
 }
 
-.cat-card-bar {
-  height: 3px;
-  background: var(--lv-hover);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.cat-card-bar-fill {
-  height: 100%;
-  border-radius: 99px;
-}
-
 // ── Detail table ────────────────────────────────────────────────────────────
 .cat-table-header-row {
   display: flex;
@@ -129,7 +117,7 @@
 }
 
 .cat-table-cols {
-  grid-template-columns: 36px 1fr 75px 95px 140px 64px;
+  grid-template-columns: 36px 1fr 75px 95px 64px;
 }
 
 .cat-dot-lg {
@@ -145,10 +133,4 @@
 
 .cat-muted {
   color: var(--lv-text-md);
-}
-
-.cat-total-val {
-  text-align: right;
-  font-weight: 600;
-  color: var(--lv-text);
 }

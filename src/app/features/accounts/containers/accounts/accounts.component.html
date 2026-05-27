@@ -42,7 +42,7 @@
             </button>
           </div>
           <div class="acc-card-bal">
-            <span class="acc-card-amount lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
+            <span class="acc-card-amount lv-mono">{{ fmtMoney(acc.balance) }}</span>
             <span class="acc-card-ccy lv-mono">{{ acc.currency }}</span>
           </div>
         </div>
@@ -87,7 +87,7 @@
           </div>
           <span class="acc-muted">{{ acc.institution }}</span>
           <span class="acc-muted">{{ acc.type }}</span>
-          <span class="acc-bal lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
+          <span class="acc-bal lv-mono">{{ fmtMoney(acc.balance) }}</span>
           <span class="acc-muted lv-mono">{{ acc.currency }}</span>
           <div class="lv-row-actions">
             <button class="lv-icon-btn" (click)="openEdit(acc)"><mat-icon>edit</mat-icon></button>

@@ -45,11 +45,8 @@ export class AccountsComponent implements OnInit {
     return m[type] ?? 'credit_card';
   }
 
-  protected fmtMoney(amount: number, currency = 'USD'): string {
-    const sym: Record<string, string> = { USD: '$', EUR: '€', GBP: '£' };
-    return (
-      (sym[currency] ?? '$') + Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    );
+  protected fmtMoney(amount: number): string {
+    return Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   protected openAdd(): void {

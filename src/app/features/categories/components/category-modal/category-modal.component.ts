@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, CategoryRequest, CategoryType, getCategoryCssPillClass } from '@model/category.model';
+import { Category, CategoryRequest, CategoryType, getCategoryCssPillClass, getCategoryTranslationKey } from '@model/category.model';
 
 export interface CategoryModalData {
   category?: Category;
@@ -35,6 +35,8 @@ export class CategoryModalComponent implements OnInit {
   protected readonly palette = PALETTE;
 
   protected readonly CategoryType = CategoryType;
+  protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
+  protected readonly getCategoryTranslationKey = getCategoryTranslationKey;
 
   constructor(
     private fb: FormBuilder,
@@ -100,6 +102,4 @@ export class CategoryModalComponent implements OnInit {
   protected get color(): FormControl {
     return this.form.get('color') as FormControl;
   }
-
-  protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
 }

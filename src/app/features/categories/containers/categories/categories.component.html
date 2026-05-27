@@ -34,11 +34,7 @@
             <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>
           </div>
           <div class="cat-card-stats">
-            <span class="cat-card-total lv-mono">{{ fmtMoney(getUsage(cat.id).total) }}</span>
-            <span class="cat-card-count">{{ getUsage(cat.id).count }} tx</span>
-          </div>
-          <div class="cat-card-bar">
-            <div class="cat-card-bar-fill" [style.background]="cat.color" [style.width.%]="fillPct(cat.id)"></div>
+            <span class="cat-card-count">{{ cat.transactionCount }} tx</span>
           </div>
         </div>
       }
@@ -57,7 +53,6 @@
         <span>{{ 'common.name' | translate }}</span>
         <span>{{ 'common.type' | translate }}</span>
         <span class="text-right">{{ 'theme.transactions' | translate }}</span>
-        <span class="text-right">{{ 'common.total' | translate }}</span>
         <span></span>
       </div>
 
@@ -65,9 +60,8 @@
         <div class="lv-table-row cat-table-cols">
           <div class="cat-dot-lg" [style.background]="category.color"></div>
           <span class="cat-row-name">{{ category.name }}</span>
-          <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ category.type }}</span>
-          <span class="cat-muted lv-mono text-right">{{ getUsage(category.id).count }}</span>
-          <span class="cat-total-val lv-mono">{{ fmtMoney(getUsage(category.id).total) }}</span>
+          <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ getCategoryTranslationKey(category.type) | translate }}</span>
+          <span class="cat-muted lv-mono text-right">{{ category.transactionCount }}</span>
           <div class="lv-row-actions">
             <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>
             <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(category)"><mat-icon>delete</mat-icon></button>

@@ -48,7 +48,7 @@
       <div class="lv-spacer"></div>
       <span class="lv-dot" [style.background]="color.value"></span>
       <span class="cat-preview-name">{{ previewName }}</span>
-      <span class="lv-pill ml-auto" [class]="getCategoryCssPillClass(type.value)">{{ type.value }}</span>
+      <span class="lv-pill ml-auto" [class]="getCategoryCssPillClass(type.value)">{{ getCategoryTranslationKey(type.value) | translate }}</span>
     </div>
   </div>
 
