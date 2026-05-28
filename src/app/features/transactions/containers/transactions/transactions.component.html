@@ -51,19 +51,18 @@
       <div class="lv-spacer"></div>
     </div>
 
-    <!-- Summary strip -->
-    @if (!loading()) {
+    <div class="lv-overlay-wrap">
+      @if (loading()) {
+        <div class="lv-overlay"><mat-spinner diameter="28"></mat-spinner></div>
+      }
+
+      <!-- Summary strip -->
       <div class="tx-summary">
         <div class="tx-summary-item">
           <div class="tx-summary-label">{{ page().totalElements }} {{ 'theme.transactions' | translate }}</div>
         </div>
       </div>
-    }
 
-    <!-- Loading -->
-    @if (loading()) {
-      <div class="lv-loading" style="padding: 32px"><mat-spinner diameter="28"></mat-spinner></div>
-    } @else {
       <!-- Table header -->
       <div class="lv-table-header tx-cols">
         <span></span>
@@ -146,6 +145,6 @@
           {{ 'common.next' | translate }}
         </button>
       </div>
-    }
+    </div>
   </div>
 </div>

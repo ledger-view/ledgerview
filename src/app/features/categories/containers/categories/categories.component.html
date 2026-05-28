@@ -11,9 +11,11 @@
 </div>
 
 <div class="cat-wrap">
-  @if (loading()) {
-    <div class="lv-loading"><mat-spinner diameter="28"></mat-spinner></div>
-  } @else {
+  <div class="lv-overlay-wrap">
+    @if (loading()) {
+      <div class="lv-overlay"><mat-spinner diameter="28"></mat-spinner></div>
+    }
+
     <!-- Category cards grid -->
     <!--    <div class="cat-cards-grid">-->
     <!--      @for (cat of categories(); track cat.id) {-->
@@ -92,5 +94,5 @@
         <div class="lv-empty">{{ 'common.noData' | translate }}</div>
       }
     </div>
-  }
+  </div>
 </div>

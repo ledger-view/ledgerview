@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
-import { finalize, tap } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 import { AccountApiService } from './account-api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -31,19 +31,26 @@ export class AccountService {
   }
 
   create$(data: AccountCreateRequest) {
+    this._loading.set(true);
     return this.api.createAccount$(data).pipe(
       tap((created) => this._accounts.update((list) => [...list, created])),
-      finalize(() => {})
+      finalize(() => this._loading.set(false))
     );
   }
 
   update$(id: string, data: AccountUpdateRequest) {
-    return this.api
-      .updateAccount$(id, data)
-      .pipe(tap((updated) => this._accounts.update((list) => list.map((a) => (a.id === id ? updated : a)))));
+    this._loading.set(true);
+    return this.api.updateAccount$(id, data).pipe(
+      tap((updated) => this._accounts.update((list) => list.map((a) => (a.id === id ? updated : a)))),
+      finalize(() => this._loading.set(false))
+    );
   }
 
   delete$(id: string) {
-    return this.api.deleteAccount$(id).pipe(tap(() => this._accounts.update((list) => list.filter((a) => a.id !== id))));
+    this._loading.set(true);
+    return this.api.deleteAccount$(id).pipe(
+      tap(() => this._accounts.update((list) => list.filter((a) => a.id !== id))),
+      finalize(() => this._loading.set(false))
+    );
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Transaction, TransactionPageRequest, TransactionRequest } from '@model/transaction.model';
-import { finalize, tap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { TransactionApiService } from './transaction-api.service';
 
 export interface TransactionPage {
@@ -33,23 +33,17 @@ export class TransactionService {
   }
 
   create$(data: TransactionRequest) {
-    return this.api.createTransaction$(data).pipe(
-      tap(() => this._loading.set(true)),
-      finalize(() => this._loading.set(false))
-    );
+    this._loading.set(true);
+    return this.api.createTransaction$(data).pipe(finalize(() => this._loading.set(false)));
   }
 
   update$(id: string, data: TransactionRequest) {
-    return this.api.updateTransaction$(id, data).pipe(
-      tap(() => this._loading.set(true)),
-      finalize(() => this._loading.set(false))
-    );
+    this._loading.set(true);
+    return this.api.updateTransaction$(id, data).pipe(finalize(() => this._loading.set(false)));
   }
 
   delete$(id: string) {
-    return this.api.deleteTransaction$(id).pipe(
-      tap(() => this._loading.set(true)),
-      finalize(() => this._loading.set(false))
-    );
+    this._loading.set(true);
+    return this.api.deleteTransaction$(id).pipe(finalize(() => this._loading.set(false)));
   }
 }

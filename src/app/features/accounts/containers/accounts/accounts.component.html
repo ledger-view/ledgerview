@@ -10,10 +10,11 @@
   </button>
 </div>
 
-<div class="acc-wrap">
+<div class="lv-overlay-wrap scroll-y">
   @if (loading()) {
-    <div class="lv-loading"><mat-spinner diameter="28"></mat-spinner></div>
-  } @else {
+    <div class="lv-overlay"><mat-spinner diameter="28"></mat-spinner></div>
+  }
+  <div class="acc-wrap">
     <!-- Cards grid -->
     <div class="acc-cards-grid">
       @for (acc of accounts(); track acc.id) {
@@ -90,5 +91,5 @@
         <div class="lv-empty">{{ 'common.noData' | translate }}</div>
       }
     </div>
-  }
+  </div>
 </div>

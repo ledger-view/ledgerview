@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Category, CategoryRequest } from '@model/category.model';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, finalize, tap, throwError } from 'rxjs';
 import { CategoryApiService } from './category-api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -50,18 +50,26 @@ export class CategoryService {
   }
 
   create$(data: CategoryRequest) {
-    return this.api.createCategory$(data).pipe(tap((created) => this._categories.update((list) => [...list, created])));
+    this._loading.set(true);
+    return this.api.createCategory$(data).pipe(
+      tap((created) => this._categories.update((list) => [...list, created])),
+      finalize(() => this._loading.set(false))
+    );
   }
 
   update$(id: string, data: CategoryRequest) {
-    return this.api
-      .updateCategory$(id, data)
-      .pipe(tap((updated) => this._categories.update((list) => list.map((c) => (c.id === id ? updated : c)))));
+    this._loading.set(true);
+    return this.api.updateCategory$(id, data).pipe(
+      tap((updated) => this._categories.update((list) => list.map((c) => (c.id === id ? updated : c)))),
+      finalize(() => this._loading.set(false))
+    );
   }
 
   delete$(id: string) {
+    this._loading.set(true);
     return this.api.deleteCategory$(id).pipe(
       tap(() => this._categories.update((list) => list.filter((c) => c.id !== id))),
+      finalize(() => this._loading.set(false)),
       catchError((err: HttpErrorResponse) => {
         if (err.status === 409) return throwError(() => new Error('CATEGORY_IN_USE'));
         return throwError(() => err);
