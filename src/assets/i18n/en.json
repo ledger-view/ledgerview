@@ -101,6 +101,7 @@
   },
   "transactions": {
     "subtitle": "All your financial activity",
+    "add": "Add transaction",
     "empty": "No transactions match these filters.",
     "filter": {
       "allAccounts": "All accounts",

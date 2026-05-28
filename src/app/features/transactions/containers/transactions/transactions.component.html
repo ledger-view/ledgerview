@@ -4,6 +4,11 @@
     <div class="lv-topbar-sub">{{ 'transactions.subtitle' | translate }}</div>
   </div>
   <div class="lv-spacer"></div>
+
+  <button class="lv-btn-primary" (click)="openAdd()">
+    <mat-icon>add</mat-icon>
+    {{ 'transactions.add' | translate }}
+  </button>
 </div>
 
 <div class="tx-wrap">
@@ -44,10 +49,6 @@
       </select>
 
       <div class="lv-spacer"></div>
-      <button class="lv-btn-primary lv-btn-sm" (click)="openAdd()">
-        <mat-icon>add</mat-icon>
-        {{ 'common.add' | translate }}
-      </button>
     </div>
 
     <!-- Summary strip -->
