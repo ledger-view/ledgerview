@@ -10,6 +10,7 @@
 
   <div class="lv-modal-body">
     <div class="lv-field-row">
+      <!-- 1: Name -->
       <div class="lv-field">
         <label class="lv-label">{{ 'common.name' | translate }}</label>
         <input class="lv-input" formControlName="name" [placeholder]="'accounts.form.namePlaceholder' | translate" />
@@ -19,6 +20,7 @@
           }
         </span>
       </div>
+      <!-- 2: Institution -->
       <div class="lv-field">
         <label class="lv-label">{{ 'theme.institution' | translate }}</label>
         <input class="lv-input" formControlName="institution" [placeholder]="'accounts.form.institutionPlaceholder' | translate" />
@@ -28,6 +30,7 @@
           }
         </span>
       </div>
+      <!-- 3: Type -->
       <div class="lv-field">
         <label class="lv-label">{{ 'common.type' | translate }}</label>
         <select class="lv-select" formControlName="type">
@@ -38,17 +41,15 @@
         </select>
         <span class="lv-error"></span>
       </div>
+      <!-- 4: Handle / Last 4 -->
       <div class="lv-field">
-        <label class="lv-label">{{ 'theme.currency' | translate }}</label>
-        <select class="lv-select" formControlName="currency">
-          @for (c of currencies; track c) {
-            <option [value]="c">{{ c }}</option>
-          }
-        </select>
+        <label class="lv-label">{{ 'accounts.form.last4' | translate }}&nbsp;({{ 'theme.optional' | translate | lowercase }})</label>
+        <input class="lv-input" formControlName="number" [placeholder]="'accounts.form.last4Placeholder' | translate" />
         <span class="lv-error"></span>
       </div>
-      <div class="lv-field">
-        <label class="lv-label">{{ 'theme.openingBalance' | translate }}</label>
+      <!-- 5: Balance (Opening Balance on create, Balance on edit — disabled on edit) -->
+      <div class="lv-field" matTooltipPosition="below" [matTooltip]="isEdit ? ('accounts.form.readOnlyAfterCreate' | translate) : ''">
+        <label class="lv-label">{{ (isEdit ? 'theme.balance' : 'theme.openingBalance') | translate }}</label>
         <input class="lv-input acc-mono" formControlName="balance" step="0.01" type="number" />
         <span class="lv-error">
           @if (form.get('balance')?.invalid && form.get('balance')?.touched) {
@@ -56,9 +57,14 @@
           }
         </span>
       </div>
-      <div class="lv-field">
-        <label class="lv-label">{{ 'accounts.form.last4' | translate }}&nbsp;({{ 'theme.optional' | translate | lowercase }})</label>
-        <input class="lv-input" formControlName="number" [placeholder]="'accounts.form.last4Placeholder' | translate" />
+      <!-- 6: Currency (disabled on edit) -->
+      <div class="lv-field" matTooltipPosition="below" [matTooltip]="isEdit ? ('accounts.form.readOnlyAfterCreate' | translate) : ''">
+        <label class="lv-label">{{ 'theme.currency' | translate }}</label>
+        <select class="lv-select" formControlName="currency">
+          @for (c of currencies; track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
         <span class="lv-error"></span>
       </div>
     </div>

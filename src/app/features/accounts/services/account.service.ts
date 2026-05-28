@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Account, AccountRequest } from '@model/account.model';
+import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
 import { finalize, tap } from 'rxjs';
 import { AccountApiService } from './account-api.service';
 
@@ -30,14 +30,14 @@ export class AccountService {
     });
   }
 
-  create$(data: AccountRequest) {
+  create$(data: AccountCreateRequest) {
     return this.api.createAccount$(data).pipe(
       tap((created) => this._accounts.update((list) => [...list, created])),
       finalize(() => {})
     );
   }
 
-  update$(id: string, data: AccountRequest) {
+  update$(id: string, data: AccountUpdateRequest) {
     return this.api
       .updateAccount$(id, data)
       .pipe(tap((updated) => this._accounts.update((list) => list.map((a) => (a.id === id ? updated : a)))));

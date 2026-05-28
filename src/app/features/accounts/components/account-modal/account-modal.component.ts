@@ -1,11 +1,16 @@
 import { ChangeDetectionStrategy, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Account, AccountRequest } from '@model/account.model';
+import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
 
 export interface AccountModalData {
   account?: Account;
 }
+
+export type AccountModalResult =
+  | { action: 'save'; data: AccountCreateRequest | AccountUpdateRequest }
+  | { action: 'delete' }
+  | { action: 'cancel' };
 
 @Component({
   selector: 'app-account-modal',
@@ -34,9 +39,9 @@ export class AccountModalComponent implements OnInit {
       name: [a?.name ?? '', Validators.required],
       institution: [a?.institution ?? '', Validators.required],
       type: [a?.type ?? 'Checking'],
-      currency: [a?.currency ?? 'USD'],
-      balance: [a?.balance ?? 0, Validators.required],
-      number: [a?.number ?? '']
+      number: [a?.number ?? ''],
+      balance: [{ value: a?.balance ?? 0, disabled: this.isEdit }, this.isEdit ? [] : [Validators.required]],
+      currency: [{ value: a?.currency ?? 'USD', disabled: this.isEdit }]
     });
   }
 
@@ -56,16 +61,10 @@ export class AccountModalComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    const v = this.form.value;
-    const req: AccountRequest = {
-      name: v.name.trim(),
-      institution: v.institution.trim(),
-      type: v.type,
-      currency: v.currency,
-      balance: +v.balance,
-      number: v.number?.trim() || undefined
-    };
-    this.dialogRef.close({ action: 'save', data: req });
+    const v = this.form.getRawValue();
+    const base = { name: v.name.trim(), institution: v.institution.trim(), type: v.type, number: v.number?.trim() || undefined };
+    const data = this.isEdit ? base : { ...base, currency: v.currency, balance: +v.balance };
+    this.dialogRef.close({ action: 'save', data });
   }
 
   protected delete(): void {

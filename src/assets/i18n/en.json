@@ -148,7 +148,8 @@
       "institutionPlaceholder": "Chase",
       "last4": "Last 4 / handle",
       "last4Placeholder": "1234",
-      "create": "Create account"
+      "create": "Create account",
+      "readOnlyAfterCreate": "This field is read-only after account creation"
     },
     "filter": {
       "checking": "Checking",

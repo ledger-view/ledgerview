@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Account, AccountRequest } from '@model/account.model';
+import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -14,11 +14,11 @@ export class AccountApiService {
     return this.http.get<Account[]>(this.baseUrl);
   }
 
-  createAccount$(data: AccountRequest): Observable<Account> {
+  createAccount$(data: AccountCreateRequest): Observable<Account> {
     return this.http.post<Account>(this.baseUrl, data);
   }
 
-  updateAccount$(id: string, data: AccountRequest): Observable<Account> {
+  updateAccount$(id: string, data: AccountUpdateRequest): Observable<Account> {
     return this.http.put<Account>(`${this.baseUrl}/${id}`, data);
   }
 

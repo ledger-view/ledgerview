@@ -10,11 +10,18 @@ export interface Account {
   number: string;
 }
 
-export interface AccountRequest {
+export interface AccountCreateRequest {
   name: string;
   institution: string;
   type: AccountType;
   currency: string;
   balance: number;
+  number?: string;
+}
+
+export interface AccountUpdateRequest {
+  name: string;
+  institution: string;
+  type: AccountType;
   number?: string;
 }

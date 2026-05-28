@@ -2,9 +2,13 @@ import { ChangeDetectionStrategy, Component, inject, Injector, OnInit } from '@a
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountModalComponent, AccountModalData } from '@features/accounts/components/account-modal/account-modal.component';
+import {
+  AccountModalComponent,
+  AccountModalData,
+  AccountModalResult
+} from '@features/accounts/components/account-modal/account-modal.component';
 import { AccountService } from '@features/accounts/services/account.service';
-import { Account, AccountRequest } from '@model/account.model';
+import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { filter, switchMap, take } from 'rxjs';
@@ -99,15 +103,17 @@ export class AccountsComponent implements OnInit {
 
   private openModal(account?: Account): void {
     this.dialog
-      .open<AccountModalComponent, AccountModalData, { action: string; data?: AccountRequest }>(AccountModalComponent, {
+      .open<AccountModalComponent, AccountModalData, AccountModalResult>(AccountModalComponent, {
         data: { account },
         width: '460px'
       })
       .afterClosed()
-      .pipe(filter((r): r is { action: string; data?: AccountRequest } => !!r))
+      .pipe(filter((r): r is AccountModalResult => !!r))
       .subscribe((result) => {
-        if (result.action === 'save' && result.data) {
-          const op$ = account ? this.accountService.update$(account.id, result.data) : this.accountService.create$(result.data);
+        if (result.action === 'save') {
+          const op$ = account
+            ? this.accountService.update$(account.id, result.data as AccountUpdateRequest)
+            : this.accountService.create$(result.data as AccountCreateRequest);
           op$.subscribe();
         }
         if (result.action === 'delete' && account) {
