@@ -165,7 +165,7 @@
       "message": "\"{{name}}\" is used by existing transactions and cannot be deleted."
     },
     "subtitle": "Used to label every transaction. Color shows up in charts.",
-    "add": "New category",
+    "add": "Create new category",
     "total": "total",
     "form": {
       "new": "New category",

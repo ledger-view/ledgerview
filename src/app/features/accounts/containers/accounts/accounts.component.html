@@ -4,17 +4,13 @@
     <div class="lv-topbar-sub">{{ 'accounts.subtitle' | translate }}</div>
   </div>
   <div class="lv-spacer"></div>
+  <button class="lv-btn-primary" (click)="openAdd()">
+    <mat-icon>add</mat-icon>
+    {{ 'accounts.add' | translate }}
+  </button>
 </div>
 
 <div class="acc-wrap">
-  <!-- Header strip -->
-  <div class="acc-header flex justify-end">
-    <button class="lv-btn-primary" (click)="openAdd()">
-      <mat-icon>add</mat-icon>
-      {{ 'accounts.add' | translate }}
-    </button>
-  </div>
-
   @if (loading()) {
     <div class="lv-loading"><mat-spinner diameter="28"></mat-spinner></div>
   } @else {

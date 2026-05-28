@@ -4,17 +4,13 @@
     <div class="lv-topbar-sub">{{ 'categories.subtitle' | translate }}</div>
   </div>
   <div class="lv-spacer"></div>
+  <button class="lv-btn-primary" (click)="openAdd()">
+    <mat-icon>add</mat-icon>
+    {{ 'categories.add' | translate }}
+  </button>
 </div>
 
 <div class="cat-wrap">
-  <div class="cat-toolbar">
-    <div class="lv-spacer"></div>
-    <button class="lv-btn-primary" (click)="openAdd()">
-      <mat-icon>add</mat-icon>
-      {{ 'categories.add' | translate }}
-    </button>
-  </div>
-
   @if (loading()) {
     <div class="lv-loading"><mat-spinner diameter="28"></mat-spinner></div>
   } @else {
