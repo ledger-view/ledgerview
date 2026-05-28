@@ -47,14 +47,12 @@
 
       <div class="lv-side-footer">
         @if (identityClaims) {
-          <div class="lv-user-avatar">{{ userInitials }}</div>
-          <div class="lv-user-info">
-            <span class="lv-user-name">{{ identityClaims.name || identityClaims.preferred_username }}</span>
-            <span class="lv-user-email">{{ identityClaims.email }}</span>
-          </div>
-          <div class="lv-spacer"></div>
-          <button class="lv-icon-btn" [matTooltip]="'Logout'" (click)="logout()">
-            <mat-icon>logout</mat-icon>
+          <button class="lv-user-btn" (click)="openUserModal()">
+            <div class="lv-user-avatar">{{ identityClaims.name | initials }}</div>
+            <div class="lv-user-info">
+              <span class="lv-user-name">{{ identityClaims.name || identityClaims.preferred_username }}</span>
+              <span class="lv-user-email">{{ identityClaims.email }}</span>
+            </div>
           </button>
         }
       </div>

@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AccountService } from '@features/accounts/services/account.service';
 import { CategoryService } from '@features/categories/services/category.service';
 import { IdentityClaims } from '@model/auth.model';
 import { TranslateService } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { filter } from 'rxjs';
+import { UserModalComponent, UserModalResult } from './user-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +33,8 @@ export class AppComponent implements OnInit {
     private translateService: TranslateService,
     private oauthService: OAuthService,
     private accountService: AccountService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -44,25 +48,17 @@ export class AppComponent implements OnInit {
     return this.oauthService.hasValidAccessToken();
   }
 
-  protected logout(): void {
-    this.oauthService.logOut();
-  }
-
   protected get identityClaims(): IdentityClaims | null {
     return (this.oauthService.getIdentityClaims() as IdentityClaims) ?? null;
   }
 
-  protected get userInitials(): string {
-    const c = this.identityClaims;
-    if (!c) return '?';
-    if (c.given_name && c.family_name) return (c.given_name[0] + c.family_name[0]).toUpperCase();
-    if (c.name)
-      return c.name
-        .split(' ')
-        .map((p) => p[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase();
-    return c.preferred_username?.slice(0, 2).toUpperCase() ?? '?';
+  protected openUserModal(): void {
+    const claims = this.identityClaims;
+    if (!claims) return;
+    this.dialog
+      .open<UserModalComponent, IdentityClaims, UserModalResult>(UserModalComponent, { data: claims, width: '360px' })
+      .afterClosed()
+      .pipe(filter((result): result is 'logout' => result === 'logout'))
+      .subscribe(() => this.oauthService.logOut());
   }
 }

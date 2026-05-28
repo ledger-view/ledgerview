@@ -24,6 +24,7 @@
   "nav": {
     "workspace": "Workspace",
     "dashboard": "Dashboard",
+    "logout": "Logout",
     "cashFlow": "Cash Flow",
     "netWorth": "Net Worth",
     "budgets": "Budgets",
