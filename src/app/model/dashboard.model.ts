@@ -1,5 +1,14 @@
 import { Account } from './account.model';
 
+export interface CashflowRow {
+  weekLabel: string;
+  weekStart: string;
+  currency: string;
+  accountId: string;
+  income: number;
+  expense: number;
+}
+
 export interface CurrencyAmount {
   currency: string;
   amount: number;

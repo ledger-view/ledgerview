@@ -1,8 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { buildWeeks, CASHFLOW_DAYS_DEFAULT } from '@features/dashboard/utils';
+import { AccountApiService } from '@features/accounts/services/account-api.service';
+import { buildWeeks, CASHFLOW_WEEKS_DEFAULT } from '@features/dashboard/utils';
 import { Account } from '@model/account.model';
-import { AccountGroup, DashboardSummary, WeekBucket } from '@model/dashboard.model';
-import { Transaction } from '@model/transaction.model';
+import { AccountGroup, CashflowRow, DashboardSummary, WeekBucket } from '@model/dashboard.model';
 import { forkJoin } from 'rxjs';
 import { DashboardApiService } from './dashboard-api.service';
 
@@ -18,18 +18,21 @@ export class DashboardService {
   readonly expandedCurrency = this._expandedCurrency.asReadonly();
   readonly loading = this._loading.asReadonly();
 
-  constructor(private api: DashboardApiService) {}
+  constructor(
+    private api: DashboardApiService,
+    private accountApiService: AccountApiService
+  ) {}
 
-  load(cashFlowDays: number = CASHFLOW_DAYS_DEFAULT): void {
+  load(weeks: number = CASHFLOW_WEEKS_DEFAULT): void {
     this._loading.set(true);
     forkJoin({
       summary: this.api.getSummary$(),
-      accounts: this.api.getAccounts$(),
-      cashflow: this.api.getCashflowTransactions$(cashFlowDays)
+      accounts: this.accountApiService.getAccounts$(),
+      cashflow: this.api.getCashflow$(weeks)
     }).subscribe({
       next: ({ summary, accounts, cashflow }) => {
         this._summary.set(summary);
-        const groups = this.buildGroups(accounts, cashflow);
+        const groups = this.buildGroups(accounts, cashflow, summary, weeks);
         this._groups.set(groups);
         if (groups.length > 0 && this._expandedCurrency() === null) {
           this._expandedCurrency.set(groups[0].currency);
@@ -44,10 +47,8 @@ export class DashboardService {
     this._expandedCurrency.update((cur) => (cur === currency ? null : currency));
   }
 
-  private buildGroups(accounts: Account[], transactions: Transaction[]): AccountGroup[] {
-    const now = new Date();
-    const weeks = buildWeeks(now, 12);
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  private buildGroups(accounts: Account[], cashflow: CashflowRow[], summary: DashboardSummary, weeks: number): AccountGroup[] {
+    const weekScaffold = buildWeeks(new Date(), weeks);
 
     const byCurrency: Record<string, Account[]> = {};
     for (const acc of accounts) {
@@ -58,35 +59,28 @@ export class DashboardService {
     return Object.entries(byCurrency)
       .map(([currency, accs]) => {
         const totalBalance = accs.reduce((s, a) => s + a.balance, 0);
-        const txs = transactions.filter((t) => t.currency === currency);
+        const currencyRows = cashflow.filter((r) => r.currency === currency);
 
-        const monthTxs = txs.filter((t) => new Date(t.date) >= monthStart);
-        const totalIncome = monthTxs.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-        const totalExpenses = monthTxs.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-
-        const weekBuckets: WeekBucket[] = weeks.map((w) => {
-          const wTxs = txs.filter((t) => {
-            const d = new Date(t.date);
-            return d >= w.start && d <= w.end;
-          });
-          const income = wTxs.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-          const expense = wTxs.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-          return { label: w.label, income, expense };
+        const weekBuckets: WeekBucket[] = weekScaffold.map((w) => {
+          const rows = currencyRows.filter((r) => r.weekLabel === w.label);
+          return {
+            label: w.label,
+            income: rows.reduce((s, r) => s + r.income, 0),
+            expense: rows.reduce((s, r) => s + r.expense, 0)
+          };
         });
 
         const accountWeeks: Record<string, WeekBucket[]> = {};
         for (const acc of accs) {
-          const aTxs = txs.filter((t) => t.accountId === acc.id);
-          accountWeeks[acc.id] = weeks.map((w) => {
-            const wTxs = aTxs.filter((t) => {
-              const d = new Date(t.date);
-              return d >= w.start && d <= w.end;
-            });
-            const income = wTxs.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-            const expense = wTxs.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-            return { label: w.label, income, expense };
+          const accRows = currencyRows.filter((r) => r.accountId === acc.id);
+          accountWeeks[acc.id] = weekScaffold.map((w) => {
+            const row = accRows.find((r) => r.weekLabel === w.label);
+            return { label: w.label, income: row?.income ?? 0, expense: row?.expense ?? 0 };
           });
         }
+
+        const totalIncome = summary.monthlyIncome.find((c) => c.currency === currency)?.amount ?? 0;
+        const totalExpenses = summary.monthlyExpenses.find((c) => c.currency === currency)?.amount ?? 0;
 
         return {
           currency,

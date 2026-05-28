@@ -20,5 +20,4 @@ export function buildWeeks(now: Date, count: number): { label: string; start: Da
   return result;
 }
 
-const CASHFLOW_WEEKS_DEFAULT = 12;
-export const CASHFLOW_DAYS_DEFAULT = 7 * CASHFLOW_WEEKS_DEFAULT;
+export const CASHFLOW_WEEKS_DEFAULT = 12;
