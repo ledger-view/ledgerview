@@ -1,0 +1,43 @@
+$c-black: #101010;
+
+.mat-mdc-row {
+  cursor: pointer;
+  &:hover {
+    td {
+      background-color: rgba($c-black, 0.02);
+    }
+    .delete-button {
+      color: currentColor;
+    }
+  }
+}
+
+.delete-button {
+  color: transparent;
+}
+
+:host ::ng-deep thead {
+  th {
+    font-weight: 400 !important;
+    color: white !important;
+    &:first-child {
+      color: rgba(white, 0.25) !important;
+    }
+  }
+  background-color: rgba($c-black, 0.7) !important;
+}
+
+tr > th,
+td {
+  &:first-child {
+    //width: 3rem;
+    color: rgba($c-black, 0.25);
+  }
+  &:nth-last-child(-n + 2) {
+    //$width: 4rem;
+    //width: $width;
+    //min-width: $width;
+    //max-width: $width;
+    padding: 0 0.25rem !important;
+  }
+}
