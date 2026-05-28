@@ -1,0 +1,1 @@
+var r=(t=>(t.INCOME="INCOME",t.EXPENSE="EXPENSE",t.TRANSFER="TRANSFER",t))(r||{}),s={INCOME:{cssPillClass:"lv-pill-income",translationKey:"theme.income"},EXPENSE:{cssPillClass:"lv-pill-expense",translationKey:"theme.expense"},TRANSFER:{cssPillClass:"lv-pill-neutral",translationKey:"theme.transfer"}},o=e=>s[e].cssPillClass,l=e=>s[e].translationKey;export{r as a,o as b,l as c};

@@ -1,0 +1,185 @@
+{
+  "theme": {
+    "title": "LedgerView",
+    "income": "Income",
+    "expense": "Expense",
+    "expenses": "Expenses",
+    "transfer": "Transfer",
+    "account": "Account",
+    "accounts": "Accounts",
+    "category": "Category",
+    "categories": "Categories",
+    "transaction": "Transaction",
+    "transactions": "Transactions",
+    "amount": "Amount",
+    "balance": "Balance",
+    "currency": "Currency",
+    "date": "Date",
+    "time": "Time",
+    "description": "Description",
+    "institution": "Institution",
+    "openingBalance": "Opening balance",
+    "optional": "Optional"
+  },
+  "nav": {
+    "workspace": "Workspace",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "cashFlow": "Cash Flow",
+    "netWorth": "Net Worth",
+    "budgets": "Budgets",
+    "transactionsNeedBoth": "Add an account and a category first",
+    "transactionsNeedAccount": "Add an account first",
+    "transactionsNeedCategory": "Add a category first"
+  },
+  "common": {
+    "errors": {
+      "required": "Required",
+      "positiveAmount": "Must be greater than 0"
+    },
+    "cancel": "Cancel",
+    "ok": "OK",
+    "delete": "Delete",
+    "save": "Save changes",
+    "create": "Create",
+    "edit": "Edit",
+    "add": "Add",
+    "export": "Export",
+    "all": "All",
+    "name": "Name",
+    "type": "Type",
+    "total": "Total",
+    "showing": "Showing",
+    "of": "of",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "noData": "No data",
+    "previous": "Previous",
+    "next": "Next",
+    "personal": "Personal"
+  },
+  "onboarding": {
+    "eyebrow": "Welcome to LedgerView",
+    "title": "Set up your dashboard",
+    "subtitle": "Three short steps. You can come back to the rest later.",
+    "skip": "You can skip the tour and add things in any order.",
+    "step1": {
+      "title": "Add an account",
+      "badge": "Start here",
+      "desc": "Bank, card, cash, or crypto wallet. We'll group them by currency automatically.",
+      "cta": "Add account"
+    },
+    "step2": {
+      "title": "Review categories",
+      "desc": "Customize how your transactions get labeled — or accept the defaults.",
+      "cta": "Review categories"
+    },
+    "step3": {
+      "title": "Import or log transactions",
+      "desc": "Paste a CSV from your bank, or add transactions one at a time.",
+      "cta": "Go to transactions"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your finances",
+    "totalBalance": "Total balance",
+    "monthlyIncome": "Income · This month",
+    "monthlyExpenses": "Expenses · This month",
+    "netFlow": "Net flow",
+    "vsLastMonth": "vs. last month",
+    "accounts": "accounts",
+    "weeks": "Weeks",
+    "chart": {
+      "mirror": "Mirror Bars",
+      "area": "Balance Area",
+      "waterfall": "Waterfall",
+      "heatmap": "Heatmap",
+      "runningBalance": "Running balance",
+      "surplus": "Surplus",
+      "deficit": "Deficit"
+    }
+  },
+  "transactions": {
+    "subtitle": "All your financial activity",
+    "add": "Add transaction",
+    "empty": "No transactions match these filters.",
+    "filter": {
+      "allAccounts": "All accounts",
+      "allCategories": "All categories",
+      "last7d": "Last 7 days",
+      "last30d": "Last 30 days",
+      "last90d": "Last 90 days",
+      "ytd": "Year-to-date"
+    },
+    "confirmDelete": {
+      "title": "Delete transaction",
+      "message": "Delete \"{{title}}\"? This cannot be undone."
+    },
+    "form": {
+      "addTitle": "Add transaction",
+      "editTitle": "Edit transaction",
+      "descriptionPlaceholder": "e.g. Trader Joe's",
+      "amountExpense": "Amount (−)",
+      "amountIncome": "Amount (+)",
+      "amountPlaceholder": "0.00",
+      "note": "Note",
+      "notePlaceholder": "Add a note",
+      "save": "Save transaction",
+      "update": "Update transaction"
+    }
+  },
+  "accounts": {
+    "confirmDelete": {
+      "title": "Delete account",
+      "message": "Delete \"{{name}}\"? All associated transactions will be affected. This cannot be undone."
+    },
+    "subtitle": "Manage your financial accounts",
+    "add": "Add account",
+    "totalAcross": "Total across",
+    "activeAccounts": "active",
+    "detailView": "Detail view",
+    "refreshed": "Balances refreshed just now",
+    "linkNew": "Link a new account",
+    "linkNewSub": "Bank, card, wallet, or crypto",
+    "form": {
+      "new": "New account",
+      "edit": "Edit account",
+      "namePlaceholder": "Main Checking",
+      "institutionPlaceholder": "Chase",
+      "last4": "Last 4 / handle",
+      "last4Placeholder": "1234",
+      "create": "Create account",
+      "readOnlyAfterCreate": "This field is read-only after account creation"
+    },
+    "filter": {
+      "checking": "Checking",
+      "savings": "Savings",
+      "crypto": "Crypto"
+    }
+  },
+  "categories": {
+    "confirmDelete": {
+      "title": "Delete category",
+      "message": "Delete \"{{name}}\"? This cannot be undone."
+    },
+    "deleteError": {
+      "title": "Cannot delete category",
+      "message": "\"{{name}}\" is used by existing transactions and cannot be deleted."
+    },
+    "subtitle": "Used to label every transaction. Color shows up in charts.",
+    "add": "Create new category",
+    "total": "total",
+    "form": {
+      "new": "New category",
+      "edit": "Edit category",
+      "namePlaceholder": "Groceries",
+      "color": "Color",
+      "preview": "Preview",
+      "create": "Create category",
+      "untitled": "Untitled"
+    }
+  }
+}
