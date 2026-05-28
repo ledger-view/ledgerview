@@ -1,56 +1,58 @@
-<div class="lv-shell">
-  <aside class="lv-sidebar">
-    <div class="lv-brand">
-      <div class="lv-brand-icon">
-        <svg fill="white" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">
-          <rect height="6" rx="1" width="4" x="1" y="9" />
-          <rect height="10" rx="1" width="4" x="6" y="5" />
-          <rect height="13" rx="1" width="4" x="11" y="2" />
-        </svg>
-      </div>
-      <div class="lv-brand-cols">
-        <span class="lv-brand-name">{{ 'theme.title' | translate }}</span>
-        <span class="lv-brand-sub">{{ 'common.personal' | translate }}</span>
-      </div>
-    </div>
-
-    <nav class="lv-nav">
-      <div class="lv-nav-section">{{ 'nav.workspace' | translate }}</div>
-
-      <a class="lv-nav-item" routerLink="/dashboard" routerLinkActive="lv-nav-item--active">
-        <mat-icon>dashboard</mat-icon>
-        <span>{{ 'nav.dashboard' | translate }}</span>
-      </a>
-      <a class="lv-nav-item" routerLink="/transactions" routerLinkActive="lv-nav-item--active">
-        <mat-icon>receipt_long</mat-icon>
-        <span>{{ 'nav.transactions' | translate }}</span>
-      </a>
-      <a class="lv-nav-item" routerLink="/accounts" routerLinkActive="lv-nav-item--active">
-        <mat-icon>account_balance</mat-icon>
-        <span>{{ 'nav.accounts' | translate }}</span>
-      </a>
-      <a class="lv-nav-item" routerLink="/categories" routerLinkActive="lv-nav-item--active">
-        <mat-icon>label</mat-icon>
-        <span>{{ 'nav.categories' | translate }}</span>
-      </a>
-    </nav>
-
-    <div class="lv-side-footer">
-      @if (identityClaims) {
-        <div class="lv-user-avatar">{{ userInitials }}</div>
-        <div class="lv-user-info">
-          <span class="lv-user-name">{{ identityClaims.name || identityClaims.preferred_username }}</span>
-          <span class="lv-user-email">{{ identityClaims.email }}</span>
+@if (isAuthenticated) {
+  <div class="lv-shell">
+    <aside class="lv-sidebar">
+      <div class="lv-brand">
+        <div class="lv-brand-icon">
+          <svg fill="white" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">
+            <rect height="6" rx="1" width="4" x="1" y="9" />
+            <rect height="10" rx="1" width="4" x="6" y="5" />
+            <rect height="13" rx="1" width="4" x="11" y="2" />
+          </svg>
         </div>
-        <div class="lv-spacer"></div>
-        <button class="lv-icon-btn" [matTooltip]="'Logout'" (click)="logout()">
-          <mat-icon>logout</mat-icon>
-        </button>
-      }
-    </div>
-  </aside>
+        <div class="lv-brand-cols">
+          <span class="lv-brand-name">{{ 'theme.title' | translate }}</span>
+          <span class="lv-brand-sub">{{ 'common.personal' | translate }}</span>
+        </div>
+      </div>
 
-  <main class="lv-content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+      <nav class="lv-nav">
+        <div class="lv-nav-section">{{ 'nav.workspace' | translate }}</div>
+
+        <a class="lv-nav-item" routerLink="/dashboard" routerLinkActive="lv-nav-item--active">
+          <mat-icon>dashboard</mat-icon>
+          <span>{{ 'nav.dashboard' | translate }}</span>
+        </a>
+        <a class="lv-nav-item" routerLink="/transactions" routerLinkActive="lv-nav-item--active">
+          <mat-icon>receipt_long</mat-icon>
+          <span>{{ 'nav.transactions' | translate }}</span>
+        </a>
+        <a class="lv-nav-item" routerLink="/accounts" routerLinkActive="lv-nav-item--active">
+          <mat-icon>account_balance</mat-icon>
+          <span>{{ 'nav.accounts' | translate }}</span>
+        </a>
+        <a class="lv-nav-item" routerLink="/categories" routerLinkActive="lv-nav-item--active">
+          <mat-icon>label</mat-icon>
+          <span>{{ 'nav.categories' | translate }}</span>
+        </a>
+      </nav>
+
+      <div class="lv-side-footer">
+        @if (identityClaims) {
+          <div class="lv-user-avatar">{{ userInitials }}</div>
+          <div class="lv-user-info">
+            <span class="lv-user-name">{{ identityClaims.name || identityClaims.preferred_username }}</span>
+            <span class="lv-user-email">{{ identityClaims.email }}</span>
+          </div>
+          <div class="lv-spacer"></div>
+          <button class="lv-icon-btn" [matTooltip]="'Logout'" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </button>
+        }
+      </div>
+    </aside>
+
+    <main class="lv-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+}

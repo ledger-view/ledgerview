@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
     this.translateService.use('en');
   }
 
+  protected get isAuthenticated(): boolean {
+    return this.oauthService.hasValidAccessToken();
+  }
+
   protected logout(): void {
     this.oauthService.logOut();
   }
