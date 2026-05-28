@@ -14,6 +14,7 @@ import { Transaction } from '@model/transaction.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { dayEndIso, dayStartIso, formatDate, formatTime } from '@shared/date/utils';
+import { getLocalStorage, setLocalStorage } from '@shared/util/localStorage.utils';
 import { filter, switchMap } from 'rxjs';
 
 export interface TxFilters {
@@ -22,6 +23,8 @@ export interface TxFilters {
   categoryId: string;
   range: '7d' | '30d' | '90d' | 'ytd';
 }
+
+const TRANSACTIONS_RANGE_KEY = 'TRANSACTIONS_RANGE';
 
 @Component({
   selector: 'app-transactions',
@@ -42,7 +45,12 @@ export class TransactionsComponent implements OnInit {
   protected readonly accounts = this.accountService.accounts;
   protected readonly categories = this.categoryService.categories;
 
-  protected readonly filters = signal<TxFilters>({ type: 'all', accountId: '', categoryId: '', range: '30d' });
+  protected readonly filters = signal<TxFilters>({
+    type: 'all',
+    accountId: '',
+    categoryId: '',
+    range: getLocalStorage<TxFilters['range']>(TRANSACTIONS_RANGE_KEY) ?? '90d'
+  });
   protected readonly sort = signal<{ key: 'date' | 'amount' | 'title'; dir: 'asc' | 'desc' }>({ key: 'date', dir: 'desc' });
   protected readonly currentPage = signal(0);
   protected readonly pageSize = 12;
@@ -54,6 +62,12 @@ export class TransactionsComponent implements OnInit {
   protected readonly categoryMap = computed<Record<string, Category>>(() =>
     Object.fromEntries(this.categories().map((c) => [c.id, c]))
   );
+
+  protected readonly filteredCategories = computed(() => {
+    const type = this.filters().type;
+    if (type === 'all') return this.categories();
+    return this.categories().filter((c) => c.type === type);
+  });
 
   ngOnInit(): void {
     if (this.accountService.accounts().length === 0) this.accountService.load();
@@ -101,7 +115,14 @@ export class TransactionsComponent implements OnInit {
   }
 
   protected setTypeFilter(type: TxFilters['type']): void {
-    this.filters.update((f) => ({ ...f, type }));
+    this.filters.update((f) => {
+      let { categoryId } = f;
+      if (type !== 'all' && categoryId) {
+        const cat = this.categoryMap()[categoryId];
+        if (!cat || cat.type !== type) categoryId = '';
+      }
+      return { ...f, type, categoryId };
+    });
     this.currentPage.set(0);
     this.loadTransactions();
   }
@@ -119,6 +140,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   protected setRangeFilter(range: TxFilters['range']): void {
+    setLocalStorage(TRANSACTIONS_RANGE_KEY, range);
     this.filters.update((f) => ({ ...f, range }));
     this.currentPage.set(0);
     this.loadTransactions();
