@@ -1,24 +1,13 @@
-<header>
-  <div class="container">
-    <a href="/">
-      <mat-icon fontIcon="spa" aria-hidden="false"></mat-icon>
-      {{ 'theme.title' | translate  }}
-    </a>
-    @if (identityClaims) {
-      <div class="user-details">
-        <div class="user">
-          <mat-icon fontIcon="account_circle" [matTooltip]="identityClaims.email" aria-hidden="false"></mat-icon>
-          {{ identityClaims.name || identityClaims.preferred_username }}
-        </div>
-        <button mat-icon-button (click)="logout()">
-          <mat-icon>logout</mat-icon>
-        </button>
-      </div>
-    }
+@if (isAuthenticated) {
+  <div class="lv-shell">
+    <app-sidenav
+      [identityClaims]="identityClaims"
+      [transactionsEnabled]="transactionsEnabled()"
+      [transactionsTooltipKey]="transactionsTooltipKey() | translate"
+    ></app-sidenav>
+
+    <main class="lv-content">
+      <router-outlet></router-outlet>
+    </main>
   </div>
-</header>
-<div class="container-wrapper">
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+}

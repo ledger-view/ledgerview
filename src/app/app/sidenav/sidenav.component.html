@@ -1,0 +1,110 @@
+<div class="lv-brand-section">
+  <a class="lv-brand" routerLink="/">
+    <div class="lv-brand-icon">
+      <svg fill="white" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">
+        <rect height="6" rx="1" width="4" x="1" y="9" />
+        <rect height="10" rx="1" width="4" x="6" y="5" />
+        <rect height="13" rx="1" width="4" x="11" y="2" />
+      </svg>
+    </div>
+    @if (isOpened()) {
+      <div class="lv-brand-cols">
+        <span class="lv-brand-name">{{ 'theme.title' | translate }}</span>
+        <span class="lv-brand-sub">{{ 'common.personal' | translate }}</span>
+      </div>
+    }
+  </a>
+</div>
+
+<nav class="lv-nav">
+  <a
+    class="lv-nav-item"
+    matTooltipPosition="right"
+    routerLink="/dashboard"
+    routerLinkActive="lv-nav-item--active"
+    [matTooltip]="isOpened() ? '' : ('nav.dashboard' | translate)"
+  >
+    <mat-icon>dashboard</mat-icon>
+    @if (isOpened()) {
+      <span>{{ 'nav.dashboard' | translate }}</span>
+    }
+  </a>
+
+  @if (transactionsEnabled) {
+    <a
+      class="lv-nav-item"
+      matTooltipPosition="right"
+      routerLink="/transactions"
+      routerLinkActive="lv-nav-item--active"
+      [matTooltip]="isOpened() ? '' : ('theme.transactions' | translate)"
+    >
+      <mat-icon>receipt_long</mat-icon>
+      @if (isOpened()) {
+        <span>{{ 'theme.transactions' | translate }}</span>
+      }
+    </a>
+  } @else {
+    <span
+      class="lv-nav-item lv-nav-item--disabled"
+      matTooltipPosition="right"
+      [matTooltip]="isOpened() ? (transactionsTooltipKey | translate) : ('theme.transactions' | translate)"
+    >
+      <mat-icon>receipt_long</mat-icon>
+      @if (isOpened()) {
+        <span>{{ 'theme.transactions' | translate }}</span>
+      }
+    </span>
+  }
+
+  <a
+    class="lv-nav-item"
+    matTooltipPosition="right"
+    routerLink="/accounts"
+    routerLinkActive="lv-nav-item--active"
+    [matTooltip]="isOpened() ? '' : ('theme.accounts' | translate)"
+  >
+    <mat-icon>account_balance</mat-icon>
+    @if (isOpened()) {
+      <span>{{ 'theme.accounts' | translate }}</span>
+    }
+  </a>
+
+  <a
+    class="lv-nav-item"
+    matTooltipPosition="right"
+    routerLink="/categories"
+    routerLinkActive="lv-nav-item--active"
+    [matTooltip]="isOpened() ? '' : ('theme.categories' | translate)"
+  >
+    <mat-icon>label</mat-icon>
+    @if (isOpened()) {
+      <span>{{ 'theme.categories' | translate }}</span>
+    }
+  </a>
+</nav>
+
+<div class="lv-side-footer">
+  <button class="lv-nav-item lv-toggle-btn" matTooltipPosition="right" [matTooltip]="isOpened() ? '' : ('nav.expand' | translate)" (click)="toggle()">
+    <mat-icon>{{ isOpened() ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+    @if (isOpened()) {
+      <span>{{ 'nav.collapse' | translate }}</span>
+    }
+  </button>
+
+  @if (identityClaims) {
+    <button
+      class="lv-user-btn"
+      matTooltipPosition="right"
+      [matTooltip]="isOpened() ? '' : identityClaims.name || identityClaims.preferred_username"
+      (click)="openUserModal()"
+    >
+      <div class="lv-user-avatar">{{ identityClaims.name | initials }}</div>
+      @if (isOpened()) {
+        <div class="lv-user-info">
+          <span class="lv-user-name">{{ identityClaims.name || identityClaims.preferred_username }}</span>
+          <span class="lv-user-email">{{ identityClaims.email }}</span>
+        </div>
+      }
+    </button>
+  }
+</div>

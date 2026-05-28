@@ -1,0 +1,78 @@
+// ── Table ─────────────────────────────────────────────────────────────────
+.lv-table-header {
+  display: grid;
+  padding: 6px 14px;
+  background: var(--lv-bg);
+  border-top: 1px solid var(--lv-border);
+  border-bottom: 1px solid var(--lv-border);
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--lv-text-md);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lv-table-row {
+  display: grid;
+  height: 36px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--lv-border);
+  transition: background 0.1s;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    background: var(--lv-hover);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .lv-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+
+  &:hover .lv-row-actions {
+    opacity: 1;
+  }
+}
+
+// ── Sort button ───────────────────────────────────────────────────────────
+.lv-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--lv-font);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lv-text-md);
+
+  &.active {
+    color: var(--lv-text);
+  }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────
+.lv-empty {
+  padding: 40px 14px;
+  text-align: center;
+  color: var(--lv-text-md);
+  font-size: 12.5px;
+}

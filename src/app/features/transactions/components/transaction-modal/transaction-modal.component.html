@@ -1,0 +1,102 @@
+<div class="lv-modal-wrap" [formGroup]="form">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">
+      {{ (isEdit ? 'transactions.form.editTitle' : 'transactions.form.addTitle') | translate }}
+    </span>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-segmented">
+      <button [class.active]="form.get('type')?.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
+        {{ 'theme.expense' | translate }}
+      </button>
+      <button [class.active]="form.get('type')?.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
+        {{ 'theme.income' | translate }}
+      </button>
+    </div>
+
+    <div class="lv-field-row">
+      <div class="lv-field">
+        <label class="lv-label">{{ 'theme.description' | translate }}</label>
+        <input class="lv-input" cdkFocusInitial formControlName="title" [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
+        <span class="lv-error">
+          @if (form.get('title')?.invalid && form.get('title')?.touched) {
+            {{ 'common.errors.required' | translate }}
+          }
+        </span>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ amountLabel | translate }}</label>
+        <input
+          class="lv-input tx-mono"
+          formControlName="amount"
+          step="0.01"
+          type="number"
+          [placeholder]="'transactions.form.amountPlaceholder' | translate"
+        />
+        <span class="lv-error">
+          @if (form.get('amount')?.touched) {
+            @if (form.get('amount')?.hasError('required')) {
+              {{ 'common.errors.required' | translate }}
+            } @else if (form.get('amount')?.hasError('min')) {
+              {{ 'common.errors.positiveAmount' | translate }}
+            }
+          }
+        </span>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'theme.date' | translate }}</label>
+        <input class="lv-input" formControlName="date" type="date" />
+        <span class="lv-error">
+          @if (form.get('date')?.invalid && form.get('date')?.touched) {
+            {{ 'common.errors.required' | translate }}
+          }
+        </span>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'theme.time' | translate }}</label>
+        <input class="lv-input" formControlName="time" type="time" />
+        <span class="lv-error"></span>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'theme.account' | translate }}</label>
+        <select class="lv-select" formControlName="accountId">
+          @for (acc of data.accounts; track acc.id) {
+            <option [value]="acc.id">{{ acc.name }}</option>
+          }
+        </select>
+        <span class="lv-error"></span>
+      </div>
+      <div class="lv-field">
+        <label class="lv-label">{{ 'theme.category' | translate }}</label>
+        <select class="lv-select" formControlName="categoryId">
+          @for (cat of filteredCategories; track cat.id) {
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+        <span class="lv-error"></span>
+      </div>
+      <div class="lv-field lv-field--full">
+        <label class="lv-label">{{ 'transactions.form.note' | translate }}&nbsp;({{ 'theme.optional' | translate | lowercase }})</label>
+        <input class="lv-input" formControlName="note" [placeholder]="'transactions.form.notePlaceholder' | translate" />
+        <span class="lv-error"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-modal-footer justify-between">
+    @if (isEdit) {
+      <button class="lv-btn-danger" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        {{ 'common.delete' | translate }}
+      </button>
+    }
+    <div class="lv-spacer"></div>
+    <div class="flex gap-2">
+      <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button class="lv-btn-primary" (click)="save()">
+        {{ (isEdit ? 'transactions.form.update' : 'transactions.form.save') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

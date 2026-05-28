@@ -1,15 +1,37 @@
-import { PageRequest } from './page.model';
+import { PageRequest } from '@model/page.model';
+
+export enum TransactionType {
+  INCOME = 'INCOME',
+  EXPENSE = 'EXPENSE'
+}
 
 export interface Transaction {
   id: string;
-  iban: string;
-  date: string;
-  currency: string;
-  category: string;
+  title: string;
   amount: number;
+  type: TransactionType;
+  currency: string;
+  date: string;
+  categoryId: string;
+  accountId: string;
+  note?: string;
+}
+
+export interface TransactionRequest {
+  title: string;
+  amount: number;
+  type: TransactionType;
+  date: string;
+  categoryId: string;
+  accountId: string;
+  note?: string;
 }
 
 export interface TransactionPageRequest extends PageRequest {
-  iban?: string;
-  category?: string;
+  sort?: 'date' | 'amount' | 'title';
+  accountId?: string;
+  categoryId?: string;
+  type?: TransactionType;
+  dateFrom?: string;
+  dateTo?: string;
 }

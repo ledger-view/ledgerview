@@ -1,0 +1,71 @@
+<div class="lv-modal-wrap" [formGroup]="form">
+  <div class="lv-modal-header">
+    <span class="lv-modal-title">
+      {{ (isEdit ? 'categories.form.edit' : 'categories.form.new') | translate }}
+      @if (isEdit) {
+        — {{ data.category?.name }}
+      }
+    </span>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-field">
+      <label class="lv-label">{{ 'common.name' | translate }}</label>
+      <input class="lv-input" formControlName="name" [placeholder]="'categories.form.namePlaceholder' | translate" />
+      <span class="lv-error">
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          {{ 'common.errors.required' | translate }}
+        }
+      </span>
+    </div>
+
+    <div class="lv-field">
+      <label class="lv-label">{{ 'common.type' | translate }}</label>
+      <div class="lv-segmented">
+        <button [class.active]="type.value === CategoryType.EXPENSE" (click)="setType(CategoryType.EXPENSE)">
+          {{ 'theme.expense' | translate }}
+        </button>
+        <button [class.active]="type.value === CategoryType.INCOME" (click)="setType(CategoryType.INCOME)">
+          {{ 'theme.income' | translate }}
+        </button>
+        <button [class.active]="type.value === CategoryType.TRANSFER" (click)="setType(CategoryType.TRANSFER)">
+          {{ 'theme.transfer' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="lv-field">
+      <label class="lv-label">{{ 'categories.form.color' | translate }}</label>
+      <div class="cat-palette">
+        @for (c of palette; track c) {
+          <button class="cat-swatch" [class.cat-swatch--active]="color.value === c" [style.background]="c" (click)="setColor(c)"></button>
+        }
+      </div>
+    </div>
+
+    <div class="cat-preview">
+      <span class="cat-preview-label">{{ 'categories.form.preview' | translate }}</span>
+      <div class="lv-spacer"></div>
+      <span class="lv-dot" [style.background]="color.value"></span>
+      <span class="cat-preview-name">{{ previewName }}</span>
+      <span class="lv-pill ml-auto" [class]="getCategoryCssPillClass(type.value)">{{ getCategoryTranslationKey(type.value) | translate }}</span>
+    </div>
+  </div>
+
+  <div class="lv-modal-footer flex justify-between">
+    <div>
+      @if (isEdit) {
+        <button class="lv-btn-danger" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          {{ 'common.delete' | translate }}
+        </button>
+      }
+    </div>
+    <div class="flex gap-2">
+      <button class="lv-btn-ghost" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button class="lv-btn-primary" (click)="save()">
+        {{ (isEdit ? 'common.save' : 'categories.form.create') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

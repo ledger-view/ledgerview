@@ -1,0 +1,98 @@
+<div class="lv-topbar">
+  <div>
+    <div class="lv-topbar-title">{{ 'theme.categories' | translate }}</div>
+    <div class="lv-topbar-sub">{{ 'categories.subtitle' | translate }}</div>
+  </div>
+  <div class="lv-spacer"></div>
+  <button class="lv-btn-primary" (click)="openAdd()">
+    <mat-icon>add</mat-icon>
+    {{ 'categories.add' | translate }}
+  </button>
+</div>
+
+<div class="cat-wrap">
+  <div class="lv-overlay-wrap">
+    @if (loading()) {
+      <div class="lv-overlay"><mat-spinner diameter="28"></mat-spinner></div>
+    }
+
+    <!-- Category cards grid -->
+    <!--    <div class="cat-cards-grid">-->
+    <!--      @for (cat of categories(); track cat.id) {-->
+    <!--        <div class="lv-card cat-card">-->
+    <!--          <div class="cat-card-top">-->
+    <!--            <div class="cat-icon" [style.background]="cat.color">-->
+    <!--              <span class="cat-icon-letter">{{ cat.name[0] }}</span>-->
+    <!--            </div>-->
+    <!--            <div class="cat-card-info">-->
+    <!--              <span class="cat-card-name">{{ cat.name }}</span>-->
+    <!--              <span class="cat-card-type">{{ cat.type }}</span>-->
+    <!--            </div>-->
+    <!--            <div class="lv-spacer"></div>-->
+    <!--            <button class="lv-icon-btn" (click)="openEdit(cat)"><mat-icon>edit</mat-icon></button>-->
+    <!--          </div>-->
+    <!--          <div class="cat-card-stats">-->
+    <!--            <span class="cat-card-count">{{ cat.transactionCount }} tx</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      }-->
+    <!--    </div>-->
+
+    <!-- Detail list -->
+    <div class="lv-card" style="padding: 0; overflow: hidden">
+      <div class="cat-table-header-row">
+        <span class="cat-table-title">{{ 'theme.categories' | translate }}</span>
+        <div class="lv-spacer"></div>
+        <span class="cat-total-label">{{ categories().length }} {{ 'categories.total' | translate }}</span>
+      </div>
+
+      <div class="lv-table-header cat-table-cols">
+        <span></span>
+        <span>{{ 'common.name' | translate }}</span>
+        <span>{{ 'common.type' | translate }}</span>
+        <span class="text-right">{{ 'theme.transactions' | translate }}</span>
+        <span></span>
+      </div>
+
+      @for (group of groupedCategories(); track group.type) {
+        <div class="cat-group">
+          <div
+            class="cat-group-header"
+            [class.cat-group-header--expense]="group.type === CategoryType.EXPENSE"
+            [class.cat-group-header--income]="group.type === CategoryType.INCOME"
+            [class.cat-group-header--transfer]="group.type === CategoryType.TRANSFER"
+            (click)="toggleGroup(group.type)"
+          >
+            <mat-icon class="cat-group-chevron" [class.cat-group-chevron--open]="isOpen(group.type)">chevron_right</mat-icon>
+            <span class="lv-pill" [class]="getCategoryCssPillClass(group.type)">{{ getCategoryTranslationKey(group.type) | translate }}</span>
+            <span class="cat-group-count">{{ group.items.length }}</span>
+          </div>
+          @if (isOpen(group.type)) {
+            <div class="cat-group-body">
+              @for (category of group.items; track category.id) {
+                <div class="lv-table-row cat-table-cols">
+                  <div class="cat-dot-lg" [style.background]="category.color"></div>
+                  <span class="cat-row-name">{{ category.name }}</span>
+                  <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">
+                    {{ getCategoryTranslationKey(category.type) | translate }}
+                  </span>
+                  <span class="cat-muted lv-mono text-right">{{ category.transactionCount }}</span>
+                  <div class="lv-row-actions">
+                    <button class="lv-icon-btn" (click)="openEdit(category); $event.stopPropagation()"><mat-icon>edit</mat-icon></button>
+                    <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(category); $event.stopPropagation()">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (categories().length === 0) {
+        <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+      }
+    </div>
+  </div>
+</div>

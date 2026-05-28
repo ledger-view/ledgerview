@@ -1,0 +1,39 @@
+.cat-palette {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.cat-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: box-shadow 0.12s;
+
+  &--active {
+    box-shadow:
+      0 0 0 2px var(--lv-surface),
+      0 0 0 4px currentColor;
+  }
+}
+
+.cat-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--lv-radius-sm);
+  background: var(--lv-bg);
+  border: 1px solid var(--lv-border);
+  font-size: 11px;
+  color: var(--lv-text-lo);
+}
+
+.cat-preview-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--lv-text);
+}

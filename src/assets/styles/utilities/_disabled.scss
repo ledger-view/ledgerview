@@ -1,0 +1,77 @@
+// Disabled states
+//
+// Principle: surface drops to sidebar tone (locked, not empty).
+// Border holds. Text + chrome go faint. Cursor: not-allowed everywhere.
+// Focus rings never paint on disabled fields.
+
+// Inputs & selects
+.lv-input:disabled,
+.lv-select:disabled {
+  background-color: var(--lv-sidebar);
+  color: var(--lv-text-lo);
+  border-color: var(--lv-border);
+  cursor: not-allowed;
+  pointer-events: none;
+
+  &::placeholder {
+    color: var(--lv-text-lo);
+    opacity: 0.6;
+  }
+
+  &:focus {
+    border-color: var(--lv-border);
+  }
+}
+
+// Faded chevron for disabled select — background-image/repeat/position inherit from base .lv-select
+.lv-select:disabled {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%23D1D5DB' d='M0 0h10L5 6z'/></svg>");
+}
+
+// Buttons
+// Override the base opacity:0.4 rule with per-variant disabled colours.
+
+.lv-btn-primary:disabled {
+  // accent mixed 32% into sidebar — brand hue held, contrast below tap-affordance
+  background: color-mix(in srgb, var(--lv-accent) 32%, var(--lv-sidebar));
+  border-color: color-mix(in srgb, var(--lv-accent) 32%, var(--lv-sidebar));
+  color: color-mix(in srgb, #fff 60%, var(--lv-sidebar));
+  opacity: 1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lv-btn-ghost:disabled {
+  color: var(--lv-text-lo);
+  border-color: transparent;
+  background: transparent;
+  opacity: 1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lv-btn-secondary:disabled {
+  background: var(--lv-sidebar);
+  color: var(--lv-text-lo);
+  border-color: var(--lv-border);
+  opacity: 1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lv-btn-danger:disabled {
+  // red mixed 45% into faint — destructive hue survives, de-escalated
+  color: color-mix(in srgb, var(--lv-danger) 45%, var(--lv-text-lo));
+  border-color: var(--lv-border);
+  background: transparent;
+  opacity: 1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// Segmented control
+// Whole control dims when any button is disabled; selected pill stays raised.
+.lv-segmented:has(button:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+}

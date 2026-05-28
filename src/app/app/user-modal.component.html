@@ -1,0 +1,34 @@
+<div class="lv-modal-wrap">
+  <div class="lv-modal-header um-header">
+    <div class="um-avatar">{{ data.name | initials }}</div>
+    <div class="um-identity">
+      <span class="um-name">{{ displayName }}</span>
+      <span class="um-sub">{{ data.email }}</span>
+    </div>
+    <button class="lv-icon-btn um-close" (click)="close()"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="lv-modal-body">
+    <div class="lv-field">
+      <label class="lv-label">{{ 'common.name' | translate }}</label>
+      <input class="lv-input" readonly [value]="displayName" />
+    </div>
+    <div class="lv-field">
+      <label class="lv-label">Email</label>
+      <input class="lv-input" readonly [value]="data.email" />
+    </div>
+    @if (data.preferred_username && data.preferred_username !== data.email) {
+      <div class="lv-field">
+        <label class="lv-label">Username</label>
+        <input class="lv-input" readonly [value]="data.preferred_username" />
+      </div>
+    }
+  </div>
+
+  <div class="lv-modal-footer justify-end">
+    <button class="lv-btn-danger" (click)="logout()">
+      {{ 'nav.logout' | translate }}
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</div>

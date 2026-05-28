@@ -1,0 +1,79 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
+import { Category, CategoryRequest } from '@model/category.model';
+import { catchError, finalize, tap, throwError } from 'rxjs';
+import { CategoryApiService } from './category-api.service';
+
+@Injectable({ providedIn: 'root' })
+export class CategoryService {
+  private _categories = signal<Category[]>([]);
+  private _loading = signal(false);
+  private _loaded = signal(false);
+  private _palette = signal<string[]>([]);
+  private _defaultColor = signal<string>('');
+  private _colorsLoaded = signal(false);
+
+  readonly categories = this._categories.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly loaded = this._loaded.asReadonly();
+  readonly palette = this._palette.asReadonly();
+  readonly defaultColor = this._defaultColor.asReadonly();
+  readonly colorsLoaded = this._colorsLoaded.asReadonly();
+
+  constructor(private api: CategoryApiService) {}
+
+  loadColors(): void {
+    if (this._colorsLoaded()) return;
+    this.api.getColorPalette$().subscribe({
+      next: ({ colors, defaultColor }) => {
+        this._palette.set(colors);
+        this._defaultColor.set(defaultColor);
+        this._colorsLoaded.set(true);
+      },
+      error: () => this._colorsLoaded.set(true)
+    });
+  }
+
+  load(): void {
+    this._loading.set(true);
+    this.api.getCategories$().subscribe({
+      next: (categories) => {
+        this._categories.set(categories);
+        this._loading.set(false);
+        this._loaded.set(true);
+      },
+      error: () => {
+        this._loading.set(false);
+        this._loaded.set(true);
+      }
+    });
+  }
+
+  create$(data: CategoryRequest) {
+    this._loading.set(true);
+    return this.api.createCategory$(data).pipe(
+      tap((created) => this._categories.update((list) => [...list, created])),
+      finalize(() => this._loading.set(false))
+    );
+  }
+
+  update$(id: string, data: CategoryRequest) {
+    this._loading.set(true);
+    return this.api.updateCategory$(id, data).pipe(
+      tap((updated) => this._categories.update((list) => list.map((c) => (c.id === id ? updated : c)))),
+      finalize(() => this._loading.set(false))
+    );
+  }
+
+  delete$(id: string) {
+    this._loading.set(true);
+    return this.api.deleteCategory$(id).pipe(
+      tap(() => this._categories.update((list) => list.filter((c) => c.id !== id))),
+      finalize(() => this._loading.set(false)),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 409) return throwError(() => new Error('CATEGORY_IN_USE'));
+        return throwError(() => err);
+      })
+    );
+  }
+}

@@ -1,0 +1,59 @@
+.um-header {
+  gap: 12px;
+  align-items: center;
+}
+
+.um-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #818cf8, var(--lv-accent));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.um-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+  flex: 1;
+}
+
+.um-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--lv-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.um-sub {
+  font-size: 11.5px;
+  color: var(--lv-text-lo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.um-close {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.lv-input[readonly] {
+  background: var(--lv-bg);
+  color: var(--lv-text-md);
+  cursor: default;
+  border-color: var(--lv-border);
+
+  &:focus {
+    border-color: var(--lv-border);
+  }
+}

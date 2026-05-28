@@ -1,19 +1,111 @@
-<!--<div class="container">-->
-<!--  <div class="hero-container">-->
-<!--    <div class="hero">-->
-<!--      <div class="image-container"></div>-->
-<!--    </div>-->
-<!--  </div>-->
+<div class="lv-topbar">
+  <div>
+    <div class="lv-topbar-title">{{ 'dashboard.title' | translate }}</div>
+    <div class="lv-topbar-sub">{{ 'dashboard.subtitle' | translate }}</div>
+  </div>
+  <div class="lv-spacer"></div>
+</div>
 
-<!--  <div *ngIf="transactions$ | async as transactions">-->
-<!--    <h2 class="panel-title">-->
-<!--      Your transactions ({{ transactions.length }})-->
-<!--      <ng-container *ngTemplateOutlet="loader"></ng-container>-->
-<!--    </h2>-->
-<!--    <app-transactions-table [transactions]="transactions"></app-transactions-table>-->
-<!--  </div>-->
-<!--</div>-->
+<div class="db-scroll-wrap">
+  @if (loading()) {
+    <div class="lv-loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+  } @else {
+    @if (groups().length === 0 && !onboardingDismissed()) {
+      <app-onboarding-steps
+        (addAccount)="navigateToAccounts()"
+        (importTransactions)="navigateToTransactions()"
+        (reviewCategories)="navigateToCategories()"
+        (skip)="dismissOnboarding()"
+      ></app-onboarding-steps>
+    } @else if (groups().length === 0) {
+      <div class="lv-card db-accordion-empty">
+        <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+      </div>
+    }
 
-<!--<ng-template #loader>-->
-<!--  <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>-->
-<!--</ng-template>-->
+    <!-- Currency groups accordion -->
+    <div class="db-accordion">
+      @for (group of groups(); track trackByCurrency($index, group)) {
+        <div class="lv-card db-group" [class.db-group--expanded]="expandedCurrency() === group.currency">
+          <!-- Collapsed summary row -->
+          <div class="db-group-row" (click)="toggle(group.currency)">
+            <div class="h-full flex flex-col">
+              <span class="db-ccy-pill lv-mono h-full">{{ group.currency }}</span>
+            </div>
+
+            <div class="db-group-balance">
+              <span class="db-group-bal-value lv-mono">{{ fmtMoney(group.totalBalance, group.currency) }}</span>
+              <span class="db-group-acc-count">{{ group.accounts.length }} {{ 'dashboard.accounts' | translate }}</span>
+              <span class="db-group-weeks">{{ group.weeks.length }} {{ 'dashboard.weeks' | translate }}</span>
+            </div>
+
+            <div class="db-group-kpis">
+              <div class="db-kpi">
+                <span class="db-kpi-label">{{ 'dashboard.monthlyIncome' | translate }}</span>
+                <span class="db-kpi-value db-kpi-value--income lv-mono">{{ fmtMoney(group.totalIncome, group.currency) }}</span>
+              </div>
+              <div class="db-kpi">
+                <span class="db-kpi-label">{{ 'dashboard.monthlyExpenses' | translate }}</span>
+                <span class="db-kpi-value db-kpi-value--expense lv-mono">{{ fmtMoney(group.totalExpenses, group.currency) }}</span>
+              </div>
+              <div class="db-kpi">
+                <span class="db-kpi-label">{{ 'dashboard.netFlow' | translate }}</span>
+                <span
+                  class="db-kpi-value lv-mono"
+                  [class.db-kpi-value--expense]="group.netFlow < 0"
+                  [class.db-kpi-value--income]="group.netFlow >= 0"
+                >
+                  {{ fmtSigned(group.netFlow, group.currency) }}
+                </span>
+              </div>
+            </div>
+
+            <app-echart class="db-sparkline" [option]="sparklineOption(group.weeks)"></app-echart>
+
+            <mat-icon class="db-chevron">{{ expandedCurrency() === group.currency ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </div>
+
+          <!-- Expanded panel -->
+          @if (expandedCurrency() === group.currency) {
+            <div class="db-group-panel">
+              <!-- Chart type tabs -->
+              <div class="db-chart-tabs">
+                @for (ct of chartTypes; track ct) {
+                  <button
+                    class="db-chart-tab"
+                    [class.db-chart-tab--active]="getChart(group.currency) === ct"
+                    (click)="setChart(group.currency, ct); $event.stopPropagation()"
+                  >
+                    {{ 'dashboard.chart.' + ct | translate }}
+                  </button>
+                }
+              </div>
+
+              <!-- Chart -->
+              <app-echart class="db-chart" [option]="groupChartOption(group, getChart(group.currency))"></app-echart>
+
+              <!-- Account tiles -->
+              <div class="db-account-list">
+                @for (acc of group.accounts; track trackById($index, acc)) {
+                  <div class="db-account-tile" (click)="navigateToAccountEdit(acc.id); $event.stopPropagation()">
+                    <div class="lv-account-icon" [style.background]="accountColor(acc.type)">
+                      <mat-icon>{{ accountIcon(acc.type) }}</mat-icon>
+                    </div>
+                    <div class="db-account-info">
+                      <span class="db-account-name">{{ acc.name }}</span>
+                      <span class="db-account-sub">{{ acc.institution }} · {{ acc.number }}</span>
+                    </div>
+                    <app-echart class="db-acc-sparkline" [option]="sparklineOption(group.accountWeeks[acc.id])"></app-echart>
+                    <span class="db-account-bal lv-mono">{{ fmtMoney(acc.balance, acc.currency) }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
