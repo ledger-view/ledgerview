@@ -5,6 +5,8 @@ Personal finance dashboard. Track accounts, transactions, and spending across cu
 **Live:** https://ledger-view.github.io/ledgerview  
 **Backend:** https://github.com/ledger-view/ledgerview-backend
 
+![dashboard](docs/images/dashboard.png)
+
 ---
 
 ## Features
