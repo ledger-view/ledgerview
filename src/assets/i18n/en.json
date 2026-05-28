@@ -25,6 +25,8 @@
     "workspace": "Workspace",
     "dashboard": "Dashboard",
     "logout": "Logout",
+    "collapse": "Collapse",
+    "expand": "Expand",
     "cashFlow": "Cash Flow",
     "netWorth": "Net Worth",
     "budgets": "Budgets",

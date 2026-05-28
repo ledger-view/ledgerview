@@ -6,10 +6,11 @@ import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app/app.component';
+import { SidenavComponent } from './app/sidenav/sidenav.component';
 import { UserModalComponent } from './app/user-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, UserModalComponent],
+  declarations: [AppComponent, UserModalComponent, SidenavComponent],
   imports: [
     // angular
     BrowserModule,
