@@ -24,7 +24,9 @@
         <div class="lv-card db-group" [class.db-group--expanded]="expandedCurrency() === group.currency">
           <!-- Collapsed summary row -->
           <div class="db-group-row" (click)="toggle(group.currency)">
-            <span class="db-ccy-pill lv-mono">{{ group.currency }}</span>
+            <div class="h-full flex flex-col">
+              <span class="db-ccy-pill lv-mono h-full">{{ group.currency }}</span>
+            </div>
 
             <div class="db-group-balance">
               <span class="db-group-bal-value lv-mono">{{ fmtMoney(group.totalBalance, group.currency) }}</span>
