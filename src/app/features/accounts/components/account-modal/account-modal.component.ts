@@ -5,6 +5,7 @@ import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/acco
 
 export interface AccountModalData {
   account?: Account;
+  currencies: string[];
 }
 
 export type AccountModalResult =
@@ -23,7 +24,7 @@ export class AccountModalComponent implements OnInit {
   protected form!: FormGroup;
   protected readonly isEdit: boolean;
 
-  protected readonly currencies = ['USD', 'EUR', 'GBP'];
+  protected readonly currencies: string[];
 
   constructor(
     private fb: FormBuilder,
@@ -31,6 +32,7 @@ export class AccountModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) protected data: AccountModalData
   ) {
     this.isEdit = !!data.account;
+    this.currencies = data.currencies;
   }
 
   ngOnInit(): void {

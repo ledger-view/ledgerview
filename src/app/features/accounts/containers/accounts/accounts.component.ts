@@ -8,6 +8,7 @@ import {
   AccountModalResult
 } from '@features/accounts/components/account-modal/account-modal.component';
 import { AccountService } from '@features/accounts/services/account.service';
+import { CurrencyService } from '@features/accounts/services/currency.service';
 import { Account, AccountCreateRequest, AccountUpdateRequest } from '@model/account.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
@@ -22,6 +23,7 @@ import { filter, switchMap, take } from 'rxjs';
 })
 export class AccountsComponent implements OnInit {
   private readonly accountService = inject(AccountService);
+  private readonly currencyService = inject(CurrencyService);
   private readonly dialog = inject(MatDialog);
   private readonly translate = inject(TranslateService);
   private readonly route = inject(ActivatedRoute);
@@ -104,7 +106,7 @@ export class AccountsComponent implements OnInit {
   private openModal(account?: Account): void {
     this.dialog
       .open<AccountModalComponent, AccountModalData, AccountModalResult>(AccountModalComponent, {
-        data: { account },
+        data: { account, currencies: [...this.currencyService.fiat(), ...this.currencyService.crypto()] },
         width: '460px'
       })
       .afterClosed()
