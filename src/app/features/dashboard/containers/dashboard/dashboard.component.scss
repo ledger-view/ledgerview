@@ -245,6 +245,7 @@
   border-radius: 8px;
   background: var(--lv-surface-alt, oklch(97.5% 0.003 250));
   transition: background 0.1s;
+  cursor: pointer;
 
   &:hover {
     background: var(--lv-hover);

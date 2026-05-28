@@ -87,6 +87,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/' + AppPath.transactions]);
   }
 
+  protected navigateToAccountEdit(accountId: string): void {
+    this.router.navigate(['/' + AppPath.accounts], { queryParams: { editId: accountId } });
+  }
+
   protected dismissOnboarding(): void {
     this.onboardingDismissed.set(true);
   }

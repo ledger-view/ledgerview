@@ -89,7 +89,7 @@
               <!-- Account tiles -->
               <div class="db-account-list">
                 @for (acc of group.accounts; track trackById($index, acc)) {
-                  <div class="db-account-tile">
+                  <div class="db-account-tile" (click)="navigateToAccountEdit(acc.id); $event.stopPropagation()">
                     <div class="lv-account-icon" [style.background]="accountColor(acc.type)">
                       <mat-icon>{{ accountIcon(acc.type) }}</mat-icon>
                     </div>

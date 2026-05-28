@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountModalComponent, AccountModalData } from '@features/accounts/components/account-modal/account-modal.component';
 import { AccountService } from '@features/accounts/services/account.service';
 import { Account, AccountRequest } from '@model/account.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { filter, switchMap } from 'rxjs';
+import { filter, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-accounts',
@@ -18,12 +20,28 @@ export class AccountsComponent implements OnInit {
   private readonly accountService = inject(AccountService);
   private readonly dialog = inject(MatDialog);
   private readonly translate = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
 
   protected readonly accounts = this.accountService.accounts;
   protected readonly loading = this.accountService.loading;
 
   ngOnInit(): void {
     this.accountService.load();
+    const editId = this.route.snapshot.queryParamMap.get('editId');
+    if (editId) {
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      toObservable(this.accountService.loaded, { injector: this.injector })
+        .pipe(
+          filter((loaded) => loaded),
+          take(1)
+        )
+        .subscribe(() => {
+          const acc = this.accountService.accounts().find((a) => a.id === editId);
+          if (acc) this.openModal(acc);
+        });
+    }
   }
 
   protected get total(): number {
