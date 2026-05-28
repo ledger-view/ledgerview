@@ -47,8 +47,8 @@ export class CategoriesComponent implements OnInit {
   private openModal(category?: Category): void {
     this.dialog
       .open<CategoryModalComponent, CategoryModalData, { action: string; data?: CategoryRequest }>(CategoryModalComponent, {
-        data: { category },
-        width: '420px'
+        data: { category, palette: this.categoryService.palette(), defaultColor: this.categoryService.defaultColor() },
+        minWidth: '360px'
       })
       .afterClosed()
       .subscribe((result) => {

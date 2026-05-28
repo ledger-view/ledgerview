@@ -9,12 +9,30 @@ export class CategoryService {
   private _categories = signal<Category[]>([]);
   private _loading = signal(false);
   private _loaded = signal(false);
+  private _palette = signal<string[]>([]);
+  private _defaultColor = signal<string>('');
+  private _colorsLoaded = signal(false);
 
   readonly categories = this._categories.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly loaded = this._loaded.asReadonly();
+  readonly palette = this._palette.asReadonly();
+  readonly defaultColor = this._defaultColor.asReadonly();
+  readonly colorsLoaded = this._colorsLoaded.asReadonly();
 
   constructor(private api: CategoryApiService) {}
+
+  loadColors(): void {
+    if (this._colorsLoaded()) return;
+    this.api.getColorPalette$().subscribe({
+      next: ({ colors, defaultColor }) => {
+        this._palette.set(colors);
+        this._defaultColor.set(defaultColor);
+        this._colorsLoaded.set(true);
+      },
+      error: () => this._colorsLoaded.set(true)
+    });
+  }
 
   load(): void {
     this._loading.set(true);

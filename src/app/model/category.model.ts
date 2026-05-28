@@ -18,6 +18,11 @@ export interface CategoryRequest {
   type: CategoryType;
 }
 
+export interface ColorPaletteProperties {
+  colors: string[];
+  defaultColor: string;
+}
+
 const categoryTypeConfig: Record<CategoryType, { cssPillClass: string; translationKey: string }> = {
   [CategoryType.INCOME]: { cssPillClass: 'lv-pill-income', translationKey: 'theme.income' },
   [CategoryType.EXPENSE]: { cssPillClass: 'lv-pill-expense', translationKey: 'theme.expense' },

@@ -11,22 +11,9 @@ import {
 
 export interface CategoryModalData {
   category?: Category;
+  palette: string[];
+  defaultColor: string;
 }
-
-const PALETTE = [
-  '#6366F1',
-  '#3B82F6',
-  '#0EA5E9',
-  '#06B6D4',
-  '#10B981',
-  '#84CC16',
-  '#F59E0B',
-  '#F97316',
-  '#EF4444',
-  '#EC4899',
-  '#A855F7',
-  '#64748B'
-];
 
 @Component({
   selector: 'app-category-modal',
@@ -38,7 +25,7 @@ const PALETTE = [
 export class CategoryModalComponent implements OnInit {
   protected form!: FormGroup;
   protected readonly isEdit: boolean;
-  protected readonly palette = PALETTE;
+  protected readonly palette: string[];
 
   protected readonly CategoryType = CategoryType;
   protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
@@ -50,14 +37,16 @@ export class CategoryModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) protected data: CategoryModalData
   ) {
     this.isEdit = !!data.category;
+    this.palette = data.palette;
   }
 
   ngOnInit(): void {
     const c = this.data.category;
+    const defaultColor = c?.color ?? this.data.defaultColor ?? this.palette[0] ?? '';
     this.form = this.fb.group({
       name: [c?.name ?? '', Validators.required],
       type: [c?.type ?? CategoryType.EXPENSE],
-      color: [c?.color ?? PALETTE[0]]
+      color: [defaultColor]
     });
   }
 
