@@ -134,3 +134,55 @@
 .cat-muted {
   color: var(--lv-text-md);
 }
+
+.cat-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 14px;
+  border-top: 1px solid var(--lv-border);
+  cursor: pointer;
+  user-select: none;
+
+  &--expense {
+    background: var(--lv-expense-soft);
+    &:hover {
+      background: color-mix(in srgb, var(--lv-expense) 8%, var(--lv-expense-soft));
+    }
+  }
+
+  &--income {
+    background: var(--lv-income-soft);
+    &:hover {
+      background: color-mix(in srgb, var(--lv-income) 8%, var(--lv-income-soft));
+    }
+  }
+
+  &--transfer {
+    background: var(--lv-hover);
+    &:hover {
+      background: color-mix(in srgb, var(--lv-border-str) 40%, var(--lv-hover));
+    }
+  }
+}
+
+.cat-group-chevron {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--lv-text-lo);
+  transform: rotate(0deg);
+  transition: transform 0.15s ease;
+
+  &--open {
+    transform: rotate(90deg);
+  }
+}
+
+.cat-group-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--lv-text-lo);
+  font-variant-numeric: tabular-nums;
+}

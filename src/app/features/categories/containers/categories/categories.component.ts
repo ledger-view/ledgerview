@@ -1,11 +1,17 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   CategoryModalComponent,
   CategoryModalData
 } from '@features/categories/components/category-modal/category-modal.component';
 import { CategoryService } from '@features/categories/services/category.service';
-import { Category, CategoryRequest, getCategoryCssPillClass, getCategoryTranslationKey } from '@model/category.model';
+import {
+  Category,
+  CategoryRequest,
+  CategoryType,
+  getCategoryCssPillClass,
+  getCategoryTranslationKey
+} from '@model/category.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { filter, switchMap } from 'rxjs';
@@ -27,6 +33,30 @@ export class CategoriesComponent implements OnInit {
 
   protected readonly getCategoryCssPillClass = getCategoryCssPillClass;
   protected readonly getCategoryTranslationKey = getCategoryTranslationKey;
+  protected readonly CategoryType = CategoryType;
+
+  protected readonly openGroups = signal<Set<CategoryType>>(
+    new Set([CategoryType.EXPENSE, CategoryType.INCOME, CategoryType.TRANSFER])
+  );
+
+  protected readonly groupedCategories = computed(() =>
+    [CategoryType.EXPENSE, CategoryType.INCOME, CategoryType.TRANSFER].map((type) => ({
+      type,
+      items: this.categories().filter((c) => c.type === type)
+    }))
+  );
+
+  protected toggleGroup(type: CategoryType): void {
+    this.openGroups.update((s) => {
+      const next = new Set(s);
+      next.has(type) ? next.delete(type) : next.add(type);
+      return next;
+    });
+  }
+
+  protected isOpen(type: CategoryType): boolean {
+    return this.openGroups().has(type);
+  }
 
   ngOnInit(): void {
     this.categoryService.load();

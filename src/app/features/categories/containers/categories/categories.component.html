@@ -52,16 +52,39 @@
         <span></span>
       </div>
 
-      @for (category of categories(); track category.id; let last = $last) {
-        <div class="lv-table-row cat-table-cols">
-          <div class="cat-dot-lg" [style.background]="category.color"></div>
-          <span class="cat-row-name">{{ category.name }}</span>
-          <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">{{ getCategoryTranslationKey(category.type) | translate }}</span>
-          <span class="cat-muted lv-mono text-right">{{ category.transactionCount }}</span>
-          <div class="lv-row-actions">
-            <button class="lv-icon-btn" (click)="openEdit(category)"><mat-icon>edit</mat-icon></button>
-            <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(category)"><mat-icon>delete</mat-icon></button>
+      @for (group of groupedCategories(); track group.type) {
+        <div class="cat-group">
+          <div
+            class="cat-group-header"
+            [class.cat-group-header--expense]="group.type === CategoryType.EXPENSE"
+            [class.cat-group-header--income]="group.type === CategoryType.INCOME"
+            [class.cat-group-header--transfer]="group.type === CategoryType.TRANSFER"
+            (click)="toggleGroup(group.type)"
+          >
+            <mat-icon class="cat-group-chevron" [class.cat-group-chevron--open]="isOpen(group.type)">chevron_right</mat-icon>
+            <span class="lv-pill" [class]="getCategoryCssPillClass(group.type)">{{ getCategoryTranslationKey(group.type) | translate }}</span>
+            <span class="cat-group-count">{{ group.items.length }}</span>
           </div>
+          @if (isOpen(group.type)) {
+            <div class="cat-group-body">
+              @for (category of group.items; track category.id) {
+                <div class="lv-table-row cat-table-cols">
+                  <div class="cat-dot-lg" [style.background]="category.color"></div>
+                  <span class="cat-row-name">{{ category.name }}</span>
+                  <span class="lv-pill" [class]="getCategoryCssPillClass(category.type)">
+                    {{ getCategoryTranslationKey(category.type) | translate }}
+                  </span>
+                  <span class="cat-muted lv-mono text-right">{{ category.transactionCount }}</span>
+                  <div class="lv-row-actions">
+                    <button class="lv-icon-btn" (click)="openEdit(category); $event.stopPropagation()"><mat-icon>edit</mat-icon></button>
+                    <button class="lv-icon-btn lv-icon-btn-danger" (click)="openDelete(category); $event.stopPropagation()">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
         </div>
       }
 
