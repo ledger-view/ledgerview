@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit {
 
   protected readonly activeChart = signal<Record<string, ChartType>>({});
   protected readonly chartTypes: ChartType[] = ['area', 'mirror', 'waterfall', 'heatmap'];
+  protected readonly onboardingDismissed = signal(false);
 
   protected readonly formatDate = formatDate;
   protected readonly formatTime = formatTime;
@@ -74,8 +75,20 @@ export class DashboardComponent implements OnInit {
     this.activeChart.update((m) => ({ ...m, [currency]: type }));
   }
 
+  protected navigateToAccounts(): void {
+    this.router.navigate(['/' + AppPath.accounts]);
+  }
+
+  protected navigateToCategories(): void {
+    this.router.navigate(['/' + AppPath.categories]);
+  }
+
   protected navigateToTransactions(): void {
     this.router.navigate(['/' + AppPath.transactions]);
+  }
+
+  protected dismissOnboarding(): void {
+    this.onboardingDismissed.set(true);
   }
 
   protected fmtMoney(amount: number, currency = 'USD'): string {

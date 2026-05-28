@@ -12,14 +12,21 @@
       <mat-spinner diameter="32"></mat-spinner>
     </div>
   } @else {
+    @if (groups().length === 0 && !onboardingDismissed()) {
+      <app-onboarding-steps
+        (addAccount)="navigateToAccounts()"
+        (importTransactions)="navigateToTransactions()"
+        (reviewCategories)="navigateToCategories()"
+        (skip)="dismissOnboarding()"
+      ></app-onboarding-steps>
+    } @else if (groups().length === 0) {
+      <div class="lv-card db-accordion-empty">
+        <div class="lv-empty">{{ 'common.noData' | translate }}</div>
+      </div>
+    }
+
     <!-- Currency groups accordion -->
     <div class="db-accordion">
-      @if (groups().length === 0) {
-        <div class="lv-card db-accordion-empty">
-          <div class="lv-empty">{{ 'common.noData' | translate }}</div>
-        </div>
-      }
-
       @for (group of groups(); track trackByCurrency($index, group)) {
         <div class="lv-card db-group" [class.db-group--expanded]="expandedCurrency() === group.currency">
           <!-- Collapsed summary row -->

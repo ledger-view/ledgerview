@@ -57,6 +57,28 @@
     "next": "Next",
     "personal": "Personal"
   },
+  "onboarding": {
+    "eyebrow": "Welcome to LedgerView",
+    "title": "Set up your dashboard",
+    "subtitle": "Three short steps. You can come back to the rest later.",
+    "skip": "You can skip the tour and add things in any order.",
+    "step1": {
+      "title": "Add an account",
+      "badge": "Start here",
+      "desc": "Bank, card, cash, or crypto wallet. We'll group them by currency automatically.",
+      "cta": "Add account"
+    },
+    "step2": {
+      "title": "Review categories",
+      "desc": "Customize how your transactions get labeled — or accept the defaults.",
+      "cta": "Review categories"
+    },
+    "step3": {
+      "title": "Import or log transactions",
+      "desc": "Paste a CSV from your bank, or add transactions one at a time.",
+      "cta": "Go to transactions"
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your finances",

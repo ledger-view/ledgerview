@@ -1,0 +1,55 @@
+<div class="ob-card">
+  <div class="ob-header">
+    <div class="ob-headline">
+      <span class="ob-eyebrow">{{ 'onboarding.eyebrow' | translate }}</span>
+      <h2 class="ob-title">{{ 'onboarding.title' | translate }}</h2>
+      <p class="ob-subtitle">{{ 'onboarding.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="ob-steps">
+    <div class="ob-step ob-step--active">
+      <div class="ob-step-num">1</div>
+      <div class="ob-step-body">
+        <div class="ob-step-head">
+          <span class="ob-step-title">{{ 'onboarding.step1.title' | translate }}</span>
+          <span class="ob-step-badge">{{ 'onboarding.step1.badge' | translate }}</span>
+        </div>
+        <p class="ob-step-desc">{{ 'onboarding.step1.desc' | translate }}</p>
+        <button class="lv-btn-primary ob-cta" (click)="addAccount.emit()">
+          {{ 'onboarding.step1.cta' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="ob-step">
+      <div class="ob-step-num">2</div>
+      <div class="ob-step-body">
+        <div class="ob-step-head">
+          <span class="ob-step-title">{{ 'onboarding.step2.title' | translate }}</span>
+        </div>
+        <p class="ob-step-desc">{{ 'onboarding.step2.desc' | translate }}</p>
+        <button class="lv-btn-ghost ob-step-link" (click)="reviewCategories.emit()">
+          {{ 'onboarding.step2.cta' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="ob-step">
+      <div class="ob-step-num">3</div>
+      <div class="ob-step-body">
+        <div class="ob-step-head">
+          <span class="ob-step-title">{{ 'onboarding.step3.title' | translate }}</span>
+        </div>
+        <p class="ob-step-desc">{{ 'onboarding.step3.desc' | translate }}</p>
+        <button class="lv-btn-ghost ob-step-link" (click)="importTransactions.emit()">
+          {{ 'onboarding.step3.cta' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ob-footer">
+    <button class="ob-skip" (click)="skip.emit()">{{ 'onboarding.skip' | translate }}</button>
+  </div>
+</div>
