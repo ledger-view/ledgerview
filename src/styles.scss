@@ -1,4 +1,5 @@
 @use './assets/styles/utilities/helpers';
+@use './assets/styles/utilities/disabled';
 @use './assets/styles/layout/tables';
 
 // ── Pulse Light design tokens ─────────────────────────────────────────────
@@ -229,7 +230,6 @@ body {
   }
 
   &:disabled {
-    opacity: 0.4;
     cursor: not-allowed;
   }
 }
