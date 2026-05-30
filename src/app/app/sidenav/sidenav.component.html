@@ -20,9 +20,9 @@
   <a
     class="lv-nav-item"
     matTooltipPosition="right"
-    routerLink="/dashboard"
     routerLinkActive="lv-nav-item--active"
     [matTooltip]="isOpened() ? '' : ('nav.dashboard' | translate)"
+    [routerLink]="AppPath.dashboard"
   >
     <mat-icon>dashboard</mat-icon>
     @if (isOpened()) {
@@ -34,9 +34,9 @@
     <a
       class="lv-nav-item"
       matTooltipPosition="right"
-      routerLink="/transactions"
       routerLinkActive="lv-nav-item--active"
       [matTooltip]="isOpened() ? '' : ('theme.transactions' | translate)"
+      [routerLink]="AppPath.transactions"
     >
       <mat-icon>receipt_long</mat-icon>
       @if (isOpened()) {
@@ -59,9 +59,9 @@
   <a
     class="lv-nav-item"
     matTooltipPosition="right"
-    routerLink="/accounts"
     routerLinkActive="lv-nav-item--active"
     [matTooltip]="isOpened() ? '' : ('theme.accounts' | translate)"
+    [routerLink]="AppPath.accounts"
   >
     <mat-icon>account_balance</mat-icon>
     @if (isOpened()) {
@@ -72,9 +72,9 @@
   <a
     class="lv-nav-item"
     matTooltipPosition="right"
-    routerLink="/categories"
     routerLinkActive="lv-nav-item--active"
     [matTooltip]="isOpened() ? '' : ('theme.categories' | translate)"
+    [routerLink]="AppPath.categories"
   >
     <mat-icon>label</mat-icon>
     @if (isOpened()) {

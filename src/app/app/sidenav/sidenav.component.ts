@@ -4,6 +4,7 @@ import { IdentityClaims } from '@model/auth.model';
 import { getLocalStorage, setLocalStorage } from '@shared/util/localStorage.utils';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { filter } from 'rxjs';
+import { AppPath } from '../../app-routing.model';
 import { UserModalComponent, UserModalResult } from '../user-modal.component';
 
 const SIDENAV_KEY = 'lv_sidenav';
@@ -20,6 +21,8 @@ export class SidenavComponent {
   @Input() identityClaims: IdentityClaims | null = null;
   @Input() transactionsEnabled = false;
   @Input() transactionsTooltipKey = '';
+
+  protected readonly AppPath = AppPath;
 
   private readonly dialog = inject(MatDialog);
   private readonly oauthService = inject(OAuthService);
